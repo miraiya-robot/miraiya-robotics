@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EngineAI T800 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* EDITION TABLE */
+.edition-table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:12px}
+.edition-table th{background:var(--navy);color:#fff;padding:12px 16px;text-align:center;font-weight:700;font-size:13px}
+.edition-table th:first-child{text-align:left;border-radius:10px 0 0 0}
+.edition-table th:last-child{border-radius:0 10px 0 0}
+.edition-table td{padding:11px 16px;border-bottom:1px solid var(--border);text-align:center;font-size:13.5px}
+.edition-table td:first-child{text-align:left;font-weight:700;color:var(--muted)}
+.edition-table tr:hover td{background:#f0fdfc}
+.edition-table .recommended{color:var(--accent);font-weight:800}
+.edition-table .best{background:rgba(11,208,200,.05)}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://en.engineai.com.cn/" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/EngineAI T800.png" alt="EngineAI T800">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">ENGINE AI（深圳引智科技）</div>
+      <h1 class="product-name">T800</h1>
+      <p class="product-tagline">CES 2026発表・4エディション展開の産業向けフルサイズヒューマノイド。<br>173 cm / 75 kg / 最高3 m/s / ピークトルク450 N·m・14,000 W / Pro版Jetson Thor 2,000 TOPS。固体電池ホットスワップ・全関節アクティブ冷却搭載。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">エディション別価格（Basic〜Max 4ライン）</div>
+        <div class="price-main">$25,000〜$50,000</div>
+        <div class="price-sub">¥3,750,000〜¥7,500,000（¥150換算）<br>Basic $25K / Eco $33K / Pro $38.5K / Max $50K · 2026年6月2日出荷予定</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">⚡ 最高3 m/s（10.8 km/h）</span>
+        <span class="badge">💪 450 N·m / 14,000 W</span>
+        <span class="badge">🧠 Pro/Max: 2,000 TOPS</span>
+        <span class="badge">🔋 固体電池ホットスワップ</span>
+        <span class="badge">✋ Eco+: 5指・触覚センサー</span>
+        <span class="badge">❄️ 全関節アクティブ冷却</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">173cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">75kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">43 DOF</div><div class="qstat-key">自由度（Eco以上）</div></div>
+    <div class="qstat"><div class="qstat-val">10.8km/h</div><div class="qstat-key">最高速度</div></div>
+    <div class="qstat"><div class="qstat-val">4〜5h</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-29）。Eco以上の代表値。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能7(r=70, top):              (150, 80)
+               身体能力5(r=50, upper-right):  (193, 125)
+               器用さ7(r=70, lower-right):    (211, 185)
+               連続稼働5(r=50, bottom):       (150, 200)
+               耐久性4(r=40, lower-left):     (115, 170)
+               安全性2(r=20, upper-left):     (133, 140) -->
+          <polygon points="150,80 193,125 211,185 150,200 115,170 133,140"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="150"  cy="80"  r="4.5" fill="#0bd0c8"/>
+          <circle cx="193"  cy="125" r="4.5" fill="#f59e0b"/>
+          <circle cx="211"  cy="185" r="4.5" fill="#0bd0c8"/>
+          <circle cx="150"  cy="200" r="4.5" fill="#f59e0b"/>
+          <circle cx="115"  cy="170" r="4.5" fill="#f59e0b"/>
+          <circle cx="133"  cy="140" r="4.5" fill="#ef4444"/>
+          <!-- Score labels -->
+          <text x="150"  y="74"  text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">7</text>
+          <text x="200"  y="123" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">5</text>
+          <text x="218"  y="187" text-anchor="start"  fill="#0bd0c8" font-size="12" font-weight="900">7</text>
+          <text x="150"  y="214" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="900">5</text>
+          <text x="108"  y="175" text-anchor="end"    fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="126"  y="138" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score">7</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:70%"></div></div>
+          <div class="param-bar-note">Pro/Max: Jetson Thor 2,000 TOPS · Basic/Eco: Intel N97 + AGX Orin 275 TOPS · 強化学習・OTA · LLM統合非公開 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:50%"></div></div>
+          <div class="param-bar-note">最高3 m/s（10.8 km/h）· 可搬5 kg/手 · ピークトルク450 N·m · 瞬間ピーク出力14,000 W · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score">7</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:70%"></div></div>
+          <div class="param-bar-note">Eco+: 5指×2 / 7 DoF/手 / 触覚センサー / 43 DoF合計 · Basic: グリッパーのみ（29 DoF）· 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:50%"></div></div>
+          <div class="param-bar-note">4〜5時間 · 固体電池ホットスワップ対応 · 充電時間非公開 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">Mg-Al合金外骨格 + 航空宇宙グレードアルミ · 全関節アクティブ冷却 · IP等級非公開 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">力制御精度5% · サーマルマネジメント · 安全規格認証未取得 · 技適PSE未確認 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア（Eco以上代表値）</div>
+        <div class="radar-total-formula">7×0.20 + 5×0.15 + 7×0.15 + 5×0.20 + 4×0.15 + 2×0.15</div>
+      </div>
+      <div class="radar-total-val">5.1<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">バク転・回し蹴り・格闘デモを75 kgの機体でやってのける、EngineAI T800の公式ローンチ映像。ピークトルク450 N·m・瞬間出力14,000 W・最高3 m/s（10.8 km/h）—— 数字が示す通りの「破壊的」な運動性能をこの映像で確認してください。</p>
+    <a href="https://www.youtube.com/watch?v=FGcQqyCaG5s" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/FGcQqyCaG5s/maxresdefault.jpg" alt="EngineAI T800: Born to Disrupt!" onerror="this.src='https://img.youtube.com/vi/FGcQqyCaG5s/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">EngineAI T800: Born to Disrupt!</div>
+          <div class="yt-thumb-label">EngineAI 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">botinfo.ai・Robots International・CES 2026プレスリリース・prtimes（日本語）より。ファクトチェック済（2026-05-29）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ・共通</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-edition')">🗂 4エディション比較</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-ai')">💻 演算・AI</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ・共通 -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">botinfo.ai「Height: 173 cm (5′8″)」確認済み。⚠️ originofbotsは185cm（180cmとも）と誤記。公式・botinfo.ai・Robots International全てが173cmで一致するため173cmが正確</div></div><div class="spec-val-wrap"><span class="spec-val">173 cm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">botinfo.ai「Weight: 75 kg (165 lbs)」確認済み。⚠️ originofbotsは85kgと誤記。75kgは競合比で中程度の重量で、2人での搬入・台車での移動が可能な範囲</div></div><div class="spec-val-wrap"><span class="spec-val">75 kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高速度 / 歩行速度</div><div class="spec-lbl-desc">Robots International「3 METERS / SECOND（10.8 km/h）」を最高速度として確認。botinfo.aiは「~2 m/s class」を歩行速度として記載。最高速度3 m/sと通常歩行速度~2 m/sの2段階で把握することが重要</div></div><div class="spec-val-wrap"><span class="spec-val">最高 3 m/s（10.8 km/h）</span><span class="spec-note-sm">通常歩行: ~2 m/s</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ピークトルク</div><div class="spec-lbl-desc">CES 2026公式プレスリリース「up to 450 N·m of peak torque」確認済み。AGIBOT G2（0.5 N力制御精度）やWalker S（ハーモニック）と比較して特に高トルク設計。力制御精度は5%</div></div><div class="spec-val-wrap"><span class="spec-val">450 N·m</span><span class="spec-note-sm">力制御精度5%</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">瞬間ピーク出力</div><div class="spec-lbl-desc">公式プレスリリース「14,000 W of instantaneous joint peak power」確認済み。14 kWの瞬間出力は高速動作・急加速・重量物との格闘デモ（CES 2026で実演）を可能にする設計値</div></div><div class="spec-val-wrap"><span class="spec-val">14,000 W</span><span class="spec-note-sm">瞬間ジョイントピーク出力</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">フレーム材料</div><div class="spec-lbl-desc">マグネシウム-アルミニウム合金外骨格（botinfo.ai「Mg-Al alloy exoskeleton」確認）と航空宇宙グレードアルミ合金の一体鋳造技術（prtimes.jp「航空機級の高強度アルミニウム合金を用いた一体鋳造技術」確認）を組み合わせた高剛性軽量構造</div></div><div class="spec-val-wrap"><span class="spec-val">Mg-Al合金 + 航空宇宙グレードアルミ</span><span class="spec-note-sm">一体鋳造技術</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">アクティブ冷却・熱管理</div><div class="spec-lbl-desc">全関節にアクティブ冷却システムとサーマルマネジメントを搭載（botinfo.ai確認済み）。450 N·mのハイトルク駆動・最高3 m/sの高速動作が発生する大量の熱を効率的に排熱することで、産業連続稼働中の過熱リスクを低減</div></div><div class="spec-val-wrap"><span class="spec-val">全関節アクティブ冷却</span><span class="spec-note-sm">サーマルマネジメント搭載</span></div></div>
+      </div>
+    </div>
+
+    <!-- 4エディション比較 -->
+    <div class="spec-panel" id="tab-edition">
+      <div style="overflow-x:auto;margin-bottom:16px">
+        <table class="edition-table">
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>Basic</th>
+              <th>Eco</th>
+              <th>Pro ★推奨</th>
+              <th>Max</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>価格（USD）</td><td>$25,000</td><td>$33,000</td><td class="recommended">$38,500</td><td>$50,000</td></tr>
+            <tr><td>価格（JPY換算）</td><td>¥3,750,000</td><td>¥4,950,000</td><td class="recommended">¥5,775,000</td><td>¥7,500,000</td></tr>
+            <tr><td>ボディ DoF</td><td>29</td><td>29</td><td class="recommended">29</td><td>29</td></tr>
+            <tr><td>ハンド</td><td>グリッパーのみ</td><td>5指 / 7DoF / 触覚センサー</td><td class="recommended">同左</td><td>同左</td></tr>
+            <tr><td>総自由度</td><td>29</td><td>43</td><td class="recommended">43</td><td>43</td></tr>
+            <tr><td>演算チップ</td><td>Intel N97 + AGX Orin</td><td>同左</td><td class="recommended">Jetson Thor</td><td>同左</td></tr>
+            <tr><td>演算性能</td><td>275 TOPS</td><td>275 TOPS</td><td class="recommended">2,000 TOPS</td><td>2,000 TOPS</td></tr>
+            <tr><td>主な対象</td><td>産業基本</td><td>研究・OSS</td><td class="recommended">産業AI</td><td>24/7産業</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12px;color:var(--muted)">※ botinfo.ai確認済みデータ。価格はJPY¥150換算の参考値。</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:6px">★ Pro版: $38,500でJetson Thor 2,000 TOPSを搭載。演算性能/価格比で最も優れたエディション。Eco版はオープンソースSDK提供で研究機関向け。</p>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">botinfo.ai「Runtime: 4–5 hours」確認済み。Robots Internationalは「UP TO 4 HOURS」（上限4時間のみ）と記載しており、4〜5時間の上限5時間はbotinfo.aiのみの記載。実際の運用では4時間を基準にした計画を推奨</div></div><div class="spec-val-wrap"><span class="spec-val">4〜5時間</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー種類</div><div class="spec-lbl-desc">固体電池（Solid-State Battery）を採用（botinfo.ai「Modular solid-state」確認済み）。従来のリチウムイオン電池と比べて高いエネルギー密度・安全性・充放電サイクル寿命が期待できる次世代バッテリー技術</div></div><div class="spec-val-wrap"><span class="spec-val">固体電池</span><span class="spec-note-sm">次世代バッテリー</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ホットスワップ</div><div class="spec-lbl-desc">バッテリーのホットスワップに対応（botinfo.ai「Hot-swap modular design」確認済み）。稼働中にバッテリーを交換できるため、Max版の24/7連続稼働を実現するための基本機能。電圧72Vの固体電池パックを予備として用意することで実質無制限稼働が可能</div></div><div class="spec-val-wrap"><span class="spec-val">ホットスワップ対応</span><span class="spec-note-sm">モジュール式設計</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">充電時間の公開情報なし。固体電池はリチウムイオン比で高速充電の可能性があるが、具体的な充電時間はEngineAI公式への問い合わせで確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">要メーカー確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- 演算・AI -->
+    <div class="spec-panel" id="tab-ai">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">Basic / Eco 演算</div><div class="spec-lbl-desc">Intel N97（低消費電力x86 CPU）+ NVIDIA Jetson AGX Orin 64GB（275 TOPS）のデュアルチップ構成（botinfo.ai確認済み）。275 TOPSはEmbodied AI推論・強化学習の実行に十分な性能で研究・教育用途に対応</div></div><div class="spec-val-wrap"><span class="spec-val">Intel N97 + AGX Orin</span><span class="spec-note-sm">275 TOPS</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">Pro / Max 演算</div><div class="spec-lbl-desc">NVIDIA Jetson Thor 2,000 TOPS（botinfo.ai確認済み）。Jetson ThorはNVIDIAの産業・ロボティクス向け最高性能SoCで、275 TOPSの約7倍の演算性能を持つ。$38,500のPro版でこの性能を実現できるのは競合比でのコストパフォーマンスの高さを示す</div></div><div class="spec-val-wrap"><span class="spec-val">Jetson Thor</span><span class="spec-note-sm">2,000 TOPS</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">強化学習・OTA</div><div class="spec-lbl-desc">強化学習（RL）対応・OTAアップデート・マルチロボット協調制御に対応（botinfo.ai確認済み）。Eco版はオープンソースSDK提供で研究機関が独自アルゴリズムを実機で検証できる開発フレンドリーな設計</div></div><div class="spec-val-wrap"><span class="spec-val">強化学習 / OTA / マルチロボット</span><span class="spec-note-sm">Eco: OSS SDK提供</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">LLM統合</div><div class="spec-lbl-desc">公式・全ソースでLLM統合の明示的な記載なし。Embodied AI・強化学習ベースとの記述は確認されるがLLM/VLA統合の有無はEngineAI公式への確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">360° LiDAR</div><div class="spec-lbl-desc">360°全周囲LiDARで環境を3Dポイントクラウドとしてリアルタイム計測（botinfo.ai「360° omnidirectional LiDAR」確認済み）。産業現場での全方位障害物検知・自律ナビゲーション・人との協調作業における安全確保に使用</div></div><div class="spec-val-wrap"><span class="spec-val">360° LiDAR</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">Intel RealSense D415/D435i</div><div class="spec-lbl-desc">Intel RealSense D415 / D435iの深度カメラを搭載（botinfo.ai確認済み）。D415は高精度の長距離深度測定、D435iはIMU統合型で動的環境での姿勢推定と深度認識を組み合わせた高精度3D環境認識を実現</div></div><div class="spec-val-wrap"><span class="spec-val">Intel RealSense D415 / D435i</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">AC1センサースイート</div><div class="spec-lbl-desc">EngineAI独自の「AC1センサースイート」を搭載（botinfo.ai確認済み）。AC1の詳細仕様は非公開だが、LiDAR・カメラ・深度センサーを統合した専用センサーフュージョンシステムと推定される</div></div><div class="spec-val-wrap"><span class="spec-val">AC1センサースイート</span><span class="spec-note-sm">詳細仕様非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンドセンサー（Eco以上）</div><div class="spec-lbl-desc">Eco以上の5指ハンドには触覚センサーを内蔵（botinfo.ai「5-finger design with tactile sensors」確認済み）。把持力・接触力・対象物の材質感を検知し、精密なグリップ制御に活用</div></div><div class="spec-val-wrap"><span class="spec-val">触覚センサー（Eco以上）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信方式</div><div class="spec-lbl-desc">具体的な通信規格の公開情報なし。OTA更新・API遠隔操作をサポートすることから無線接続手段を持つが、Wi-Fi/5G等の詳細は未公開。日本での使用には技適確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">OTA/API対応（技適要確認）</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">なし（公開情報なし）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本語メディア報道</div><div class="spec-val-wrap"><span class="spec-val">あり</span><span class="spec-note-sm">ロボスタ・ASCII.jp・prtimes（日本語プレスリリース）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売価格</div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">USD $25,000〜$50,000 / JPY ¥3,750,000〜¥7,500,000</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">取得報告なし</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">出荷予定</div><div class="spec-val-wrap"><span class="spec-val">2026年6月2日（予定）</span><span class="spec-note-sm">中国JD.com先行 / グローバル出荷</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">発表イベント</div><div class="spec-val-wrap"><span class="spec-val">CES 2026（2026年1月）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">同社モデル</div><div class="spec-val-wrap"><span class="spec-val">SE01（上位）/ PM01（廉価研究向け）</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">T800 が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">バク転・回し蹴り・格闘デモをこなすアクロバット性能と、産業連続稼働を支える固体電池・全関節アクティブ冷却。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤸</div>
+        <div class="feature-title">バク転・回し蹴り・格闘デモ実証済み</div>
+        <div class="feature-desc">バク転（バックフリップ）・ハイキック・回し蹴り・格闘動作をCES 2026で実際に実演。自重75 kgのロボットがこれらのアクロバット動作をこなせるのは、全身29 DOFの広い関節可動域（腰部322°・股関節横320°）と450 N·m・14,000 Wのハイトルク関節の組み合わせがあってこそ。産業ヒューマノイドの運動性能の新基準を打ち立てた。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💨</div>
+        <div class="feature-title">最高3 m/s（10.8 km/h）・ピークトルク450 N·m・瞬間出力14,000 W</div>
+        <div class="feature-desc">最高走行速度3 m/s（10.8 km/h）はヒューマノイドロボットとして業界最速クラス。それを支えるのは公式確認済みのジョイントピークトルク450 N·mと瞬間出力14,000 W。力強い急加速・急制動・空中動作を可能にする圧倒的なパワー密度で、スポーツ選手並みの動的運動を75 kgの機体で実現している。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🦵</div>
+        <div class="feature-title">広大な関節可動域：腰322°・股関節横320°・膝屈曲120°</div>
+        <div class="feature-desc">全身29 DOFの各関節は人間を超える可動域を持つ。腰部（322°回転）・股関節横方向（320°）・膝（最大屈曲120°）・肩（全方向150°以上）という大可動域が、バク転・蹴り技・スクワット・深屈みといった激しい全身運動を可能にする。産業作業の多様な姿勢にも同じ関節自由度が活きる。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">❄️</div>
+        <div class="feature-title">全関節アクティブ冷却＋固体電池ホットスワップで4〜5h連続稼働</div>
+        <div class="feature-desc">450 N·m高トルクのフル稼働が続く産業現場で最も重要なのが熱管理。T800は全関節にアクティブ冷却システムとサーマルマネジメントを搭載し、高強度動作を長時間維持。次世代の固体電池をホットスワップ対応で搭載し4〜5時間稼働。Max版は24/7連続稼働に対応する。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">Pro/Max版: Jetson Thor 2,000 TOPS を $38,500 で提供</div>
+        <div class="feature-desc">圧倒的な身体性能を制御するAIも最高水準。Pro版（$38,500）・Max版（$50,000）にNVIDIA Jetson Thor（2,000 TOPS）を搭載。$138,000のAGIBOT G2と同世代チップを3分の1以下の価格で実現。高速動作中のリアルタイム姿勢制御・環境認識・強化学習をオンデバイスで処理できる。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏗</div>
+        <div class="feature-title">Mg-Al合金外骨格＋航空宇宙グレードアルミ一体鋳造・4エディション</div>
+        <div class="feature-desc">バク転・格闘動作の衝撃に耐えるフレームに、マグネシウム-アルミニウム合金外骨格と航空機級アルミ合金の一体鋳造技術を採用。75 kgという軽量性と高剛性を両立。用途・予算に応じてBasic（$25,000）〜Max（$50,000）の4エディションから最適な構成を選択できる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年6月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">✋</div>
+        <div>
+          <div class="caution-title">可搬5 kg/手は産業重作業には不十分。Basic版はハンドなし・器用さゼロに近い</div>
+          <div class="caution-desc">botinfo.ai確認の「5 kg per hand」は、Walker S（片腕15kg）・AGIBOT G2（5kg/アーム）と同水準だが、重量部品の把持・搬送が必要な重作業用途には不足する。⚠️ originofbotsは可搬20kg（デッドリフト100kg）と記載しているが全てのソースと乖離しており誤りと判断。またBasic版（$25,000）はハンドなし（グリッパーのみ）のため、精密マニピュレーションが必要な用途にはEco以上（$33,000〜）の選択が必要。エディション選択は用途をよく整理してから行うことを推奨。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🆕</div>
+        <div>
+          <div class="caution-title">CES 2026発表・2026年6月2日出荷予定の最新鋭機。実稼働フィールドデータが未蓄積</div>
+          <div class="caution-desc">T800はCES 2026（2026年1月）で発表された最新製品で、ファクトチェック時点（2026年5月）では出荷前のため産業現場での実稼働データ・長期信頼性のトラックレコードが存在しない。2026年6月2日の初期出荷は中国JD.com先行とされる。なお一部ソース（originofbots）は「not currently available」と記載しており情報が錯綜している点にも注意。実導入前に初期ユーザーの実稼働フィードバックを確認することを推奨する。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">⚠️</div>
+        <div>
+          <div class="caution-title">originofbotsのT800データは全て誤り。身長・重量・可搬重量が大幅に異なる</div>
+          <div class="caution-desc">ファクトチェックにより、originofbotsのEngineAI T800ページは全スペックが誤りと判明。身長「185cm/180cm」（正: 173cm）・重量「85kg」（正: 75kg）・可搬重量「20kg」（正: 5kg/手）・デッドリフト「100kg」（公式データなし）など全ての数値が他ソースと乖離。T800の導入検討では公式サイト・botinfo.ai・Robots International・CES 2026プレスリリースを参照し、originofbotsのデータは参照しないこと。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">日本代理店なし・技適PSE未確認。初期出荷は中国先行で日本への本格展開時期不明</div>
+          <div class="caution-desc">日本国内の正規代理店・サポート拠点が未設定。技適マーク・PSE認証の取得状況も不明のため、日本での商用運用には電波法・電気用品安全法への準拠確認が必要。初期出荷は2026年6月に中国JD.com先行とされており、日本への正規流通・サポート体制の整備時期は未確認。日本語メディア（ロボスタ・ASCII.jp・prtimes）で製品紹介記事は出ているため、需要次第で日本展開が進む可能性はある。問い合わせ先: sales@engineai.com.cn</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">エディション別に産業製造・物流・研究開発まで幅広く対応。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">産業製造ライン（Pro/Max）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📦</div><div class="usecase-title">物流・部品搬送（Basic〜）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">AI・ロコモーション研究（Eco）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🌙</div><div class="usecase-title">24/7夜間無人稼働（Max）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔩</div><div class="usecase-title">精密組立・ピック&プレース</div></div>
+      <div class="usecase-card"><div class="usecase-icon">💻</div><div class="usecase-title">強化学習・SDK開発（Eco）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎪</div><div class="usecase-title">展示会・デモンストレーション</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤝</div><div class="usecase-title">人ロボット協調作業</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要産業・研究用ヒューマノイドとの比較</h2>
+    <p class="section-sub">2026年時点の主要な産業・研究向けヒューマノイドとの比較（T800はEco版代表値）。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">T800 Eco ★</th>
+          <th>T800 Pro</th>
+          <th>EngineAI SE01</th>
+          <th>Unitree G1</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">研究・産業</td><td class="highlight">産業AI</td><td>研究・産業展示</td><td>研究・産業</td></tr>
+        <tr><td>身長</td><td>173cm</td><td>173cm</td><td>170cm</td><td class="highlight">127cm</td></tr>
+        <tr><td>重量</td><td>75kg</td><td>75kg</td><td>約55kg</td><td class="highlight">35kg</td></tr>
+        <tr><td>最高速度</td><td class="highlight">3 m/s（10.8 km/h）</td><td class="highlight">3 m/s</td><td>2 m/s</td><td>2 m/s</td></tr>
+        <tr><td>自由度</td><td>43 DOF（5指）</td><td class="highlight">43 DOF（5指）</td><td>32 DOF（5指）</td><td>43 DOF</td></tr>
+        <tr><td>演算</td><td>275 TOPS（Orin）</td><td class="highlight">2,000 TOPS（Thor）</td><td>NVIDIA+Intel（TOPS非公開）</td><td>Orin NX（100 TOPS）</td></tr>
+        <tr><td>稼働時間</td><td>4〜5h + HS</td><td class="highlight">4〜5h + HS</td><td>約2時間</td><td>約2時間</td></tr>
+        <tr><td>バッテリー</td><td class="highlight">固体電池HS</td><td class="highlight">固体電池HS</td><td>クイックスワップ</td><td>有線充電</td></tr>
+        <tr><td>参考価格</td><td class="highlight">$33,000</td><td>$38,500</td><td>$54,000</td><td class="highlight">$13,500〜</td></tr>
+        <tr><td>日本代理店</td><td class="cross">なし</td><td class="cross">なし</td><td class="cross">なし</td><td class="check">TechShare Japan</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">EngineAI T800 の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">エディション選定・技適PSE確認・価格交渉まで、日本語でご支援します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© Engine AI / 深圳引智科技（<a href="https://en.engineai.com.cn/" target="_blank">engineai.com.cn</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

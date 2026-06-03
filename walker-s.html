@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UBTECH Walker S | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://www.ubtrobot.com/en/humanoid/products/walker-s" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/Ubitech Walker S.png" alt="UBTECH Walker S">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">UBTECH ROBOTICS</div>
+      <h1 class="product-name">Walker S</h1>
+      <p class="product-tagline">BYD・Dongfeng・Geely等の中国大手EV工場に量産投入済みの産業用ヒューマノイド。<br>LLM統合・力コンプライアント関節・41 DOF。後継Walker S2は2025年11月量産開始・受注800億円超。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">参考価格（B2Bエンタープライズ向け）</div>
+        <div class="price-main">$50,000〜$150,000</div>
+        <div class="price-sub">¥7,500,000〜¥22,500,000（¥150換算・参考値）<br>日本向け価格はGA Robotics株式会社へお問い合わせください</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🏭 産業用設計</span>
+        <span class="badge">🦾 41 DOF</span>
+        <span class="badge">🧠 LLM統合</span>
+        <span class="badge">⚡ 片腕15kg積載</span>
+        <span class="badge">🏗 航空宇宙グレードアルミ</span>
+        <span class="badge">🤝 力コンプライアント関節</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">170cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">76kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">41 DOF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">15kg</div><div class="qstat-key">片腕可搬</div></div>
+    <div class="qstat"><div class="qstat-val">2〜5h</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-06-01）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能6(r=60, top):             (150, 90)
+               身体能力4(r=40, upper-right): (185, 130)
+               器用さ4(r=40, lower-right):   (185, 170)
+               連続稼働3(r=30, bottom):      (150, 180)
+               耐久性5(r=50, lower-left):    (107, 175)
+               安全性5(r=50, upper-left):    (107, 125) -->
+          <polygon points="150,90 185,130 185,170 150,180 107,175 107,125"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="150"  cy="90"  r="4.5" fill="#0bd0c8"/>
+          <circle cx="185"  cy="130" r="4.5" fill="#f59e0b"/>
+          <circle cx="185"  cy="170" r="4.5" fill="#f59e0b"/>
+          <circle cx="150"  cy="180" r="4.5" fill="#ef4444"/>
+          <circle cx="107"  cy="175" r="4.5" fill="#0bd0c8"/>
+          <circle cx="107"  cy="125" r="4.5" fill="#0bd0c8"/>
+          <!-- Score labels -->
+          <text x="150"  y="84"  text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">6</text>
+          <text x="192"  y="128" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="192"  y="172" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="150"  y="193" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="900">3</text>
+          <text x="100"  y="180" text-anchor="end"    fill="#0bd0c8" font-size="12" font-weight="900">5</text>
+          <text x="100"  y="123" text-anchor="end"    fill="#0bd0c8" font-size="12" font-weight="900">5</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score">6</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:60%"></div></div>
+          <div class="param-bar-note">マルチモーダルLLM統合・3Dセマンティックナビゲーション・6Dポーズ認識によるハンドアイ協調 · Jetson AGX Orin（S2確認・Walker S原型TOPS非公開） · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">片腕15kg高ペイロード · 歩行0.83 m/s（3 km/h）は競合最低水準 · 二足歩行・産業現場対応 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">41 DOF · 7 DOF × 2アーム · 基本グリッパー（5本指なし）· 作業空間0〜1.8 m · 腰回転±162° · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:30%"></div></div>
+          <div class="param-bar-note">2〜5時間（幅あり）· 有線充電のみ · 自動帰巣なし · 充電2〜4時間 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:50%"></div></div>
+          <div class="param-bar-note">航空宇宙グレードアルミ合金フレーム · BYD・Dongfeng・Geely等工場での量産実稼働実績 · IP等級未公開 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:50%"></div></div>
+          <div class="param-bar-note">力コンプライアント関節・剛柔複合構造で衝突エネルギー吸収 · GA Robotics日本正規代理店あり · 技適PSE未確認 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">6×0.20 + 4×0.15 + 4×0.15 + 3×0.20 + 5×0.15 + 5×0.15</div>
+      </div>
+      <div class="radar-total-val">4.5<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">UBTECH Robotics 公式チャンネルより。Walker S の産業用途における能力訓練デモをご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=ujdK3yd2gHY" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/ujdK3yd2gHY/maxresdefault.jpg" alt="UBTECH Humanoid Robot Walker S: Industrial Application Ability Training" onerror="this.src='https://img.youtube.com/vi/ujdK3yd2gHY/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">UBTECH Humanoid Robot Walker S: Industrial Application Ability Training</div>
+          <div class="yt-thumb-label">UBTECH Robotics 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">UBTECH公式・robozaps・GA Robotics・humanoidapplicationsより。ファクトチェック済（2026-06-01）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-hand')">✋ ハンド・DoF</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー・AI</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-safety')">🛡 安全性</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">170cmは日本人成人男性平均（172cm）に近いサイズ。一般的な工場の作業台・棚・ラインの高さと概ね同じ寸法感で設計されており、人間のワークスペースに自然に適合</div></div><div class="spec-val-wrap"><span class="spec-val">170cm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">約76kgはrobozapsで確認済み。後継Walker S2（60〜73kg）より重い。産業用フレーム構造の堅牢性を優先した設計</div></div><div class="spec-val-wrap"><span class="spec-val">約76kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">片腕可搬重量</div><div class="spec-lbl-desc">片腕15kgの可搬重量は自動車部品・工具・精密機器の把持・搬送に十分な実用値。ただし公式ページの現在版での原文確認が取れていないため⚠️要出典確認</div></div><div class="spec-val-wrap"><span class="spec-val">15kg</span><span class="spec-note-sm">⚠️公式ページ現在版確認不能</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">作業空間</div><div class="spec-lbl-desc">0〜1.8mの作業空間は、床面から天井の梁や高棚まで幅広いリーチを持つことを示す。工場内の多段棚作業・床面ピッキングの両方をカバー</div></div><div class="spec-val-wrap"><span class="spec-val">0〜1.8m</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">腰回転</div><div class="spec-lbl-desc">±162°の腰部回転（前屈最大170°）は人間の体幹可動域（±90°前後）を大幅に超え、狭い通路での180°向き転換や広い作業面への連続アクセスを可能にする</div></div><div class="spec-val-wrap"><span class="spec-val">±162°</span><span class="spec-note-sm">前屈最大170°</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">フレーム構造</div><div class="spec-lbl-desc">航空宇宙グレードアルミニウム合金フレームを採用。航空機部品に求められる高剛性・軽量・耐疲労の要件をロボット骨格に転用し、産業現場での連続稼働に耐える耐久性を実現</div></div><div class="spec-val-wrap"><span class="spec-val">航空宇宙グレード</span><span class="spec-note-sm">アルミニウム合金</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">モーター・動力伝達</div><div class="spec-lbl-desc">フレームレストルクモーター（コンパクト高トルク）＋ハーモニックリダクションドライブ（精密減速・低バックラッシュ）＋力コンプライアント機構（衝突時のエネルギー吸収）の3層構造</div></div><div class="spec-val-wrap"><span class="spec-val">フレームレストルクモーター</span><span class="spec-note-sm">ハーモニック＋力コンプライアント</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高歩行速度</div><div class="spec-lbl-desc">0.83 m/s（約3 km/h）は人間の普通歩き（1.4 m/s）の約60%。後継Walker S2（2.0 m/s）と比較して大幅に遅く、広い施設での移動効率に制約がある</div></div><div class="spec-val-wrap"><span class="spec-val">0.83 m/s</span><span class="spec-note-sm">3 km/h</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">使用環境</div><div class="spec-lbl-desc">IP等級は公開情報なし。BYD・Dongfeng・Geely等の自動車工場環境での実稼働実績がある。屋内産業環境専用と推定されるが、防水・防塵規格の詳細はメーカーへ要確認</div></div><div class="spec-val-wrap"><span class="spec-val">産業環境対応</span><span class="spec-note-sm">IP等級非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- ハンド・DoF -->
+    <div class="spec-panel" id="tab-hand">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身自由度（DOF）</div><div class="spec-lbl-desc">UBTECH公式ページで「41 servo joints with force feedback」と明記。41 DOFはアーム・腰・脚部全体の合計自由度で、複雑な産業タスクに必要な動作の多様性を確保</div></div><div class="spec-val-wrap"><span class="spec-val">41 DOF</span><span class="spec-note-sm">力フィードバック付きサーボ関節</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">アーム自由度</div><div class="spec-lbl-desc">片腕7 DOFは肩3・肘1・手首3の構成で人間の腕の可動域を再現。両腕合計14 DOFで、人間と同じ自然な動作でナット締め・部品組付け・ピック＆プレースを実行可能</div></div><div class="spec-val-wrap"><span class="spec-val">7 DOF × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンド形状</div><div class="spec-lbl-desc">Walker S原型は基本グリッパー構成（詳細非公開）。後継Walker S2では第4世代5本指デクスタラスハンドに進化。S2では精密把持・ピンチグリップ等に対応</div></div><div class="spec-val-wrap"><span class="spec-val">基本グリッパー</span><span class="spec-note-sm">S2: 5本指デクスタラスハンド</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">関節安全機構</div><div class="spec-lbl-desc">力コンプライアント関節＋剛柔複合ハイブリッド構造により、人やモノとの接触時に関節が衝撃を吸収。予期せぬ障害物との接触でも破損・怪我のリスクを低減</div></div><div class="spec-val-wrap"><span class="spec-val">力コンプライアント関節</span><span class="spec-note-sm">剛柔複合ハイブリッド構造</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">後継モデルとの比較</div><div class="spec-lbl-desc">Walker S2は52 DOF（S比+11）・5本指ハンド・最高速度2.0 m/s・自律バッテリー交換（3分）を実現。現在の出荷主力機はS2に移行しており、新規導入ではS2を推奨</div></div><div class="spec-val-wrap"><span class="spec-val">後継: Walker S2</span><span class="spec-note-sm">52 DOF / 5本指 / 2.0 m/s</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">2〜5時間の幅は動作強度・作業内容によって変動。産業シフト（8時間）の連続稼働には不足。後継Walker S2は起立8時間・移動3時間に改善し、さらに自律バッテリー交換（3分）で実質無制限稼働を実現</div></div><div class="spec-val-wrap"><span class="spec-val">2〜5時間</span><span class="spec-note-sm">動作内容による変動あり</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">2〜4時間の充電時間は稼働時間と同等以上。有線充電のみのため、バッテリー切れごとに作業停止が発生。産業ラインでの連続運用には計画的なシフト管理が必要</div></div><div class="spec-val-wrap"><span class="spec-val">2〜4時間</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電方式</div><div class="spec-lbl-desc">有線充電のみ。自律充電ステーションや自動バッテリー交換には非対応（後継Walker S2では自律スワップ3分を実現）。Walker Sの運用では充電担当スタッフまたは作業ローテーションが必要</div></div><div class="spec-val-wrap"><span class="spec-val">有線充電のみ</span><span class="spec-note-sm">自動帰巣・スワップなし</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">Walker S2 バッテリー</div><div class="spec-lbl-desc">後継のWalker S2は起立8時間・移動3時間の稼働に加え、自律バッテリー自動交換（3分ホットスワップ）を搭載。Walker S比で大幅に改善されており、24時間稼働も視野に入る</div></div><div class="spec-val-wrap"><span class="spec-val">S2: 8h（直立）/ 3h（移動）</span><span class="spec-note-sm">自律スワップ3分</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー・AI -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">カメラ・視覚センサー</div><div class="spec-lbl-desc">高解像度RGBDビジュアルセンサーを搭載。RGB（カラー映像）とDepth（距離情報）を同時取得し、3Dポイントクラウドを生成。複雑な工場環境の空間認識に使用</div></div><div class="spec-val-wrap"><span class="spec-val">高解像度 RGBD</span><span class="spec-note-sm">3Dポイントクラウド対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">その他センサー</div><div class="spec-lbl-desc">音声センサー・距離センサーを搭載。音声による指示受付・人との自然なコミュニケーション、および近接センサーによる障害物検知に対応</div></div><div class="spec-val-wrap"><span class="spec-val">音声・距離センサー</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">AIシステム</div><div class="spec-lbl-desc">マルチモーダル大規模言語モデル（LLM）を深く統合。自然言語による意図理解・細粒度のタスク計画・環境認識を組み合わせた高度な意思決定が可能。UBTECH公式で「integrates deeply with LLM」と明記</div></div><div class="spec-val-wrap"><span class="spec-val">マルチモーダル LLM 統合</span><span class="spec-note-sm">意図理解・タスク計画</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ナビゲーション</div><div class="spec-lbl-desc">3Dセマンティックマップを構築しながら歩行ルートを計画・障害物回避を実行。物体の意味的な理解（棚・通路・作業台等の認識）に基づいた自律ナビゲーションが可能</div></div><div class="spec-val-wrap"><span class="spec-val">3Dセマンティックナビ</span><span class="spec-note-sm">自律障害物回避</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">物体認識</div><div class="spec-lbl-desc">6Dポーズ認識（位置XYZ＋姿勢回転3軸）で複雑な形状の工業部品の姿勢を正確に認識。部品がランダムな向きで置かれていても、正確な把持位置・角度を算出してハンドアイ協調動作を実行</div></div><div class="spec-val-wrap"><span class="spec-val">6Dポーズ認識</span><span class="spec-note-sm">ハンドアイ協調</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット</div><div class="spec-lbl-desc">Walker S原型の演算チップ・TOPS値は全公開ソースで非公開。後継Walker S2ではIntel Core（最大4.7GHz）＋NVIDIA Jetson AGX Orin（275 TOPS）をGA Robotics公式サイトで確認</div></div><div class="spec-val-wrap"><span class="spec-val">非公開（Walker S原型）</span><span class="spec-note-sm">S2: Jetson AGX Orin確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信方式</div><div class="spec-lbl-desc">Walker S原型の通信規格は全公開ソースで非公開。後継Walker S2ではWi-Fi対応を確認。詳細はGA Roboticsへ問い合わせ推奨</div></div><div class="spec-val-wrap"><span class="spec-val">非公開（Walker S原型）</span><span class="spec-note-sm">S2: Wi-Fi対応確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- 安全性 -->
+    <div class="spec-panel" id="tab-safety">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">関節安全設計</div><div class="spec-lbl-desc">力コンプライアント関節により、人間や障害物との予期せぬ接触時に関節が「逃げる」ように衝撃を吸収。剛性の高い従来型産業ロボットと異なり、人ロボット協調作業に適した設計</div></div><div class="spec-val-wrap"><span class="spec-val">力コンプライアント関節</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">フレーム安全設計</div><div class="spec-lbl-desc">剛柔複合ハイブリッド構造（rigid-flexible coupling hybrid）により、強い衝撃はフレームの柔性部が吸収・分散。過負荷による破損リスクを低減し、長期稼働の信頼性を確保</div></div><div class="spec-val-wrap"><span class="spec-val">剛柔複合ハイブリッド構造</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IP等級（防水・防塵）</div><div class="spec-lbl-desc">IP等級の公開情報なし。BYD・Dongfeng・Geely等の自動車工場（塗装・プレス・組立ライン環境）での実稼働実績があるが、防水・防塵規格の詳細はメーカーへ確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">要メーカー確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">技適取得状況</div><div class="spec-lbl-desc">技適マーク取得状況は公開情報なし。日本での無線通信機能の使用には技適取得が必要。GA Roboticsへの確認を推奨</div></div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">GA Robotics要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">PSE認証</div><div class="spec-lbl-desc">日本国内での電気製品販売に必要なPSE認証の取得状況は公開情報なし。GA Roboticsへの問い合わせで確認可能</div></div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">GA Robotics要確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">GA Robotics株式会社</span><span class="spec-note-sm">東京 / UBTECH日本公式代理店</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本語サポート</div><div class="spec-val-wrap"><span class="spec-val">あり</span><span class="spec-note-sm">専用コールセンター＋全国出張修理</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">関東圏オンサイト対応</div><div class="spec-val-wrap"><span class="spec-val">6時間以内</span><span class="spec-note-sm">GA Robotics東京拠点より</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売価格</div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">GA Roboticsへ問い合わせ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">GA Robotics要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">GA Robotics要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本導入事例</div><div class="spec-val-wrap"><span class="spec-val">Walker E Pro レンタル開始</span><span class="spec-note-sm">2025年10月〜 / Walker S2日本展開計画中</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">Walker S2 日本展開</div><div class="spec-val-wrap"><span class="spec-val">計画中</span><span class="spec-note-sm">GA Roboticsが日本展開を進めている</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">Walker S が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">中国大手EV工場への実量産投入実績と、日本正規代理店による国内サポート体制。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏭</div>
+        <div class="feature-title">BYD・Dongfeng・Geely等の工場に量産実稼働</div>
+        <div class="feature-desc">中国大手EV・自動車メーカーの量産ラインへの実導入実績が最大の信頼性証明。受注残800億円超（2025年時点）・Foxconn・SF Express等にも拡大。机上のデモではなく「実際に工場で動いている」実証済みロボット。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">LLM統合 × 3Dセマンティックナビ × 6Dポーズ認識</div>
+        <div class="feature-desc">マルチモーダルLLMを深く統合し、自然言語指示による意図理解・タスク計画を実現。3Dセマンティックマップで工場環境を自律ナビゲーション、6Dポーズ認識で複雑な工業部品の正確な把持に対応。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🦾</div>
+        <div class="feature-title">41 DOF × 力コンプライアント関節 × 剛柔複合構造</div>
+        <div class="feature-desc">41自由度のフレームレストルクモーター×ハーモニックリダクション駆動系。力コンプライアント関節と剛柔複合ハイブリッド構造が衝撃を吸収し、人ロボット協調作業での安全性と精密な力制御を両立。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🇯🇵</div>
+        <div class="feature-title">GA Robotics日本正規代理店 · 関東6時間以内対応</div>
+        <div class="feature-desc">GA Robotics株式会社（東京）がUBTECHの日本公式代理店として専用コールセンター・全国出張修理を提供。関東圏では6時間以内のオンサイト対応を実現。Walker E Proのレンタルサービスも2025年10月から開始。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <div class="feature-title">後継Walker S2 · 受注800億円超 · 2025年11月量産開始</div>
+        <div class="feature-desc">Walker Sを大幅に進化させた後継機Walker S2が2025年11月に量産開始。52 DOF・5本指デクスタラスハンド・最高速度2.0 m/s・自律バッテリー交換（3分）を実現。Walker Sと同じUBTECHエコシステムで移行運用が可能。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏗</div>
+        <div class="feature-title">航空宇宙グレードアルミ合金 × 腰回転±162°</div>
+        <div class="feature-desc">航空機部品基準の高剛性アルミニウム合金フレームで産業現場の連続稼働に耐える耐久性を確保。腰部回転±162°・前屈最大170°の広い可動域が、狭い通路での向き転換や広い作業面へのアクセスを可能にする。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年6月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🐢</div>
+        <div>
+          <div class="caution-title">歩行速度0.83 m/s（3 km/h）は主要競合中で最低水準。広域施設での移動効率に制約</div>
+          <div class="caution-desc">Walker Sの最高歩行速度0.83 m/sは、後継Walker S2（2.0 m/s）・Figure 03（1.2 m/s）・Unitree G1（2 m/s）と比較して大幅に遅い。広い工場・倉庫・施設内で頻繁な移動が必要な業務では作業効率に大きく影響する可能性がある。ステーション型の定位置作業（ピック&プレース・品質検査）への適用が現実的。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🔄</div>
+        <div>
+          <div class="caution-title">後継Walker S2への移行期。新規導入ではS2を推奨・Walker S現行の入手状況要確認</div>
+          <div class="caution-desc">Walker S2が2025年11月に量産を開始し、出荷主力機はS2に移行している。Walker Sは基本グリッパー・低速・有線充電のみという制約があり、現時点での新規導入はWalker S2（52 DOF・5本指・2 m/s・自律スワップ）を検討する方が合理的。Walker S原型の現在の在庫状況・入手可否はGA Roboticsへ確認されたい。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">⚠️</div>
+        <div>
+          <div class="caution-title">片腕15kg可搬重量の公式ページ現在版での確認不能。導入前に要出典確認</div>
+          <div class="caution-desc">重量76kgはrobozapsで確認済み。片腕15kgの可搬重量はUBTECH公式ページの現在版で該当テキストが確認できない状態にある。公式ページの更新またはページ構造変更の可能性あり。ペイロードが重要な導入判断要素となる場合は、GA Roboticsを通じてUBTECHへ直接確認することを強く推奨。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">技適・PSE認証の取得状況が不明。日本での使用前にGA Roboticsへ確認が必要</div>
+          <div class="caution-desc">Walker Sの無線通信機能の技適マーク取得状況および日本国内販売に必要なPSE認証の取得状況がいずれも公開情報から確認できない。日本で使用する場合はGA Robotics株式会社（東京）に技適・PSEの状況を確認してから導入を検討されたい。日本語サポート体制は整備されており、問い合わせには日本語で対応可能。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">自動車製造ラインへの実量産投入から、精密産業・物流まで。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🔍</div><div class="usecase-title">製造ライン品質検査</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔩</div><div class="usecase-title">部品組立・締め付け作業</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📦</div><div class="usecase-title">精密部品搬送・ピック&プレース</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🚗</div><div class="usecase-title">自動車工場ライン作業</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">マルチタスク産業シナリオ</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤝</div><div class="usecase-title">人ロボット協調作業</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📋</div><div class="usecase-title">工場内巡回・点検</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🧩</div><div class="usecase-title">複雑形状部品のハンドリング</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要産業用ヒューマノイドとの比較</h2>
+    <p class="section-sub">2026年時点の主要な産業用・汎用ヒューマノイドとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">Walker S ★</th>
+          <th>Walker S2（後継）</th>
+          <th>Figure 03</th>
+          <th>Unitree G1</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">産業・工場</td><td>産業・工場</td><td>家庭・汎用</td><td>研究・産業</td></tr>
+        <tr><td>身長</td><td>170cm</td><td>172cm</td><td>168cm</td><td class="highlight">127cm</td></tr>
+        <tr><td>重量</td><td>約76kg</td><td>60〜73kg</td><td>60kg</td><td class="highlight">35kg</td></tr>
+        <tr><td>歩行速度</td><td>0.83 m/s</td><td class="highlight">2.0 m/s</td><td>1.2 m/s</td><td class="highlight">2 m/s</td></tr>
+        <tr><td>片腕可搬</td><td class="highlight">15kg</td><td class="highlight">15kg</td><td>20kg（両腕）</td><td>3kg（片腕）</td></tr>
+        <tr><td>ハンド</td><td>基本グリッパー</td><td class="highlight">第4世代5本指</td><td class="highlight">3g触覚センサー</td><td>5指（Dex5-1）</td></tr>
+        <tr><td>稼働時間</td><td>2〜5時間</td><td class="highlight">起立8h / 移動3h</td><td>5時間</td><td>約2時間</td></tr>
+        <tr><td>充電方式</td><td>有線のみ</td><td class="highlight">自律スワップ3分</td><td class="highlight">ワイヤレス誘導</td><td>有線</td></tr>
+        <tr><td>参考価格</td><td>$50,000〜$150,000</td><td>$68,000〜$120,000</td><td>$20,000未満（目標）</td><td class="highlight">$29,900〜</td></tr>
+        <tr><td>日本代理店</td><td class="check">GA Robotics（東京）</td><td class="check">GA Robotics（東京）</td><td class="cross">なし（未展開）</td><td class="check">TechShare Japan</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">Walker S / S2の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">日本正規代理店GA Roboticsとの連携により、日本語で丁寧にご案内します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© UBTECH Robotics（<a href="https://www.ubtrobot.com" target="_blank">ubtrobot.com</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

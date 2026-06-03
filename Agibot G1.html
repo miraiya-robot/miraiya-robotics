@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGIBOT G1 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://jp.agibot.com/products/G1" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/Agibot G1.png" alt="AGIBOT G1">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">AGIBOT INNOVATION</div>
+      <h1 class="product-name">G1</h1>
+      <p class="product-tagline">高さ130〜180 cm可変・8カメラ搭載のEmbodied AIデータ収集プラットフォーム。<br>Jetson AGX Orin（275 TOPS）・RGB-D×3＋魚眼×5＋両腕6軸力センサー・VRテレオペレーション対応。iREX2025出展・日本市場展開中。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">価格（公式未公開・要問い合わせ）</div>
+        <div class="price-main">要お問い合わせ</div>
+        <div class="price-sub">公式サイト・複数販売チャネルとも価格非公開<br>jp.agibot.com よりAGIBOT公式へお問い合わせください</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🧠 Embodied AIデータ収集</span>
+        <span class="badge">📷 8カメラ搭載</span>
+        <span class="badge">🔄 高さ130〜180cm可変</span>
+        <span class="badge">🎮 VRテレオペレーション</span>
+        <span class="badge">📡 275 TOPS</span>
+        <span class="badge">🎯 両腕6軸力センサー</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">130〜180cm</div><div class="qstat-key">高さ（可変）</div></div>
+    <div class="qstat"><div class="qstat-val">150kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">26 DOF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">3kg</div><div class="qstat-key">片アーム可搬</div></div>
+    <div class="qstat"><div class="qstat-val">4h+</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-06-01）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能5(r=50, top):              (150, 100)
+               身体能力4(r=40, upper-right):  (185, 130)
+               器用さ3(r=30, lower-right):    (176, 165)
+               連続稼働5(r=50, bottom):       (150, 200)
+               耐久性2(r=20, lower-left):     (133, 160)
+               安全性2(r=20, upper-left):     (133, 140) -->
+          <polygon points="150,100 185,130 176,165 150,200 133,160 133,140"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="150"  cy="100" r="4.5" fill="#0bd0c8"/>
+          <circle cx="185"  cy="130" r="4.5" fill="#f59e0b"/>
+          <circle cx="176"  cy="165" r="4.5" fill="#f97316"/>
+          <circle cx="150"  cy="200" r="4.5" fill="#0bd0c8"/>
+          <circle cx="133"  cy="160" r="4.5" fill="#ef4444"/>
+          <circle cx="133"  cy="140" r="4.5" fill="#ef4444"/>
+          <!-- Score labels -->
+          <text x="150"  y="94"  text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">5</text>
+          <text x="192"  y="128" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="183"  y="167" text-anchor="start"  fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="150"  y="214" text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">5</text>
+          <text x="126"  y="165" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="126"  y="138" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:50%"></div></div>
+          <div class="param-bar-note">NVIDIA Jetson AGX Orin 64GB（275 TOPS）搭載 · Embodied AI推論対応 · LLM統合は公式未記載 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">可搬3 kg/アーム（連続作業）· 移動速度公開情報なし · 車輪型全方向移動 · アームリーチ70cm · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">26 DOF（身体20 + エンドエフェクター6）· 2本指グリッパー×2（交換可能）· 両腕6軸力センサー · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:50%"></div></div>
+          <div class="param-bar-note">4時間以上（公式確認済）· 充電時間・ホットスワップの有無は非公開 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">IP等級非公開 · 安全規格認証未確認 · 車輪型屋内産業・研究環境用 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">安全規格認証未取得 · 技適PSE未確認 · 日本代理店未設定 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">5×0.20 + 4×0.15 + 3×0.15 + 5×0.20 + 2×0.15 + 2×0.15</div>
+      </div>
+      <div class="radar-total-val">3.7<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">AGIBOT G1 がコンベヤーベルト上の部品を連続把持・搬送するデモ映像。8カメラ構成と両腕6軸力センサーを活かし、流れてくる部品をリアルタイムに認識・ピックアップする産業ライン作業能力をご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=zwde6JYyQTc" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/zwde6JYyQTc/maxresdefault.jpg" alt="Agibot G1 working at the conveyor belt" onerror="this.src='https://img.youtube.com/vi/zwde6JYyQTc/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">Agibot G1 working at the conveyor belt</div>
+          <div class="yt-thumb-label">AGIBOT 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">AGIBOT公式（jp.agibot.com / agibot.com）・humanoid.guide・robotstart.infoより。ファクトチェック済（2026-06-01）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ・移動</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-arm')">🦾 アーム・DoF</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー・AI</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-safety')">🛡 安全性</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ・移動 -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">高さ（可変）</div><div class="spec-lbl-desc">130〜180 cmの高さを連続可変調整できる唯一に近い設計。日本人成人の腰〜肩高さまで可変するため、低い作業台から天井近くの棚まで同一機体で対応できる。公式原文「Height (adjustable): 130-180cm」</div></div><div class="spec-val-wrap"><span class="spec-val">130〜180 cm</span><span class="spec-note-sm">連続高さ可変</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">150kgは設備機器レベルの重量。フォークリフト・専用台車による搬入が必要。A2-W（230kg）より軽いが、一般的な人間（70kg）の2倍以上であり、設置環境の床荷重確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">150 kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">移動方式</div><div class="spec-lbl-desc">車輪型（四輪ステアリング・全方向移動）。工場内通路95%に対応するよう設計。段差20mm克服対応（⚠️humanoid.guide情報・公式現在ページでの確認不能）。平坦な屋内フロア専用</div></div><div class="spec-val-wrap"><span class="spec-val">四輪ステアリング</span><span class="spec-note-sm">全方向移動 / 通路95%対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">移動速度</div><div class="spec-lbl-desc">公式サイトに移動速度の数値記載なし。humanoid.guideは「4 km/h」と記載しているが公式ソースが確認できないため⚠️。導入計画に速度が必要な場合はAGIBOT公式に要確認</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">⚠️humanoid.guide: 4km/h（公式未確認）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">アームリーチ</div><div class="spec-lbl-desc">片腕リーチ70cm。高さ可変機構と組み合わせることで、床面から最大約250cm（高さ180cm+リーチ70cm）の空間にアクセス可能。公式原文「Arm reach (single): 70cm」</div></div><div class="spec-val-wrap"><span class="spec-val">70 cm（片腕）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">使用環境</div><div class="spec-lbl-desc">IP等級は公開情報なし。屋内産業・研究環境専用と推定。段差への対応は20mm以下と低く、車輪型のため段差・スロープ・屋外走行には非対応</div></div><div class="spec-val-wrap"><span class="spec-val">屋内産業・研究用</span><span class="spec-note-sm">IP等級非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">構造材料</div><div class="spec-lbl-desc">公式サイト・第三者ソースともに構造材料の記載なし。150kgの重量から高剛性の金属フレーム構造が推定される</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- アーム・DoF -->
+    <div class="spec-panel" id="tab-arm">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身自由度（DOF）</div><div class="spec-lbl-desc">26 DOF（身体20 DOF + エンドエフェクター6 DOF）。公式原文「20の自律自由度（エンドエフェクターを除く）」と「6自由度（二指グリッパー交換可能）」を確認</div></div><div class="spec-val-wrap"><span class="spec-val">26 DOF</span><span class="spec-note-sm">身体20 + エンドエフェクター6</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">エンドエフェクター</div><div class="spec-lbl-desc">2本指グリッパー×2（6 DOF）を標準搭載。ユーザーが交換可能な設計（Can Replaced with Two-finger Gripper）で、作業目的に合わせた別エンドエフェクターへの換装が可能。公式確認済み</div></div><div class="spec-val-wrap"><span class="spec-val">2本指グリッパー × 2</span><span class="spec-note-sm">6 DOF / 交換可能</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">片アーム可搬重量</div><div class="spec-lbl-desc">連続作業時に片腕で3kgの物体を保持可能。公式原文「continuous operation while holding a 3 kg object with one arm」。3kgは一般的な工業部品・電子機器・書類などの把持に対応する実用的なペイロード</div></div><div class="spec-val-wrap"><span class="spec-val">3 kg</span><span class="spec-note-sm">連続作業時・公式確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">両腕6軸力センサー</div><div class="spec-lbl-desc">両アームにそれぞれ6軸力覚・トルクセンサーを搭載（公式「両腕6軸力センサ」確認済み）。把持力・接触力をリアルタイム計測し、精密なデータ収集・力制御フィードバックに活用。VRテレオペレーションでのデータ品質向上にも貢献</div></div><div class="spec-val-wrap"><span class="spec-val">6軸力センサー × 2</span><span class="spec-note-sm">公式確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">高さ可変機構</div><div class="spec-lbl-desc">上半身全体（頭部・両アーム）の高さを130〜180cmで連続調整する機構。棚の高さ・作業台の種類・対象物の位置に応じてリアルタイムで作業姿勢を最適化できる。Embodied AIデータ収集において多様な高さ帯での動作データ取得を可能にする</div></div><div class="spec-val-wrap"><span class="spec-val">上半身高さ可変</span><span class="spec-note-sm">130〜180cm連続調整</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">公式で「連続稼働時間：4h+」（Runtime: 4h+）と明記。4時間以上の稼働で半日の実験セッションや産業シフトの一部をカバー可能。充電時間・ホットスワップ対応は非公開</div></div><div class="spec-val-wrap"><span class="spec-val">4時間以上</span><span class="spec-note-sm">公式確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">全公開ソースで充電時間の記載なし。導入後の運用スケジュール計画に影響するため、購入前にAGIBOT公式へ確認推奨</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">要メーカー確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ホットスワップ</div><div class="spec-lbl-desc">公開情報なし。A2-W（同社）がホットスワップ対応なのに対し、G1のホットスワップ有無は公式未記載。長時間連続運用が必要な場合は要確認</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー・AI -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">RGB-Dカメラ</div><div class="spec-lbl-desc">RGB-Dカメラ×3を搭載（公式「RGBD Camera 3」確認済み）。複数視点のカラー＋深度情報を同時取得し、3D空間認識・物体位置推定・データ収集で多角的な視覚情報を記録できる</div></div><div class="spec-val-wrap"><span class="spec-val">RGB-Dカメラ × 3</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">魚眼カメラ</div><div class="spec-lbl-desc">魚眼カメラ×5を搭載（公式「Fisheye 5」確認済み）。広角視野で周囲環境を広くカバー。RGB-D×3と魚眼×5の計8カメラ構成で前後左右すべての方向のデータを同時取得できる業界最多水準のカメラ数</div></div><div class="spec-val-wrap"><span class="spec-val">魚眼カメラ × 5</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">LiDAR</div><div class="spec-lbl-desc">シャーシ（底部）前後にLiDAR搭載との情報あり（awesomerobots.xyzの記載）。ただし公式ページには明示的な記載がなく⚠️要確認。搭載が確認されれば8カメラ＋LiDARの豊富なセンサー系でより高精度な環境マッピングが可能</div></div><div class="spec-val-wrap"><span class="spec-val">⚠️要確認</span><span class="spec-note-sm">公式ページ記載なし</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">6軸力センサー</div><div class="spec-lbl-desc">両アームにそれぞれ6軸力覚・トルクセンサー搭載（公式「Force Sensor: Six-Axis Force」確認済み）。把持・接触の精密な力データ取得はEmbodied AIトレーニングデータとして高価値</div></div><div class="spec-val-wrap"><span class="spec-val">6軸力センサー × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット</div><div class="spec-lbl-desc">NVIDIA Jetson AGX Orin 64GBを搭載（公式「エッジ側計算プラットフォーム：Jetson AGX Orin 64GB」確認済み）。275 TOPSはJetson AGX Orin 64GBの公式スペック値。8カメラ＋力センサーのデータをリアルタイム処理・記録するのに十分な演算能力</div></div><div class="spec-val-wrap"><span class="spec-val">Jetson AGX Orin 64GB</span><span class="spec-note-sm">275 TOPS</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">VRテレオペレーション</div><div class="spec-lbl-desc">VRデバイス（HMD）を使って人間がG1を遠隔操作しながら動作データを収集する「VRテレオペレーション」に対応（公式確認済み）。Embodied AIモデルの学習に使う高品質な動作データを効率的に取得できる主要機能</div></div><div class="spec-val-wrap"><span class="spec-val">VRテレオペレーション対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">LLM統合</div><div class="spec-lbl-desc">公式サイトにLLM/VLA統合の明示的な記載なし。Embodied AI推論・データ収集プラットフォームとしての位置付けが主で、モデル推論への活用が主要ユースケース</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">Embodied AI推論対応</span></div></div>
+      </div>
+    </div>
+
+    <!-- 安全性 -->
+    <div class="spec-panel" id="tab-safety">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">安全規格認証</div><div class="spec-lbl-desc">公開情報なし。CE認証・UL認証等の安全規格への準拠状況が未確認。日本での商用展開・産業現場への導入には関連安全規格の確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IP等級</div><div class="spec-lbl-desc">公開情報なし。車輪型屋内設計から防水・防塵性能は期待できないと推定。清浄な室内環境での使用が前提</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">技適マーク</div><div class="spec-lbl-desc">取得状況不明。無線通信機能の搭載状況・技適取得有無はAGIBOT公式または日本市場担当への確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">PSE認証</div><div class="spec-lbl-desc">日本国内での販売・使用に必要なPSE認証の取得状況は公開情報なし。日本での商用展開前に確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">humanoid.guideの信頼性注意</div><div class="spec-lbl-desc">ファクトチェックにより、humanoid.guideのAGIBOT G1ページには可搬重量「12kg」（公式: 3kg）・指の本数「5本/手」（公式: 2本指グリッパー）・価格「$95,000」（公式: 非公開）など誤情報の記載が確認された。公式サイト（jp.agibot.com）の情報を優先すること</div></div><div class="spec-val-wrap"><span class="spec-val">⚠️humanoid.guide情報は要注意</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span><span class="spec-note-sm">jp.agibot.com 日本語サイトあり・直販対応可能性</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本市場参入状況</div><div class="spec-val-wrap"><span class="spec-val">積極展開中</span><span class="spec-note-sm">iREX2025出展・2025年日本売上 約10億円</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">iREX2025出展</div><div class="spec-val-wrap"><span class="spec-val">出展済み</span><span class="spec-note-sm">2025年12月3〜6日・東京ビッグサイト</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">G1納入実績</div><div class="spec-val-wrap"><span class="spec-val">約700台</span><span class="spec-note-sm">2025年内4,000〜5,000台受注見込み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売価格</div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">jp.agibot.comへ問い合わせ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">同社上位モデル</div><div class="spec-val-wrap"><span class="spec-val">AGIBOT G2</span><span class="spec-note-sm">産業グレード・より高性能</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">G1 が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">Embodied AIデータ収集に最適化された豊富なセンサー系と高さ可変設計。iREX2025出展・日本売上10億円超の実績。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📷</div>
+        <div class="feature-title">8カメラ構成（RGB-D×3＋魚眼×5）＋両腕6軸力センサー</div>
+        <div class="feature-desc">RGB-Dカメラ3基と魚眼カメラ5基の計8カメラで全方位の視覚情報を同時取得。両腕の6軸力覚・トルクセンサーと組み合わせ、Embodied AIモデルの学習に必要なマルチモーダル動作データを豊富に記録する業界最多水準のセンサー構成。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📐</div>
+        <div class="feature-title">高さ130〜180 cm可変設計・作業空間を広くカバー</div>
+        <div class="feature-desc">上半身の高さを130〜180cmで連続調整できる可変機構により、床面から天井近くまでの多様な作業高さに対応。アームリーチ70cmと組み合わせ、最大約2.5m高まで到達可能。単一機体でデータ収集できる作業環境の範囲を大幅に拡大する特長。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎮</div>
+        <div class="feature-title">VRテレオペレーション対応・高品質データ収集</div>
+        <div class="feature-desc">VRデバイスを使用した直感的なテレオペレーションでG1を遠隔操作しながら動作データを収集。人間の自然な動作をそのままロボットに転写し、Embodied AIモデルの学習用高品質データセットを効率的に生成。iREX2025では山善・INSOL-HIGHとのデモを実施。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <div class="feature-title">Jetson AGX Orin 64GB（275 TOPS）・エッジAI推論</div>
+        <div class="feature-desc">NVIDIA Jetson AGX Orin 64GB（275 TOPS）をエッジ側計算プラットフォームとして搭載。クラウドに依存せず機体内でのリアルタイムAI推論・センサーデータ処理が可能。8カメラ＋力センサーの大量データを低遅延で統合処理するのに十分な演算能力。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🇯🇵</div>
+        <div class="feature-title">iREX2025出展・日本売上10億円超・積極的日本展開</div>
+        <div class="feature-desc">2025年12月のiREX2025（東京ビッグサイト）に出展し、山善・INSOL-HIGHとのG1データ収集デモを実施。2025年の日本でのヒューマノイド関連売上は約10億円超を達成。G1の納入実績は約700台・2025年内4,000〜5,000台受注見込みと急成長中。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔧</div>
+        <div class="feature-title">交換可能エンドエフェクター・2本指グリッパー標準</div>
+        <div class="feature-desc">標準の2本指グリッパー（6 DOF）はユーザーが別エンドエフェクターに交換可能な設計。研究目的・作業内容に応じたカスタマイズができるプラットフォーム性を持つ。Embodied AIデータ収集から産業向けタスク実行まで幅広い用途に対応できる拡張性。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年6月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">⚖️</div>
+        <div>
+          <div class="caution-title">重量150 kgは設備機器レベル。搬入・設置・工場フロア設計に専用対応が必要</div>
+          <div class="caution-desc">150kgは一般的な人間（70kg）の2倍以上で、搬入にはフォークリフト・専用台車が必要。オフィス・研究室への搬入では建物構造・エレベーター耐荷重・床の耐荷重を事前に確認する必要がある。工場フロアへの設置でも機体フットプリント上の集中荷重を構造計算することを推奨する。車輪型ではあるが稼働エリアには広めの安全余裕が必要。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">❓</div>
+        <div>
+          <div class="caution-title">移動速度・価格・IP等級・充電時間・通信方式がすべて公開情報なし。導入前仕様確認が必須</div>
+          <div class="caution-desc">公式サイトに移動速度・本体価格・IP等級・充電時間・通信方式の数値記載がない。humanoid.guideのAGIBOT G1ページには可搬重量「12kg」（公式: 3kg）・指の本数「5本/手」（公式: 2本指グリッパー）など明確な誤情報が確認されており、第三者サイトの情報は信頼性が低い。仕様の詳細はAGIBOT公式（jp.agibot.com）または直接の担当者へ問い合わせて確認書類の提示を依頼することを推奨する。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">日本展開は積極的だが正規代理店・技適PSEの公式確認が未完了</div>
+          <div class="caution-desc">iREX2025出展・日本売上10億円超と日本市場への参入は積極的だが、日本国内の正規代理店名・サポート拠点が公式発表されていない。技適マーク・PSE認証の取得状況も未確認のため、日本での正式商用運用前に電波法・電気用品安全法への準拠確認が必要。jp.agibot.com の日本語サイトから直接問い合わせると技適PSEの状況確認が可能。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🏗</div>
+        <div>
+          <div class="caution-title">車輪型のため段差・階段・屋外は非対応。段差克服20mmはhumaniod.guideの情報で公式未確認</div>
+          <div class="caution-desc">四輪ステアリング型は平坦な屋内フロア専用。段差克服20mm・工場通路95%対応の情報はhumanoid.guideの記載だが、2026年6月時点でページ上での原文確認が取れていない。フロア段差（配線ダクト・グレーチング・スロープ等）がある環境では事前に現地調査・メーカーへの確認が必要。IP等級も非公開のため粉塵・水気のある環境では使用不可と推定される。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">Embodied AIデータ収集から工場・産業現場のモデル推論まで。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🧠</div><div class="usecase-title">Embodied AIデータ収集</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎮</div><div class="usecase-title">VRテレオペレーション実験</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">工場・産業現場でのAI推論</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">身体化AIモデル訓練プラット</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📦</div><div class="usecase-title">部品供給・ピック&プレース</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔍</div><div class="usecase-title">品質検査・外観検査</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📊</div><div class="usecase-title">動作データセット構築</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤝</div><div class="usecase-title">人ロボット協調タスク研究</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要車輪型・Embodied AIロボットとの比較</h2>
+    <p class="section-sub">2026年時点の主要なEmbodied AIプラットフォーム・産業用車輪型ロボットとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">AGIBOT G1 ★</th>
+          <th>AGIBOT G2（上位）</th>
+          <th>AGIBOT A2-W（車輪型）</th>
+          <th>AGIBOT X1（研究向け）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">Embodied AIデータ収集</td><td>産業・工場</td><td>産業・製造</td><td>研究・教育</td></tr>
+        <tr><td>全高</td><td class="highlight">130〜180cm（可変）</td><td>非公開</td><td>163cm（固定）</td><td>130cm</td></tr>
+        <tr><td>重量</td><td>150kg</td><td>非公開</td><td>230kg</td><td class="highlight">≤33kg</td></tr>
+        <tr><td>DOF</td><td>26 DOF</td><td>非公開</td><td>22 DOF</td><td class="highlight">34 DOF</td></tr>
+        <tr><td>片アーム可搬</td><td>3 kg</td><td>非公開</td><td class="highlight">5 kg</td><td>≥0.5 kg</td></div></tr>
+        <tr><td>演算</td><td class="highlight">Jetson AGX Orin 64GB（275T）</td><td>非公開</td><td class="highlight">275 TOPS</td><td>外部PC依存</td></tr>
+        <tr><td>稼働時間</td><td>4h+</td><td>非公開</td><td class="highlight">5h+ホットスワップ</td><td>2〜4h</td></tr>
+        <tr><td>カメラ数</td><td class="highlight">8台（RGB-D×3+魚眼×5）</td><td>非公開</td><td>4台（AIビジョン）</td><td>オプション</td></tr>
+        <tr><td>VRテレオペ</td><td class="check">対応</td><td class="cross">非公開</td><td class="cross">非公開</td><td class="cross">なし</td></tr>
+        <tr><td>日本代理店</td><td class="cross">なし（直販）</td><td class="cross">なし</td><td class="cross">なし</td><td class="cross">なし</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">AGIBOT G1 の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">価格・技適PSE確認・Embodied AIデータ収集活用方法まで、日本語でご支援します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© AGIBOT Innovation（<a href="https://jp.agibot.com" target="_blank">jp.agibot.com</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

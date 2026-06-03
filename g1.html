@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unitree G1 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* COLOR SLIDESHOW */
+.color-viewer{position:relative}
+.color-slides{position:relative;background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+.color-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;display:flex;align-items:center;justify-content:center}
+.color-slide.active{opacity:1;position:relative}
+.color-slide img{width:100%;height:100%;object-fit:contain;padding:32px}
+.color-thumbs{display:flex;gap:12px;margin-top:16px;justify-content:center}
+.color-thumb{width:64px;height:64px;border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:.2s;background:#f0f0f0}
+.color-thumb img{width:100%;height:100%;object-fit:contain;padding:6px}
+.color-thumb.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(11,208,200,0.25)}
+.color-label{text-align:center;margin-top:10px;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.06em}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* MODEL TABLE */
+.model-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+.model-table th{background:var(--navy);color:#fff;padding:12px 14px;text-align:left;font-weight:700;font-size:12.5px}
+.model-table th:first-child{border-radius:10px 0 0 0}
+.model-table th:last-child{border-radius:0 10px 0 0}
+.model-table td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.model-table tr:hover td{background:#f0fdfc}
+.model-table .highlight{color:var(--accent);font-weight:800}
+.model-table .check{color:var(--green);font-weight:700}
+.model-table .cross{color:#9ca3af}
+.model-table .price-cell{font-weight:900;color:var(--navy);white-space:nowrap}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-item{}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-left{}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://www.unitree.com/g1" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="color-viewer">
+      <div class="color-slides">
+        <div class="color-slide active" id="slide-g1">
+          <img src="images/g1.png" alt="Unitree G1">
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">UNITREE ROBOTICS</div>
+      <h1 class="product-name">Unitree G1</h1>
+      <p class="product-tagline">世界最安級の本格研究用ヒューマノイド。<br>最大43 DoF・3D LiDAR搭載・技適取得済み。TechShare独占販売で日本即納対応。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">参考価格（メーカー直販）</div>
+        <div class="price-main">$13,500〜</div>
+        <div class="price-sub">日本国内（TechShare）：Basic ¥2,980,000〜 ／ R&D Standard ¥5,980,000〜<br>保証：G1標準8ヶ月 / G1 R&D 12ヶ月</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🔬 研究・開発向け</span>
+        <span class="badge">🦾 最大43 DoF</span>
+        <span class="badge">📡 3D LiDAR搭載</span>
+        <span class="badge">🤸 人体超え可動域</span>
+        <span class="badge">🇯🇵 技適取得済み</span>
+        <span class="badge">⏱ 約2時間稼働</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">132cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">約35kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">最大43 DoF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">2.0m/s</div><div class="qstat-key">最高速度</div></div>
+    <div class="qstat"><div class="qstat-val">約2h</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-29）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons: center=(150,150), maxR=100 -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150"   y2="50"  stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150"   y2="250" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4"  y2="200" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4"  y2="100" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon: 知能7, 身体能力3, 器用さ6, 連続稼働2, 耐久性1, 安全性3 -->
+          <!-- 知能(7,r=70,−90°)=(150,80) 身体能力(3,r=30,−30°)=(175.98,135) -->
+          <!-- 器用さ(6,r=60,30°)=(201.96,180) 連続稼働(2,r=20,90°)=(150,170) -->
+          <!-- 耐久性(1,r=10,150°)=(141.34,155) 安全性(3,r=30,210°)=(124.02,135) -->
+          <polygon points="150,80 175.98,135 201.96,180 150,170 141.34,155 124.02,135"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots at each score vertex -->
+          <circle cx="150"    cy="80"  r="4.5" fill="#0bd0c8"/>
+          <circle cx="175.98" cy="135" r="4.5" fill="#f97316"/>
+          <circle cx="201.96" cy="180" r="4.5" fill="#f59e0b"/>
+          <circle cx="150"    cy="170" r="4.5" fill="#ef4444"/>
+          <circle cx="141.34" cy="155" r="4.5" fill="#ef4444"/>
+          <circle cx="124.02" cy="135" r="4.5" fill="#f97316"/>
+          <!-- Score value labels -->
+          <text x="150"    y="72"  text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">7</text>
+          <text x="183"    y="132" text-anchor="start"  fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="208"    y="182" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">6</text>
+          <text x="150"    y="186" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="135"    y="164" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">1</text>
+          <text x="117"    y="132" text-anchor="end"    fill="#f97316" font-size="12" font-weight="900">3</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score">7</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:70%"></div></div>
+          <div class="param-bar-note">NVIDIA Jetson Orin NX 100 TOPS + UnifoLM-VLA-0（2026年3月OSS化）· 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">最高2.0 m/s · 片腕ペイロード2〜3kg · 転倒自己復帰対応 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">6</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:60%"></div></div>
+          <div class="param-bar-note">Ultimate D: 43 DoF + 5指17点触覚センサー · 手首360°回転 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">約2時間（待機込み） · マニピュレーション時1〜1.25h · 年間約20%劣化 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">1</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:10%"></div></div>
+          <div class="param-bar-note">IP等級非公開 · 屋内専用設計 · 2026年5月時点で公式在庫欠品中 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">技適取得済（211-250121 / 018-220008）· UniPwn BLE脆弱性（2025年9月発覚・未修正）· 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">7×0.20 + 3×0.15 + 6×0.15 + 2×0.20 + 1×0.15 + 3×0.15</div>
+      </div>
+      <div class="radar-total-val">3.8<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">DEMO VIDEO</div>
+    <h2 class="section-title">デモ動画</h2>
+    <p class="section-sub">CES 2026 にてUnitree G1がボクシング・ダンス演技を披露したデモ映像。</p>
+    <a href="https://www.youtube.com/watch?v=eVzxKgsIb_8" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://i.ytimg.com/vi/eVzxKgsIb_8/maxresdefault.jpg" alt="CES 2026 Unitree Robotics Lineup" onerror="this.src='https://i.ytimg.com/vi/eVzxKgsIb_8/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">CES 2026 Unitree Robotics — G1 ボクシング・ダンスデモ</div>
+          <div class="yt-thumb-label">YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">Unitree公式サイト・TechShare公開情報をもとに掲載。ファクトチェック済（2026-05-29）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-dof')">🦾 自由度</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-motion')">⚡ 運動性能</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-compute')">💻 AI・センサー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-models')">📊 モデル比較</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長（直立時）</div><div class="spec-lbl-desc">立った状態での全高。日本人女性の平均（158cm）より低く、小柄な体格。室内の棚や作業台には届くが、標準身長前提の環境では高さが足りない場面もある</div></div><div class="spec-val-wrap"><span class="spec-val">132cm</span><span class="spec-note-sm">1,320 × 450 × 200mm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">折畳時高さ</div><div class="spec-lbl-desc">膝を畳んで小さくしたときの高さ。スーツケース程度のサイズになるため、車のトランクや台車での輸送・展示移動が容易</div></div><div class="spec-val-wrap"><span class="spec-val">69cm</span><span class="spec-note-sm">690 × 450 × 300mm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">バッテリー込みの総重量。大人2人いれば持ち上げられるが、1人での取り回しは難しいレベル</div></div><div class="spec-val-wrap"><span class="spec-val">約35kg</span><span class="spec-note-sm">バッテリー含む</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">アームペイロード（片腕）</div><div class="spec-lbl-desc">片腕で継続的に持てる重量の上限。ペットボトル2本（約2kg）程度。工具の把持・軽量部品の組み立て・ピッキングには十分</div></div><div class="spec-val-wrap"><span class="spec-val">約2kg</span><span class="spec-note-sm">EDU版: 約3kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー</div><div class="spec-lbl-desc">13セルのリチウムイオンバッテリー。クイックリリース式で工具不要で素早く交換できる</div></div><div class="spec-val-wrap"><span class="spec-val">9,000mAh</span><span class="spec-note-sm">13セルリチウム / クイックリリース式</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">関節駆動部品</div><div class="spec-lbl-desc">産業用精密機器にも使われる「交差ローラーベアリング」を採用。耐久性・精度が高い産業グレード部品</div></div><div class="spec-val-wrap"><span class="spec-val">交差ローラーベアリング</span><span class="spec-note-sm">産業グレード部品採用</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">防水・防塵等級</div><div class="spec-lbl-desc">IP等級は現時点で非公開。屋内環境での使用を前提とした設計。</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">屋内専用設計</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">入荷状況（公式）</div><div class="spec-lbl-desc">2026年5月時点でUnitree公式ショップにて在庫欠品（Backordered）状態。日本国内はTechShare経由で要確認</div></div><div class="spec-val-wrap"><span class="spec-val">公式欠品中</span><span class="spec-note-sm">2026年5月時点 / TechShare要確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- 自由度 -->
+    <div class="spec-panel" id="tab-dof">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">合計自由度（DoF）</div><div class="spec-lbl-desc">DoF（Degrees of Freedom）= 全身で独立して動かせる関節の数。23〜43はモデルによって異なり、数が多いほど複雑な動作が可能。参考：人間全身は約244 DoF</div></div><div class="spec-val-wrap"><span class="spec-val">23〜43 DoF</span><span class="spec-note-sm">モデル構成によって異なる</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">腕（片腕）</div><div class="spec-lbl-desc">肩（3方向）・肘（1方向）・手首（3方向）の計7軸。人間の腕と同じ構成で、あらゆる方向に腕を伸ばして作業できる</div></div><div class="spec-val-wrap"><span class="spec-val">7 DoF × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">脚（片脚）</div><div class="spec-lbl-desc">股関節（3方向）・膝（1方向）・足首（2方向）の計6軸。階段・段差・しゃがみ込みなど複雑な移動動作に対応</div></div><div class="spec-val-wrap"><span class="spec-val">6 DoF × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">腰・脊椎</div><div class="spec-lbl-desc">上体を前後・左右・ねじりの3方向に動かせる軸。棚の高い場所への手伸ばしや床の物を拾う屈み動作に必要</div></div><div class="spec-val-wrap"><span class="spec-val">3 DoF</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">手首可動域</div><div class="spec-lbl-desc">手首を360°回転させられる。人間の手首は180°程度しか回らないが、G1はネジ回し・蓋開け・精密組み立てなど手首をフル回転させる作業が可能</div></div><div class="spec-val-wrap"><span class="spec-val">360°回転</span><span class="spec-note-sm">人体を超える可動域</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最上位ハンド（Ultimate D）</div><div class="spec-lbl-desc">5本指・17点触覚センサー搭載の最上位ハンド。力制御による繊細な把持が可能。3本指力制御ハンドはPro A/B・Ultimate A/Bにも搭載</div></div><div class="spec-val-wrap"><span class="spec-val">5指 + 17点触覚</span><span class="spec-note-sm">Ultimate Dのみ / 3本指はPro〜Ultimate共通</span></div></div>
+      </div>
+    </div>
+
+    <!-- 運動性能 -->
+    <div class="spec-panel" id="tab-motion">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高速度</div><div class="spec-lbl-desc">歩行・走行の最高速度。2.0m/s（時速7.2km）は人間の早歩き〜軽いジョギング相当。同価格帯の競合ロボットの中ではトップクラスの機動性</div></div><div class="spec-val-wrap"><span class="spec-val">約2.0m/s</span><span class="spec-note-sm">時速7.2km / 実証済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">転倒自己復帰</div><div class="spec-lbl-desc">転倒しても人の助けなしに自分で起き上がれる機能。展示・デモ中に倒れてもオペレーターが介入不要で安定した運用が可能</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">自律起き上がり</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">段差・不整地</div><div class="spec-lbl-desc">屋内の凹凸床・段差・スロープに対応。実際の施設環境でも安定して移動できる動的バランス制御を搭載</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">動的バランス制御</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">実証済みパフォーマンス</div><div class="spec-lbl-desc">CES 2026でボクシング・ダンス演技を実演。2026年3月にはUnifoLM-VLA-0で薬瓶開封・工具整理など12カテゴリの操作タスクを実証公開</div></div><div class="spec-val-wrap"><span class="spec-val">CES 2026 実演済み</span><span class="spec-note-sm">ボクシング・ダンス・12カテゴリ操作</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">UnifoLM-VLA-0 AIモデル</div><div class="spec-lbl-desc">VLA = Vision-Language-Action（視覚・言語・行動を統合するAI）。2026年3月にオープンソース化。言葉での指示をそのまま動作に変換する次世代制御方式に対応</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">2026年3月オープンソース化</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">制御周期</div><div class="spec-lbl-desc">ロボットの「考えて動く」サイクルの速さ。2msは1秒間に500回の制御更新を意味し、人間の反射速度（約150〜200ms）を大幅に上回る高速応答で精密な動作制御を実現</div></div><div class="spec-val-wrap"><span class="spec-val">2ms</span><span class="spec-note-sm">高速リアルタイム制御</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー容量</div><div class="spec-lbl-desc">9,000mAhは一般的なスマートフォンの約2〜3倍の蓄電量。13セル直列の高電圧構成で、モーター駆動に必要なパワーを効率的に供給する</div></div><div class="spec-val-wrap"><span class="spec-val">9,000mAh</span><span class="spec-note-sm">13セルリチウムイオン</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">フル充電から動けなくなるまでの時間。「約2時間」は軽作業・待機込みの数値。腕を常に動かすマニピュレーション作業では1〜1.25時間が現実的な目安</div></div><div class="spec-val-wrap"><span class="spec-val">約2時間</span><span class="spec-note-sm">マニピュレーション時: 1〜1.25時間</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">待機稼働時間</div><div class="spec-lbl-desc">ほぼ静止した状態の場合の目安。展示・デモ会場での「スタンバイ状態」では3〜4時間の維持が可能</div></div><div class="spec-val-wrap"><span class="spec-val">3〜4時間</span><span class="spec-note-sm">待機・軽動作時</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">空から満充電までの時間。8時間連続運用には予備バッテリーを3本以上用意する必要がある</div></div><div class="spec-val-wrap"><span class="spec-val">約1.5〜2時間</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー交換方式</div><div class="spec-lbl-desc">クイックリリース = ボタン一つで工具なしに脱着できる着脱式バッテリー。充電中に別のバッテリーに差し替えれば実質無停止での運用継続が可能</div></div><div class="spec-val-wrap"><span class="spec-val">クイックリリース式</span><span class="spec-note-sm">工具不要・素早く交換可能</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー劣化</div><div class="spec-lbl-desc">使用を繰り返すことで蓄電量が減少する。年間約20%の容量低下が報告されており、稼働時間も同程度短縮される見込み</div></div><div class="spec-val-wrap"><span class="spec-val">年間約20%劣化</span><span class="spec-note-sm">長期運用時は交換コストを考慮</span></div></div>
+      </div>
+    </div>
+
+    <!-- AI・センサー -->
+    <div class="spec-panel" id="tab-compute">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット（標準・Basicモデル）</div><div class="spec-lbl-desc">8コアCPUは一般的なノートPCと同等の処理能力。基本動作・歩行制御・センサー処理を担う。AI開発・深層学習推論は不向き</div></div><div class="spec-val-wrap"><span class="spec-val">8コアCPU</span><span class="spec-note-sm">Basicモデル搭載 / AI開発不向き</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット（EDU版）</div><div class="spec-lbl-desc">NVIDIA Jetson Orin NX = AI処理特化のエッジコンピューティングチップ。100 TOPSは1秒間に100兆回のAI演算が可能。275 TOPSのAGX Orinとは別製品であり混同注意</div></div><div class="spec-val-wrap"><span class="spec-val">NVIDIA Jetson Orin NX</span><span class="spec-note-sm">最大100 TOPS / EDU U2以上に搭載</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">3D LiDAR</div><div class="spec-lbl-desc">LiDAR = レーザー光を360°照射して周囲の立体空間を計測するセンサー。Livox Mid-360相当の高性能モデルで、障害物回避・地図作成・自律ナビゲーションの基盤。同価格帯での搭載は希少</div></div><div class="spec-val-wrap"><span class="spec-val">Livox Mid-360相当</span><span class="spec-note-sm">360°立体空間認識</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">深度カメラ</div><div class="spec-lbl-desc">各ピクセルの「距離情報」も取得できるカメラ。物体の形・大きさ・位置を3Dで把握でき、把持動作の精度を高める</div></div><div class="spec-val-wrap"><span class="spec-val">搭載</span><span class="spec-note-sm">3D物体認識・把持補助</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">マイク</div><div class="spec-lbl-desc">4本のマイクアレイで音声コマンド対応。周囲の騒音が多い環境でも話しかけた人の声を選択的に認識する</div></div><div class="spec-val-wrap"><span class="spec-val">4マイクアレイ</span><span class="spec-note-sm">音声コマンド対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">SDK / API</div><div class="spec-lbl-desc">SDK = ロボットをプログラムで制御するためのツールキット。2ms（0.002秒）という超低遅延でモーター制御が可能。C++とPythonの両方に対応</div></div><div class="spec-val-wrap"><span class="spec-val">SDK2（C++ / Python）</span><span class="spec-note-sm">2ms制御ループ / EDU版のみ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ROS2対応</div><div class="spec-lbl-desc">ROS2 = ロボット開発の世界標準フレームワーク。既存のロボットソフトウェアをそのままG1に移植・活用できる。研究の再現性と移植性が大幅に高まる</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">Ubuntu 20.04 / 22.04</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信機能</div><div class="spec-lbl-desc">Wi-Fi 6は最新世代の無線LAN規格で従来比約3倍の通信速度。Bluetooth 5.2は周辺デバイスとの低消費電力接続に使用。有線LANも別途対応</div></div><div class="spec-val-wrap"><span class="spec-val">Wi-Fi 6 / Bluetooth 5.2</span></div></div>
+      </div>
+    </div>
+
+    <!-- モデル比較 -->
+    <div class="spec-panel" id="tab-models">
+      <div style="overflow-x:auto">
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th>モデル</th>
+            <th>価格（USD）</th>
+            <th>合計 DoF</th>
+            <th>演算チップ</th>
+            <th>ハンド</th>
+            <th>SDK / ROS2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Basic</strong></td>
+            <td class="price-cell">$13,500</td>
+            <td>23</td>
+            <td>8コアCPU</td>
+            <td>グリッパ</td>
+            <td class="cross">非対応</td>
+          </tr>
+          <tr>
+            <td><strong>EDU Standard（U1）</strong></td>
+            <td class="price-cell">$43,900</td>
+            <td>23</td>
+            <td>Orin 40 TOPS</td>
+            <td>グリッパ</td>
+            <td class="check">✓ 対応</td>
+          </tr>
+          <tr>
+            <td><strong>EDU Plus（U2）</strong></td>
+            <td class="price-cell">$53,900</td>
+            <td>29</td>
+            <td>Orin NX 100 TOPS</td>
+            <td>グリッパ</td>
+            <td class="check">✓ 対応</td>
+          </tr>
+          <tr>
+            <td><strong>EDU Pro A / B</strong></td>
+            <td class="price-cell">$54,900〜</td>
+            <td>37</td>
+            <td>Orin NX 100 TOPS</td>
+            <td>3本指力制御</td>
+            <td class="check">✓ 対応</td>
+          </tr>
+          <tr>
+            <td><strong>EDU Ultimate A / B</strong></td>
+            <td class="price-cell">$65,900〜</td>
+            <td>43</td>
+            <td>Orin NX 100 TOPS</td>
+            <td>3本指力制御</td>
+            <td class="check">✓ 対応</td>
+          </tr>
+          <tr style="background:#f0fdfc">
+            <td><strong style="color:var(--accent)">EDU Ultimate D ★</strong></td>
+            <td class="price-cell highlight">$73,900</td>
+            <td class="highlight">41</td>
+            <td>Orin NX 100 TOPS</td>
+            <td class="highlight">5指 + 17点触覚</td>
+            <td class="check">✓ 対応</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:12px">※ 価格はUnitree公式（unitree.com）掲載値。日本国内価格はTechShare見積もりによる。G1-D（Standard固定型・Ultimate車両移動型）は2025年12月〜TechShare独占販売開始。</p>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本出荷開始</div><div class="spec-val-wrap"><span class="spec-val">2025年1月〜</span><span class="spec-note-sm">TechShare経由・順次出荷中</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">正規代理店</div><div class="spec-val-wrap"><span class="spec-val">TechShare株式会社</span><span class="spec-note-sm">〒135-0016 東京都江東区東陽5-28-6 TSビル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">G1-D 独占販売権</div><div class="spec-val-wrap"><span class="spec-val">2025年12月1日〜</span><span class="spec-note-sm">Standard固定型 / Ultimate車両移動型</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適取得状況</div><div class="spec-val-wrap"><span class="spec-val">取得済み ✓</span><span class="spec-note-sm">本体: 211-250121 MRA / リモコンV2: 018-220008</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span><span class="spec-note-sm">TechShareへ要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">保証期間</div><div class="spec-val-wrap"><span class="spec-val">8ヶ月（G1標準）</span><span class="spec-note-sm">G1 R&D: 12ヶ月</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">国内価格（Basic）</div><div class="spec-val-wrap"><span class="spec-val">¥2,980,000〜</span><span class="spec-note-sm">2次開発不可モデル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">国内価格（R&D Standard）</div><div class="spec-val-wrap"><span class="spec-val">¥5,980,000〜</span><span class="spec-note-sm">カスタム開発・SDK利用可</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本語サポート</div><div class="spec-val-wrap"><span class="spec-val">あり</span><span class="spec-note-sm">TechShareが窓口・ショールームあり</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">レンタルサービス</div><div class="spec-val-wrap"><span class="spec-val">あり</span><span class="spec-note-sm">EmplifAI・Robo Renta 対応</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">G1が選ばれる6つの理由</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">価格・性能・日本対応の3拍子が揃った研究・産業向けヒューマノイド。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">ヒューマノイド最安水準 $13,500〜</div>
+        <div class="feature-desc">Tesla Optimus未発売・Figure 02パイロット限定という市場環境で、G1は「今すぐ購入できる本格ヒューマノイド」の中で世界最安クラス。研究・実証実験のハードルを大幅に下げる。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <div class="feature-title">同価格帯で唯一の3D LiDAR搭載</div>
+        <div class="feature-desc">Livox Mid-360相当の3D LiDARを標準搭載。障害物回避・自律ナビゲーション・空間マッピングに対応し、深度カメラ単体では困難な広角・長距離の環境認識を実現。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤸</div>
+        <div class="feature-title">手首360°など人体超え可動域</div>
+        <div class="feature-desc">最大43 DoF・手首360°回転を含む人体を超える関節可動域。ネジ回し・蓋開け・逆向き把持など人間には難しい作業もスムーズにこなす高い操作自由度を持つ。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <div class="feature-title">産業グレード交差ローラーベアリング</div>
+        <div class="feature-desc">安価なボールベアリングではなく、精密機器・産業機械に使われる交差ローラーベアリングを採用。長期使用での精度劣化が少なく、耐久性・信頼性が高い。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔬</div>
+        <div class="feature-title">オープンSDK・ROS2で開発者フレンドリー</div>
+        <div class="feature-desc">世界標準のROS2に対応し、C++・Pythonのオープンなドキュメントとコミュニティが存在。カスタムAIアルゴリズムの実装・移植が容易で、世界中の大学・研究機関で採用実績あり。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🇯🇵</div>
+        <div class="feature-title">技適取得済み・国内即納対応</div>
+        <div class="feature-desc">Wi-Fi / Bluetoothの日本電波法認証（技適番号: 211-250121 / リモコンV2: 018-220008）を取得済み。TechShare株式会社が国内独占代理店として2025年1月より出荷開始。日本語サポート・ショールームあり。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき5つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🔋</div>
+        <div>
+          <div class="caution-title">稼働時間の実態は1〜1.25時間。公称「2時間」は待機込みの数値</div>
+          <div class="caution-desc">カタログ記載の「約2時間」は待機・軽動作を含めた数値。腕をアクティブに動かすマニピュレーション作業では1〜1.25時間が実態。8時間連続運用を想定する場合、予備バッテリーを3本以上用意する必要があり、1本あたりの追加コストも考慮が必要。バッテリーは年間約20%の容量劣化が報告されている。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">📏</div>
+        <div>
+          <div class="caution-title">身長132cmは「人間代替」には不向き。標準的な作業台・棚には届かない場面あり</div>
+          <div class="caution-desc">工場・オフィスの標準的な作業台（高さ75〜90cm）やカウンター（約90cm）へのアクセスは可能だが、人間用に設計された棚の上段・大型機器のパネル操作など「人間身長（160〜175cm）前提の環境」では届かない場合がある。「人間の作業をそのまま置き換える」用途には不向きで、G1向けに作業環境を設計する必要がある。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">💪</div>
+        <div>
+          <div class="caution-title">片腕ペイロード2kg（EDU版3kg）は家事・重作業には力不足</div>
+          <div class="caution-desc">片腕で継続的に持てる重量はペットボトル2本分（2kg）程度。工具把持・軽量部品の組み立て・ピッキングには十分だが、鍋・米袋・重い荷物の搬送などには不適。「家庭での力仕事全般」を期待して導入すると作業範囲が狭い可能性がある。ペイロードを重視するなら上位のUnitree H2（最大21kg）が候補となる。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">💻</div>
+        <div>
+          <div class="caution-title">Basicモデルは2次開発不可。カスタム開発にはR&Dモデル（国内¥5,980,000〜）が必須</div>
+          <div class="caution-desc">国内で入手しやすいBasicモデル（¥2,980,000〜）はTechShareのモバイルアプリ経由のプリセット動作のみ対応で、独自プログラムの実装や研究・AI開発には使用できない。SDK・ROS2を使った2次開発・カスタム制御には必ずR&Dモデルが必要で、国内では¥5,980,000〜となる。用途をよく確認してからモデルを選定することが重要。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🔓</div>
+        <div>
+          <div class="caution-title">【セキュリティ警告】UniPwn BLE脆弱性（2025年9月発覚）——全機種共通・未修正</div>
+          <div class="caution-desc">2025年9月に公開されたセキュリティ研究「UniPwn」にて、Unitree全機種（G1含む）のBluetooth通信にハードコードされた共通AESキーが使用されていることが判明。攻撃者が近距離からBLEでロボットを乗っ取り、任意のコマンドを送信できる脆弱性。2026年5月時点で公式パッチは未リリース。企業・研究機関での運用には、ネットワーク分離・BLE無効化・物理的アクセス制限などの対策を強く推奨する。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">研究から展示・軽産業まで幅広く活躍。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">AI・ロボット研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎓</div><div class="usecase-title">大学・研究室</div></div>
+      <div class="usecase-card"><div class="usecase-icon">💻</div><div class="usecase-title">カスタムAI開発・実装</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">軽工業・部品組み立て</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📦</div><div class="usecase-title">ピッキング・搬送</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎪</div><div class="usecase-title">イベント・展示デモ</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📸</div><div class="usecase-title">PR・撮影・メディア</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏪</div><div class="usecase-title">店頭デモ・接客補助</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">Unitreeラインナップ・主要競合との比較</h2>
+    <p class="section-sub">2026年5月時点の主要モデルとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>Unitree R1</th>
+          <th style="color:var(--accent)">Unitree G1 ★</th>
+          <th>Unitree H2</th>
+          <th>1X NEO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td>教育・エントリー</td><td class="highlight">研究・軽産業</td><td>産業・重作業</td><td>家庭用</td></tr>
+        <tr><td>身長</td><td>121〜123cm</td><td class="highlight">132cm</td><td>182cm</td><td>168cm</td></tr>
+        <tr><td>自由度（DoF）</td><td>20〜40</td><td class="highlight">23〜43</td><td>31</td><td>200+</td></tr>
+        <tr><td>3D LiDAR</td><td class="cross">なし</td><td class="check">✓ Livox Mid-360</td><td class="cross">なし（双眼のみ）</td><td class="cross">なし</td></tr>
+        <tr><td>最高速度</td><td>2.5 m/s</td><td class="highlight">2.0 m/s</td><td>1.5 m/s</td><td>6.2 m/s（公称）</td></tr>
+        <tr><td>稼働時間</td><td>〜1時間</td><td class="highlight">約2時間</td><td>約3時間</td><td>4時間</td></tr>
+        <tr><td>アームペイロード</td><td>非公表</td><td class="highlight">2〜3kg</td><td>7〜21kg</td><td>8kg</td></tr>
+        <tr><td>日本技適</td><td class="cross">未確認</td><td class="check">✓ 取得済み</td><td class="cross">未確認</td><td class="cross">未取得</td></tr>
+        <tr><td>日本代理店</td><td class="check">TechShare</td><td class="check">TechShare（独占）</td><td class="cross">未確定</td><td class="cross">未発表</td></tr>
+        <tr><td>参考価格（USD）</td><td>$4,900〜</td><td class="highlight">$13,500〜</td><td>$29,900〜</td><td>$20,000〜</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">Unitree G1の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">価格・導入サポート・レンタルプランについて、日本語で丁寧にご案内します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© Unitree Robotics（<a href="https://www.unitree.com" target="_blank">unitree.com</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unitree H2 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* COLOR SLIDESHOW */
+.color-viewer{position:relative}
+.color-slides{position:relative;background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+.color-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;display:flex;align-items:center;justify-content:center}
+.color-slide.active{opacity:1;position:relative}
+.color-slide img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* MODEL TABLE */
+.model-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+.model-table th{background:var(--navy);color:#fff;padding:12px 14px;text-align:left;font-weight:700;font-size:12.5px}
+.model-table th:first-child{border-radius:10px 0 0 0}
+.model-table th:last-child{border-radius:0 10px 0 0}
+.model-table td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.model-table tr:hover td{background:#f0fdfc}
+.model-table .highlight{color:var(--accent);font-weight:800}
+.model-table .check{color:var(--green);font-weight:700}
+.model-table .cross{color:#9ca3af}
+.model-table .price-cell{font-weight:900;color:var(--navy);white-space:nowrap}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-item{}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-left{}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://shop.unitree.com/products/unitree-h2" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="color-viewer">
+      <div class="color-slides">
+        <div class="color-slide active">
+          <img src="images/H2.png" alt="Unitree H2">
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">UNITREE ROBOTICS</div>
+      <h1 class="product-name">Unitree H2</h1>
+      <p class="product-tagline">研究・高精度マニピュレーション向けフラッグシップ。<br>生体眼デザイン・最大2,070 TOPSの演算性能・連続可搬7kgで次世代産業タスクに対応。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">参考価格（メーカー直販）</div>
+        <div class="price-main">$29,900〜</div>
+        <div class="price-sub">Commercial: $40,900 ／ EDU: $68,900（¥4,485,000〜¥10,335,000 目安）<br>デポジット $2,500（返金可） ／ 保証: Commercial 8ヶ月・EDU 12ヶ月</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🏭 研究・産業向け</span>
+        <span class="badge">🦾 31 DoF</span>
+        <span class="badge">💪 連続可搬7kg</span>
+        <span class="badge">🧠 最大2,070 TOPS</span>
+        <span class="badge">👁 生体眼デザイン</span>
+        <span class="badge">⏱ 約3時間稼働</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">180cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">70kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">31 DoF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">&lt;2 m/s</div><div class="qstat-key">最高速度</div></div>
+    <div class="qstat"><div class="qstat-val">約3h</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-29）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons: center=(150,150), maxR=100 -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150"   y2="50"  stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150"   y2="250" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4"  y2="200" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4"  y2="100" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon: 知能8, 身体能力4, 器用さ6, 連続稼働3, 耐久性2, 安全性2 -->
+          <!-- 知能(8,r=80,−90°)=(150,70) 身体能力(4,r=40,−30°)=(184.64,130) -->
+          <!-- 器用さ(6,r=60,30°)=(201.96,180) 連続稼働(3,r=30,90°)=(150,180) -->
+          <!-- 耐久性(2,r=20,150°)=(132.68,160) 安全性(2,r=20,210°)=(132.68,140) -->
+          <polygon points="150,70 184.64,130 201.96,180 150,180 132.68,160 132.68,140"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots at each score vertex -->
+          <circle cx="150"    cy="70"  r="4.5" fill="#0bd0c8"/>
+          <circle cx="184.64" cy="130" r="4.5" fill="#f59e0b"/>
+          <circle cx="201.96" cy="180" r="4.5" fill="#f59e0b"/>
+          <circle cx="150"    cy="180" r="4.5" fill="#f97316"/>
+          <circle cx="132.68" cy="160" r="4.5" fill="#ef4444"/>
+          <circle cx="132.68" cy="140" r="4.5" fill="#ef4444"/>
+          <!-- Score value labels -->
+          <text x="150"    y="62"  text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">8</text>
+          <text x="191"    y="127" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="208"    y="182" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">6</text>
+          <text x="150"    y="196" text-anchor="middle" fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="126"    y="169" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="126"    y="137" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score">8</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:80%"></div></div>
+          <div class="param-bar-note">EDU版: Jetson AGX Thor 最大2,070 TOPS + OTA継続アップデート · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">最高&lt;2 m/s · 連続可搬7kg · 脚360 N·m / 腕120 N·m · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">6</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:60%"></div></div>
+          <div class="param-bar-note">31 DoF · EDU版: Dex5-1（5指）オプション · 手首360°回転 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">約3時間 · 15 Ah / 0.972 kWh · クイックリリース交換対応 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">IP等級非公開 · 屋内専用設計 · 産業屋外環境は非対応 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">技適・PSE未確認 · 協働安全規格準拠なし · トルクリミット・衝突検知搭載 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">8×0.20 + 4×0.15 + 6×0.15 + 3×0.20 + 2×0.15 + 2×0.15</div>
+      </div>
+      <div class="radar-total-val">4.3<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">Unitree Robotics 公式チャンネルより。H2の実機デモをご覧ください。</p>
+    <a href="https://shop.unitree.com/products/unitree-h2" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="images/H2.png" alt="Unitree H2 デモ動画" style="object-fit:contain;background:#0f1923;padding:40px">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">Unitree H2 — 公式製品ページで動画を見る</div>
+          <div class="yt-thumb-label">unitree.com 公式 · 製品ページへ ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">Unitree公式EC・TechShare Japan・複数メディアのファクトチェック済み情報（2026-05-29）をもとに掲載。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-dof')">🦾 自由度</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-motion')">⚡ 運動性能</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-compute')">💻 AI・センサー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-models')">📊 モデル比較</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長（直立時）</div><div class="spec-lbl-desc">3ソース（公式EC・TechShare Japan・humanoid.press）すべてが180cmで一致。「182cm」という記載は誤りと確認済み</div></div><div class="spec-val-wrap"><span class="spec-val">180cm</span><span class="spec-note-sm">ファクトチェック確認値（✓）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">バッテリー込みの総重量。70kgは成人男性体重を大幅に上回るため、設置・移動には専用台車や2人以上での作業が推奨される</div></div><div class="spec-val-wrap"><span class="spec-val">70kg</span><span class="spec-note-sm">バッテリー含む</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">アームペイロード（連続）</div><div class="spec-lbl-desc">片腕で継続的に持てる重量。7kgはペットボトル大箱（2L×6本パック約12kg）より軽いが、工具・部品把持・物品搬送には十分な水準。G1（2〜3kg）に比べ大幅に向上</div></div><div class="spec-val-wrap"><span class="spec-val">7kg（連続）</span><span class="spec-note-sm">最大15kg（公式EC記載）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">脚部最大トルク</div><div class="spec-lbl-desc">脚の関節が発揮できる最大回転力。360 N·mは産業用マニピュレータと同等以上の水準で、階段昇降・段差越え・重量物を抱えた歩行などの高負荷タスクを支える</div></div><div class="spec-val-wrap"><span class="spec-val">360 N·m</span><span class="spec-note-sm">関節最大トルク</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">腕部最大トルク</div><div class="spec-lbl-desc">腕関節が発揮できる最大回転力。120 N·mは高精度マニピュレーション・重量物の正確な把持・精密組み立てタスクに適した水準</div></div><div class="spec-val-wrap"><span class="spec-val">120 N·m</span><span class="spec-note-sm">アーム関節最大トルク</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">モーター方式</div><div class="spec-lbl-desc">PMSM（永久磁石同期モーター）の低慣性・高速タイプ。慣性が小さいほど急加速・急停止が滑らかになり、精密な力制御と高速な位置決めを両立できる</div></div><div class="spec-val-wrap"><span class="spec-val">低慣性高速 PMSM</span><span class="spec-note-sm">高精度力制御対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">防水・防塵等級</div><div class="spec-lbl-desc">IP等級は現時点で非公開。屋内環境での運用を前提とした設計。屋外・水回りでの使用は非推奨</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">屋内専用設計</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">デポジット</div><div class="spec-lbl-desc">注文時に必要なデポジット金額。返金可能なため購入キャンセル時でも全額戻る。注文確定後の具体的な納期はUnitree公式または代理店に要確認</div></div><div class="spec-val-wrap"><span class="spec-val">$2,500</span><span class="spec-note-sm">返金可能（refundable）</span></div></div>
+      </div>
+    </div>
+
+    <!-- 自由度 -->
+    <div class="spec-panel" id="tab-dof">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">合計自由度（DoF）</div><div class="spec-lbl-desc">DoF（Degrees of Freedom）= 全身で独立して動かせる関節の数。31は脚6×2＋腕7×2＋腰3＋首2の内訳。参考：人間全身は約244 DoF</div></div><div class="spec-val-wrap"><span class="spec-val">31 DoF</span><span class="spec-note-sm">脚6×2 + 腕7×2 + 腰3 + 首2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">腕（片腕）</div><div class="spec-lbl-desc">肩（3方向）・肘（1方向）・手首（3方向）の計7軸。人間の腕と同じ構成で、あらゆる方向に腕を伸ばして精密作業ができる</div></div><div class="spec-val-wrap"><span class="spec-val">7 DoF × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">脚（片脚）</div><div class="spec-lbl-desc">股関節（3方向）・膝（1方向）・足首（2方向）の計6軸。階段・段差・不整地など複雑な移動動作に対応する</div></div><div class="spec-val-wrap"><span class="spec-val">6 DoF × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">腰・脊椎</div><div class="spec-lbl-desc">上体を前後・左右・ねじりの3方向に動かせる軸。棚の物を取る・床の物を拾う・重量物を抱えた状態でのバランス維持に必要</div></div><div class="spec-val-wrap"><span class="spec-val">3 DoF</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">首</div><div class="spec-lbl-desc">上下・左右の2軸。カメラ視点の追従・会話中の自然な視線制御・周囲認識に使用する</div></div><div class="spec-val-wrap"><span class="spec-val">2 DoF</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンドオプション（Commercial）</div><div class="spec-lbl-desc">ダミーハンドはオブジェクト風の固定手部。Dex3-1は3本指の力制御グリッパーで、把持・ピッキング・工具操作に対応。CommercialはDex5-1（5指）非対応</div></div><div class="spec-val-wrap"><span class="spec-val">ダミー / Dex3-1（3指）</span><span class="spec-note-sm">Commercialで選択可能</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンドオプション（EDU）</div><div class="spec-lbl-desc">EDU版はDex5-1（5本指・力制御）も選択可能。5指ハンドは人間の手に近い繊細な把持・組み立てが可能で、AI研究・精密マニピュレーション研究に最適</div></div><div class="spec-val-wrap"><span class="spec-val">ダミー / Dex3-1 / Dex5-1</span><span class="spec-note-sm">EDUのみ5指対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">手首可動域</div><div class="spec-lbl-desc">手首を360°回転させられる。ネジ締め・蓋開け・逆向き把持など人間の手首では不可能な作業を実現できる</div></div><div class="spec-val-wrap"><span class="spec-val">360°回転</span><span class="spec-note-sm">人体を超える可動域</span></div></div>
+      </div>
+    </div>
+
+    <!-- 運動性能 -->
+    <div class="spec-panel" id="tab-motion">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高速度</div><div class="spec-lbl-desc">公式EC記載は「Under 2 m/s」。実測値は約1.5 m/s（時速5.4km）程度とされ、人間の早歩き（約1.5 m/s）と同水準。高速移動よりも精密な作業性能を重視した設計</div></div><div class="spec-val-wrap"><span class="spec-val">&lt;2 m/s</span><span class="spec-note-sm">約1.5 m/s / 時速5.4km相当</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">転倒自己復帰</div><div class="spec-lbl-desc">転倒しても人の助けなしに自分で起き上がれる機能。展示・デモ中に倒れてもオペレーターが介入不要で安定した運用が可能</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">自律起き上がり</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">段差・不整地</div><div class="spec-lbl-desc">屋内の凹凸床・段差・スロープに対応。AIリアルタイムバランス制御で、実際の施設環境でも安定した移動を実現</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">AIリアルタイムバランス制御</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">安全機能（ハードウェア）</div><div class="spec-lbl-desc">関節に設定された最大トルク上限（トルクリミット）が、想定外の力が加わったときに自動で力を制限する。接触時の衝撃を緩和し、周囲の人や機器へのダメージリスクを軽減</div></div><div class="spec-val-wrap"><span class="spec-val">関節トルクリミット</span><span class="spec-note-sm">衝突検知 + OTA安全アップデート</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">OTAアップデート</div><div class="spec-lbl-desc">Over-The-Air（無線）でアルゴリズム・制御ソフトウェアを継続的に更新できる。購入後もAI性能・運動制御・安全機能が自動改善されていく</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">継続的なアルゴリズム更新</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">生体顔デザイン</div><div class="spec-lbl-desc">人間の顔に近いデザインの「生体眼モデル」を採用。接客・デモ展示・PR用途でユーザーへの親しみやすさを高める意匠設計。感情表現機能は現時点で非公開</div></div><div class="spec-val-wrap"><span class="spec-val">生体眼モデル搭載</span><span class="spec-note-sm">接客・デモ・PR用途に最適</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー容量</div><div class="spec-lbl-desc">15Ah / 0.972 kWhはスマートフォン約180台分のエネルギー量に相当。最大電圧75.6Vの高電圧設計で、大型高トルクモーターを効率的に駆動できる</div></div><div class="spec-val-wrap"><span class="spec-val">15 Ah / 0.972 kWh</span><span class="spec-note-sm">最大電圧 75.6V</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">フル充電から電池が切れるまでの時間。「約3時間」は一般的な作業条件でのデータ。高負荷なマニピュレーションや連続移動では短縮される場合がある</div></div><div class="spec-val-wrap"><span class="spec-val">約3時間</span><span class="spec-note-sm">タスク内容によって変動</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー交換方式</div><div class="spec-lbl-desc">クイックリリース = ボタン一つで工具なしに脱着できる着脱式バッテリー。充電中に別のバッテリーに差し替えれば実質無停止での運用継続が可能</div></div><div class="spec-val-wrap"><span class="spec-val">クイックリリース式</span><span class="spec-note-sm">工具不要 / 無停止運用可</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">空から満充電までの充電時間。公式未発表のため正確な数値は不明。充電ステーションまたは外部AC充電器の仕様に依存する</div></div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span><span class="spec-note-sm">TechShareへ要確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- AI・センサー -->
+    <div class="spec-panel" id="tab-compute">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット（Commercial）</div><div class="spec-lbl-desc">PC1にIntel Core i5搭載。一般的なノートPCと同等の処理能力で、基本動作・歩行制御・センサー処理を担当。AI深層学習の推論には向かない</div></div><div class="spec-val-wrap"><span class="spec-val">Intel Core i5（PC1）</span><span class="spec-note-sm">Commercialモデル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット（EDU）</div><div class="spec-lbl-desc">PC1にi5、PC2にi7を搭載し、加えてJetson AGX Thor（最大2,070 TOPS）でAI処理を担う三重構成。2,070 TOPSは現行の最高水準のロボット向けAIチップで、VLAモデルのリアルタイム推論が可能</div></div><div class="spec-val-wrap"><span class="spec-val">i5（PC1）+ i7（PC2）</span><span class="spec-note-sm">+ Jetson AGX Thor 最大2,070 TOPS</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">カメラ</div><div class="spec-lbl-desc">生体顔デザインに組み込まれた二眼（ステレオ）カメラ。2つのカメラで奥行き・距離を計算するロボットの主要センサー。LiDARは非搭載</div></div><div class="spec-val-wrap"><span class="spec-val">生体眼ステレオカメラ</span><span class="spec-note-sm">LiDARなし（基本モデル）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">マイク</div><div class="spec-lbl-desc">アレイマイク（複数マイクを使った指向性収音）で周囲の騒音環境でも音声コマンドを正確に認識できる</div></div><div class="spec-val-wrap"><span class="spec-val">アレイマイク</span><span class="spec-note-sm">音声コマンド対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IMU</div><div class="spec-lbl-desc">慣性計測ユニット（IMU）= 各軸の加速度・角速度を計測するセンサー群。転倒防止バランス制御・歩行の姿勢推定・動作の精密制御に使用する</div></div><div class="spec-val-wrap"><span class="spec-val">搭載</span><span class="spec-note-sm">姿勢推定・バランス制御用</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">SDK / ROS2</div><div class="spec-lbl-desc">EDUのみROS2・Python・C++によるSDKフルアクセスが可能。2ms制御ループ対応。世界標準フレームワークで既存のロボットソフトウェアをそのまま移植できる</div></div><div class="spec-val-wrap"><span class="spec-val">ROS2 / Python / C++</span><span class="spec-note-sm">EDU版のみ / SDK非対応はCommercial</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">OTAアップデート</div><div class="spec-lbl-desc">Over-The-Airで制御アルゴリズムを継続更新。購入後もAI動作が自動改善され、新機能が随時追加される</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">全モデル共通</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信方式</div><div class="spec-lbl-desc">Wi-FiおよびEthernetに対応。詳細な規格（Wi-Fi世代・Bluetooth搭載の有無）は公式未発表</div></div><div class="spec-val-wrap"><span class="spec-val">WiFi / Ethernet</span><span class="spec-note-sm">詳細仕様は公式未発表</span></div></div>
+      </div>
+    </div>
+
+    <!-- モデル比較 -->
+    <div class="spec-panel" id="tab-models">
+      <div style="overflow-x:auto">
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th>モデル</th>
+            <th>価格（USD）</th>
+            <th>演算チップ</th>
+            <th>ハンド</th>
+            <th>SDK / ROS2</th>
+            <th>保証</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>H2 Base</strong></td>
+            <td class="price-cell">$29,900</td>
+            <td>i5（PC1）</td>
+            <td>ダミー</td>
+            <td class="cross">非対応</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>H2 Commercial</strong></td>
+            <td class="price-cell">$40,900</td>
+            <td>i5（PC1）</td>
+            <td>ダミー / Dex3-1（3指）</td>
+            <td class="cross">非対応</td>
+            <td>8ヶ月</td>
+          </tr>
+          <tr style="background:#f0fdfc">
+            <td><strong style="color:var(--accent)">H2 EDU ★</strong></td>
+            <td class="price-cell highlight">$68,900</td>
+            <td class="highlight">i5 + i7 + AGX Thor<br><small>最大2,070 TOPS</small></td>
+            <td class="highlight">ダミー / Dex3-1 / Dex5-1（5指）</td>
+            <td class="check">✓ ROS2 / Python / C++</td>
+            <td>12ヶ月</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:12px">※ 価格はUnitree公式EC（shop.unitree.com）掲載値。JPY換算は$1=¥150目安。日本国内価格はTechShare見積もりによる。デポジット$2,500（返金可）が別途必要。</p>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">発売・出荷ステータス</div><div class="spec-val-wrap"><span class="spec-val">量産出荷中</span><span class="spec-note-sm">2026年4月以降・北米向け先行</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">TechShare株式会社</span><span class="spec-note-sm">〒135-0016 東京都江東区東陽5-28-6 TSビル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売ステータス</div><div class="spec-val-wrap"><span class="spec-val">先行予約準備中</span><span class="spec-note-sm">TechShare Japanにて受付開始予定</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本国内価格</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span><span class="spec-note-sm">要問合せ: unitree@techshare.co.jp</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">TechShare 電話</div><div class="spec-val-wrap"><span class="spec-val">03-5683-7293</span><span class="spec-note-sm">TechShare株式会社 窓口</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適取得状況</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span><span class="spec-note-sm">TechShareへ要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span><span class="spec-note-sm">TechShareへ要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">保証期間</div><div class="spec-val-wrap"><span class="spec-val">8ヶ月（Commercial）</span><span class="spec-note-sm">EDU版: 12ヶ月</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">参考価格（USD→JPY換算）</div><div class="spec-val-wrap"><span class="spec-val">¥4,485,000〜</span><span class="spec-note-sm">$1=¥150換算目安 / $29,900〜$68,900</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">北米代理店</div><div class="spec-val-wrap"><span class="spec-val">ToborLife</span><span class="spec-note-sm">Mountain View, CA</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">H2が選ばれる6つの理由</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">高精度マニピュレーション・接客デモ・研究開発の三拍子が揃ったフラッグシップモデル。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👁</div>
+        <div class="feature-title">生体眼デザインで親しみやすさ抜群</div>
+        <div class="feature-desc">人間の顔に近いビオニックアイを採用した外観デザイン。接客・展示・PR用途でユーザーへの心理的距離を縮め、従来の機械的外観のロボットとの差別化を実現。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">EDU版最大2,070 TOPSの最高演算性能</div>
+        <div class="feature-desc">Jetson AGX Thor（最大2,070 TOPS）を搭載するEDU版はUnitreeラインナップ最高水準の演算性能。VLAモデルのリアルタイム推論・マルチカメラ映像処理・高度なAIアルゴリズムの実装に対応。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💪</div>
+        <div class="feature-title">連続可搬7kg・脚部360 N·mの高出力設計</div>
+        <div class="feature-desc">G1（2〜3kg）に対し約2〜3倍のアームペイロード7kgを達成。脚部360 N·mの高トルクで重量物を抱えた状態での安定歩行・段差越えが可能。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤸</div>
+        <div class="feature-title">Dex5-1（5指）対応・手首360°回転</div>
+        <div class="feature-desc">EDU版はDex5-1（5本指・力制御）ハンドに対応。手首360°回転を含む高い器用さで、精密組み立て・ネジ締め・ビン開封など産業タスクを幅広くこなす。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔬</div>
+        <div class="feature-title">ROS2 + OTA継続更新で開発フレンドリー</div>
+        <div class="feature-desc">EDU版はROS2・Python・C++のSDKフルアクセス対応。2ms制御ループで高速リアルタイム制御が可能。OTAアップデートにより購入後もAI性能が継続的に向上する。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🇯🇵</div>
+        <div class="feature-title">TechShare Japan が日本代理店として先行予約準備中</div>
+        <div class="feature-desc">TechShare株式会社（東京都江東区）がUnitree H2の日本正規代理店として先行予約販売を準備中。G1・R1と同一窓口で日本語サポートが受けられる体制を構築中。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき5つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🐢</div>
+        <div>
+          <div class="caution-title">最高速度&lt;2 m/s（約1.5 m/s）は産業用としては比較的低速</div>
+          <div class="caution-desc">公式スペックは「Under 2 m/s」で、実測値は約1.5 m/s（時速5.4km相当）とされる。人間の早歩きと同程度であり、物流・倉庫での高速搬送・広いエリアでの素早い移動には不向き。H2は移動スピードよりも「精密なマニピュレーション性能と演算能力」を重視した設計であり、スピードを重視する用途には同社H1（最高速）が候補となる。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🌧</div>
+        <div>
+          <div class="caution-title">IP等級非公開・屋内専用設計。屋外・水回りでの使用はリスクあり</div>
+          <div class="caution-desc">防水・防塵等級（IP等級）は現時点で公式未発表。屋内での研究・デモ・産業利用を前提とした設計であり、屋外・工場の油や粉塵が多い環境・水を使う作業場での運用はリスクが高い。導入環境の条件については事前にTechShare / Unitreeへ確認することを強く推奨する。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">💻</div>
+        <div>
+          <div class="caution-title">CommercialモデルはSDK非対応。AI研究・カスタム制御にはEDU版（$68,900）が必須</div>
+          <div class="caution-desc">Commercialモデル（$40,900）はUnitree提供の標準機能・プリセット動作のみ対応で、独自プログラムやROS2・Python SDKによる2次開発はできない。AI研究・カスタムアルゴリズム実装・高度なマニピュレーション制御にはEDU版（$68,900）が必要。用途に応じたモデル選定が重要。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">技適・PSE未確認。日本国内での無線通信利用には電波法上のリスクがある</div>
+          <div class="caution-desc">Wi-Fi / Bluetooth等の無線通信を使用するにあたり必要な技術適合証明（技適）の取得状況は公式未発表。日本国内で技適未取得の無線機器を継続使用することは電波法に抵触する可能性がある。G1は技適取得済みだが、H2は現時点で確認できていない。導入前にTechShare株式会社（03-5683-7293）への確認を強く推奨する。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">⚠️</div>
+        <div>
+          <div class="caution-title">可搬重量21kg（瞬間値）は根拠原文の確認不能。信頼できる公式値は連続7kg</div>
+          <div class="caution-desc">一部メディアに「21kg瞬間値」という数値が記載されているが、ファクトチェック（2026-05-29）時点でこの数値の原文を公式EC・TechShare・主要レビュー媒体において確認できなかった。公式ECには「Arm Payload: 7-15 kg」と記載されており、確認できる最大値は15kgとなる。業務上の荷重計算には連続7kgを基準値として採用することを推奨する。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">高精度マニピュレーションが求められる研究・産業・デモ用途に最適。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">AI・ロボット研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">精密製造・組み立て補助</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📦</div><div class="usecase-title">重量物ピッキング・搬送</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎓</div><div class="usecase-title">大学・研究機関</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎪</div><div class="usecase-title">イベント・展示デモ</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤝</div><div class="usecase-title">接客・案内・PR</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏢</div><div class="usecase-title">施設内サービス業務</div></div>
+      <div class="usecase-card"><div class="usecase-icon">💻</div><div class="usecase-title">カスタムAI開発・実装</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">Unitreeラインナップ・主要競合との比較</h2>
+    <p class="section-sub">2026年5月時点の主要モデルとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>Unitree G1</th>
+          <th style="color:var(--accent)">Unitree H2 ★</th>
+          <th>Fourier GR-2</th>
+          <th>1X NEO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td>研究・軽産業</td><td class="highlight">研究・高精度マニピュレーション</td><td>産業・リハビリ</td><td>家庭用</td></tr>
+        <tr><td>身長</td><td>132cm</td><td class="highlight">180cm</td><td>165cm</td><td>168cm</td></tr>
+        <tr><td>自由度（DoF）</td><td>23〜43</td><td class="highlight">31</td><td>40</td><td>200+</td></tr>
+        <tr><td>アームペイロード</td><td>2〜3kg</td><td class="highlight">7kg（連続）</td><td>3kg</td><td>8kg</td></tr>
+        <tr><td>最大演算（AI）</td><td>100 TOPS（EDU）</td><td class="highlight">2,070 TOPS（EDU）</td><td>非公開</td><td>2,070 TOPS</td></tr>
+        <tr><td>最高速度</td><td>2.0 m/s</td><td class="highlight">&lt;2 m/s（約1.5 m/s）</td><td>非公開</td><td>6.2 m/s（公称）</td></tr>
+        <tr><td>稼働時間</td><td>約2時間</td><td class="highlight">約3時間</td><td>非公開</td><td>4時間</td></tr>
+        <tr><td>生体顔デザイン</td><td class="cross">なし</td><td class="check">✓ 生体眼モデル</td><td class="cross">なし</td><td class="cross">なし</td></tr>
+        <tr><td>日本代理店</td><td class="check">TechShare（独占）</td><td class="check">TechShare（先行予約準備中）</td><td class="cross">未確認</td><td class="cross">未発表</td></tr>
+        <tr><td>参考価格（USD）</td><td>$13,500〜</td><td class="highlight">$29,900〜</td><td>$130,000〜</td><td>$20,000〜</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">Unitree H2の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">価格・導入サポート・先行予約について、日本語で丁寧にご案内します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© Unitree Robotics（<a href="https://www.unitree.com" target="_blank">unitree.com</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

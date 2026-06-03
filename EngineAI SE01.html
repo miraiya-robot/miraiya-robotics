@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EngineAI SE01 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://en.engineai.com.cn/" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/EngineAI SE01.png" alt="EngineAI SE01">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">ENGINE AI（深圳引智科技）</div>
+      <h1 class="product-name">SE01</h1>
+      <p class="product-tagline">E2Eニューラルネットで人間に近い自然歩容を実現した汎用ヒューマノイド。<br>170 cm / 32 DOF / 歩行7.2 km/h / 5指Revo 2 Basicハンド / 航空宇宙グレードアルミ合金（設計寿命10年）。Engine Sense搭載。2024年12月グローバル販売開始。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">参考価格（⚠️ソース間で大幅乖離あり・要確認）</div>
+        <div class="price-main">$54,000</div>
+        <div class="price-sub">約¥8,100,000（¥150換算 / Robots International確認値）<br>⚠️ originofbotsは$20,000〜$30,000（推定値）と大幅相違。正式価格はEngineAI公式へ要確認</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🚶 E2E NN人間的歩容</span>
+        <span class="badge">⚡ 7.2 km/h歩行</span>
+        <span class="badge">✋ Revo 2 Basic 5指</span>
+        <span class="badge">🏗 設計寿命10年</span>
+        <span class="badge">📡 Engine Sense搭載</span>
+        <span class="badge">📖 オープンソースSDK</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">170cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">約55kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">32 DOF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">7.2 km/h</div><div class="qstat-key">最高歩行速度</div></div>
+    <div class="qstat"><div class="qstat-val">〜2h</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-29）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能4(r=40, top):              (150, 110)
+               身体能力5(r=50, upper-right):  (193, 125)
+               器用さ6(r=60, lower-right):    (202, 180)
+               連続稼働3(r=30, bottom):       (150, 180)
+               耐久性4(r=40, lower-left):     (115, 170)
+               安全性2(r=20, upper-left):     (133, 140) -->
+          <polygon points="150,110 193,125 202,180 150,180 115,170 133,140"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="150"  cy="110" r="4.5" fill="#f59e0b"/>
+          <circle cx="193"  cy="125" r="4.5" fill="#f59e0b"/>
+          <circle cx="202"  cy="180" r="4.5" fill="#0bd0c8"/>
+          <circle cx="150"  cy="180" r="4.5" fill="#f97316"/>
+          <circle cx="115"  cy="170" r="4.5" fill="#f59e0b"/>
+          <circle cx="133"  cy="140" r="4.5" fill="#ef4444"/>
+          <!-- Score labels -->
+          <text x="150"  y="104"  text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="200"  y="123"  text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">5</text>
+          <text x="209"  y="182"  text-anchor="start"  fill="#0bd0c8" font-size="12" font-weight="900">6</text>
+          <text x="150"  y="194"  text-anchor="middle" fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="108"  y="175"  text-anchor="end"    fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="126"  y="138"  text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">NVIDIA + Intel デュアルプロセッサ · E2Eニューラルネット歩行 · 強化学習 · OTA更新 · LLM統合非公開 · TOPS値非公開 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:50%"></div></div>
+          <div class="param-bar-note">歩行2 m/s（7.2 km/h）· 可搬15 kg（片腕・自重比27%）· ランニング・スクワット・プッシュアップ対応 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score">6</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:60%"></div></div>
+          <div class="param-bar-note">32 DOF · Revo 2 Basic 5指ハンド · 最大トルク約330 N·m · デュアルエンコーダ · 触覚センサー詳細非公開 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">約2時間 · クイックスワップ10,000 mAhバッテリー · 充電時間非公開 · 自動帰巣なし · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">航空宇宙グレードアルミ合金フレーム · 設計寿命10年 · IP等級非公開 · 2024年発売の新製品 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">障害物検知・3Dシーン理解・多層経路計画 · 安全規格認証不明 · 技適PSE未確認 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">4×0.20 + 5×0.15 + 6×0.15 + 3×0.20 + 4×0.15 + 2×0.15</div>
+      </div>
+      <div class="radar-total-val">4.0<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">EngineAI 公式チャンネルより。SE01の人間らしい自然歩容・32 DOFの全身動作・Engine Senseセンサーシステムをご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=I7Oh-ma4o1A" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/I7Oh-ma4o1A/maxresdefault.jpg" alt="EngineAI general-purpose humanoid SE01" onerror="this.src='https://img.youtube.com/vi/I7Oh-ma4o1A/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">EngineAI general-purpose humanoid SE01</div>
+          <div class="yt-thumb-label">EngineAI 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">EngineAI公式・Robots International・originofbotsより。ファクトチェック済（2026-05-29）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-joint')">🦾 関節・DoF</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-ai')">💻 演算・AI</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">公式「170CM」と明記。originofbots・robotsinternational も170cmで一致。⚠️ humanoid.guideは180cmと誤記しているが参照不可。人間の成人男性と同等サイズで、標準的な作業環境に自然に馴染む</div></div><div class="spec-val-wrap"><span class="spec-val">170 cm</span><span class="spec-note-sm">公式確認済み（humanoid.guide「180cm」は誤り）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">約55kg（originofbots「approximately 55 kilograms」/ robotsinternational「around 55 kg」の2ソースで一致）。⚠️ humanoid.guideは80kgと誤記。55kgは2人での搬入が容易な軽量設計</div></div><div class="spec-val-wrap"><span class="spec-val">約55 kg</span><span class="spec-note-sm">humanoid.guide「80kg」は誤り</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高歩行速度</div><div class="spec-lbl-desc">公式「Normal Walking Speed: 2M/s」と明記（7.2 km/h）。originofbots・robotsinternationalも2 m/sで一致。⚠️ humanoid.guideは「3 km/h」と誤記（実際の7.2 km/hの半分以下）。人間の早歩き相当の速度を実現</div></div><div class="spec-val-wrap"><span class="spec-val">2 m/s</span><span class="spec-note-sm">7.2 km/h（humanoid.guide「3km/h」は誤り）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">フレーム材料・設計寿命</div><div class="spec-lbl-desc">航空宇宙グレードアルミ合金フレームを採用（originofbots「aerospace-grade aluminum alloy frame」確認済み）。設計寿命10年（originofbots「extends the robot's design life to 10 years」確認済み）。長期使用を前提とした研究・産業向け高耐久設計</div></div><div class="spec-val-wrap"><span class="spec-val">航空宇宙グレードアルミ合金</span><span class="spec-note-sm">設計寿命10年</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">動作能力</div><div class="spec-lbl-desc">歩行・ランニングに加え、スクワット・プッシュアップ・階段昇降・段差乗り越えなどの動的動作に対応。E2Eニューラルネットによる人間に近い自然な歩容が最大の特長で、「世界初の人間的な歩容を実現した汎用ヒューマノイド」と公式に主張</div></div><div class="spec-val-wrap"><span class="spec-val">走行・スクワット・プッシュアップ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IP等級・使用環境</div><div class="spec-lbl-desc">IP等級の公開情報なし。屋内研究・産業展示用途が主とされるが、Engine Senseの360° LiDARにより屋内外の複雑環境での歩行実証に使用される事例もある。防水・防塵仕様は要確認</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">要メーカー確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- 関節・DoF -->
+    <div class="spec-panel" id="tab-joint">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身自由度（DOF）</div><div class="spec-lbl-desc">公式「Total DOF: 32pcs」と明記。originofbots・robotsinternational・robozapsの4ソースで32 DOFが一致。⚠️ humanoid.guideは「12 degrees of freedom」と誤記（参照不可）</div></div><div class="spec-val-wrap"><span class="spec-val">32 DOF</span><span class="spec-note-sm">4ソース一致（humanoid.guide「12」は誤り）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンド</div><div class="spec-lbl-desc">Revo 2 Basicデクスタラスハンドを両手に搭載（robotsinternational「Revo 2 Basic dexterous hands with five-finger design」確認済み）。5本指設計でピンチ・パワーグリップなど多様な把持パターンに対応。触覚センサーの詳細仕様は非公開</div></div><div class="spec-val-wrap"><span class="spec-val">Revo 2 Basic × 2</span><span class="spec-note-sm">5指 / 詳細仕様非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">片腕可搬重量</div><div class="spec-lbl-desc">originofbots「Payload per Arm: 15 kg」「can carry loads up to 15 kilograms」で確認済み。自重55kgに対してペイロード比27%は高水準で、産業部品・工具・実験機器の把持・搬送に対応</div></div><div class="spec-val-wrap"><span class="spec-val">15 kg</span><span class="spec-note-sm">片腕 / originofbots確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最大関節トルク</div><div class="spec-lbl-desc">カスタム電動アクチュエーターのピークトルクは約330 N·m（robotsinternational「Joint Torque: Reported ~330 N·m」確認済み）。ハーモニックドライブ類似の精密減速機とデュアルエンコーダを組み合わせた高精度駆動系</div></div><div class="spec-val-wrap"><span class="spec-val">約330 N·m</span><span class="spec-note-sm">デュアルエンコーダ搭載</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">モジュール式エンドエフェクター</div><div class="spec-lbl-desc">モジュール式設計によりエンドエフェクター（ハンド）の交換が可能。フィールド研究や異なる作業シナリオへの対応のため、Revo 2 Basic以外のハンドへの換装も可能な設計</div></div><div class="spec-val-wrap"><span class="spec-val">モジュール式交換対応</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">originofbots「approximately 2 hours of operation」で確認済み。2時間は研究デモ・1セッションカバーには十分だが、産業連続稼働（8h）には不足。クイックスワップで交換時間を短縮できる</div></div><div class="spec-val-wrap"><span class="spec-val">約2時間</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー仕様</div><div class="spec-lbl-desc">クイックスワップ対応の10,000 mAhリチウムイオンバッテリー（originofbots「Quick-swap 10,000 mAh lithium-ion battery」確認済み）。バッテリー交換時間を最小化し、予備バッテリーとの組み合わせで実験の継続性を維持</div></div><div class="spec-val-wrap"><span class="spec-val">10,000 mAh</span><span class="spec-note-sm">クイックスワップ / リムーバブル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">充電時間の公開情報なし。クイックスワップにより充電待機中も別バッテリーで稼働を継続できる設計のため、充電時間よりも予備バッテリーの準備数が運用計画に影響する</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">要メーカー確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- 演算・AI -->
+    <div class="spec-panel" id="tab-ai">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット</div><div class="spec-lbl-desc">NVIDIA + Intel のデュアルプロセッサ構成（robotsinternational「dual processing from NVIDIA and Intel platforms」確認済み）。NVIDIAがGPU推論を、IntelがCPU処理を担当する役割分担。具体的なチップ型番・TOPS値は非公開</div></div><div class="spec-val-wrap"><span class="spec-val">NVIDIA + Intel デュアル</span><span class="spec-note-sm">チップ型番・TOPS非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">E2Eニューラルネット歩行</div><div class="spec-lbl-desc">エンドツーエンドニューラルネットワーク（E2E NN）による歩行制御を採用。センサー入力から関節指令まで一貫したニューラルネットで処理することで、従来の解析的制御では困難な人間らしい自然な歩容を実現。「世界初の人間的歩容を持つ汎用ヒューマノイド」と公式に主張</div></div><div class="spec-val-wrap"><span class="spec-val">E2E NNベース歩行</span><span class="spec-note-sm">世界初・人間的歩容（公式主張）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">学習・開発環境</div><div class="spec-lbl-desc">強化学習対応・オープンソースSDK提供（originofbots「modular software supports OTA updates and reinforcement learning」確認済み）。マルチロボット群制御にも対応。API経由でのリモート制御が可能</div></div><div class="spec-val-wrap"><span class="spec-val">強化学習 / OTA / SDK</span><span class="spec-note-sm">マルチロボット群制御・API対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">LLM統合</div><div class="spec-lbl-desc">LLM統合の公開情報なし。E2Eニューラルネットによる自律歩行・動作制御が主な AI機能で、上位モデルとしての汎用AI統合はロードマップが未公開</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">OTA更新・リモート制御</div><div class="spec-lbl-desc">Over-The-Air（OTA）によるソフトウェアのリモートアップデートに対応。APIを通じた遠隔操作も可能で、フィールド展開中の機体に対してもソフトウェア改善を適用できる</div></div><div class="spec-val-wrap"><span class="spec-val">OTA対応 / API遠隔操作</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">Engine Sense（センサーシステム名）</div><div class="spec-lbl-desc">EngineAI独自のセンサーフュージョンシステム「Engine Sense」を搭載。360° LiDAR・Intel RealSense深度カメラ・赤外線カメラ・6眼HDステレオカメラを統合したマルチモーダル環境認識システム（robotsinternational「LiDAR + Depth cameras + Infrared cameras, Engine Sense」確認済み）</div></div><div class="spec-val-wrap"><span class="spec-val">Engine Sense</span><span class="spec-note-sm">マルチモーダル統合センサー</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">360° LiDAR</div><div class="spec-lbl-desc">全周囲360°をカバーするLiDARで環境を3Dポイントクラウドとしてリアルタイム計測。複雑な屋内外環境での障害物検知・自律ナビゲーション・3Dシーン理解・多層経路計画に使用</div></div><div class="spec-val-wrap"><span class="spec-val">360° LiDAR</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">深度カメラ・赤外線</div><div class="spec-lbl-desc">Intel RealSense深度カメラ（robotsinternational確認済み）と赤外線カメラを搭載。RGBと深度の同時取得・暗所での赤外線映像を組み合わせ、多様な照明条件下での物体認識・距離推定に対応</div></div><div class="spec-val-wrap"><span class="spec-val">Intel RealSense + 赤外線</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">6眼HDステレオカメラ</div><div class="spec-lbl-desc">6基の高解像度カメラとステレオビジョンシステムを搭載（robotsinternational「six high-definition cameras and stereo vision systems」確認済み）。広視野での高解像度映像取得と精密なステレオ3D認識を並行実行</div></div><div class="spec-val-wrap"><span class="spec-val">6眼 HD ステレオ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信方式</div><div class="spec-lbl-desc">具体的な通信規格の公開情報なし。OTA更新・API遠隔操作をサポートすることから何らかのネットワーク接続手段を持つが、Wi-Fi規格・Bluetooth等の詳細は未公開。日本で使用する場合は技適確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">OTA/API対応（技適要確認）</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">なし（公開情報なし）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本語問い合わせ</div><div class="spec-val-wrap"><span class="spec-val">EngineAI公式: sales@engineai.com.cn</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売価格</div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">Robots International: $54,000 / originofbots: $20K〜$30K（推定）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">取得未確認（技適DB登録なし）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">発売日</div><div class="spec-val-wrap"><span class="spec-val">2024年12月24日</span><span class="spec-note-sm">グローバル販売開始 / 2024年10月24日発表</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">CES出展</div><div class="spec-val-wrap"><span class="spec-val">CES 2025出展済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">同社モデル</div><div class="spec-val-wrap"><span class="spec-val">PM01（廉価・研究向け）/ SA01（小型版）</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">SE01 が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">E2Eニューラルネットによる業界最高水準の人間らしい歩容と、設計寿命10年の航空宇宙グレードフレーム。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🚶</div>
+        <div class="feature-title">E2Eニューラルネット・人間的歩容（7.2 km/h）</div>
+        <div class="feature-desc">エンドツーエンドニューラルネットワークによる歩行制御で、従来の解析的制御では困難だった人間に近い自然な歩容を実現。「世界初の人間的な歩容を達成した汎用ヒューマノイド」と公式に主張。2 m/s（7.2 km/h）の歩行速度はランニング・スクワット・プッシュアップにも対応。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏗</div>
+        <div class="feature-title">航空宇宙グレードアルミ合金フレーム・設計寿命10年</div>
+        <div class="feature-desc">航空機部品基準の高強度・軽量アルミ合金フレームを採用し、設計寿命10年という長期耐久性を実現。研究機関・産業ユーザーが長期運用を前提に投資できる信頼性の基盤。同価格帯の競合機と比較して耐久性への投資を明示した数少ない機体。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <div class="feature-title">Engine Sense：360° LiDAR + 6眼HD + RealSense + 赤外線</div>
+        <div class="feature-desc">独自センサーシステム「Engine Sense」が360° LiDAR・Intel RealSense深度カメラ・赤外線・6眼HDステレオカメラを統合。3Dシーン理解・多層経路計画・障害物検知を複雑な屋内外環境で実行。フィールド研究・実証実験に適した豊富なセンサー構成。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✋</div>
+        <div class="feature-title">Revo 2 Basic 5指ハンド・32 DOF・可搬15 kg</div>
+        <div class="feature-desc">Revo 2 Basicデクスタラスハンドを両手に搭載。32 DOFの全身関節と最大330 N·mのカスタムアクチュエーターを組み合わせ、片腕15kgの把持・搬送（自重比27%）を実現。モジュール式設計でハンドの交換も可能で研究目的に応じたカスタマイズができる。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📖</div>
+        <div class="feature-title">オープンソースSDK・強化学習・OTA・APIリモート制御</div>
+        <div class="feature-desc">オープンソースSDK提供・強化学習対応・OTAアップデート・API遠隔操作を標準サポート。研究者・開発者が独自アルゴリズムを実機で検証しやすい開発エコシステムを構築。マルチロボット群制御にも対応し、複数台でのスウォーム研究が可能。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔋</div>
+        <div class="feature-title">クイックスワップ10,000 mAhバッテリー・モジュール式設計</div>
+        <div class="feature-desc">10,000 mAhリチウムイオンバッテリーのクイックスワップに対応し、予備バッテリーとのローテーションで稼働時間2時間という制約を実質的に緩和できる。モジュール式設計により、センサー・ハンド・バッテリーを目的に合わせて交換・カスタマイズ可能なフィールドフレキシブルな構成。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🔋</div>
+        <div>
+          <div class="caution-title">稼働時間約2時間・充電時間非公開。産業連続稼働には不足</div>
+          <div class="caution-desc">originofbotsが確認した「approximately 2 hours」の稼働時間は、研究デモ・1セッションには十分だが産業シフト（8h）の連続稼働には大幅に不足する。クイックスワップで予備バッテリーとのローテーションは可能だが、充電完了時間が非公開のため交換運用の計画が立てにくい。購入前に充電時間・予備バッテリーの価格・入手性をEngineAI公式（sales@engineai.com.cn）に確認されたい。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">💰</div>
+        <div>
+          <div class="caution-title">価格がRobots International「$54,000」とoriginofbots「$20,000〜$30,000（推定）」で大幅乖離。正式価格の確認が必須</div>
+          <div class="caution-desc">Robots Internationalは「$54,000.00」（¥810万）、originofbotsは「USD 20,000〜30,000（推定値）」と2倍以上の乖離がある。humanoid.guideの「$20,000」は全スペックが誤りのため信頼性が低い。ローンチ特価（88,000元・2025年3月末まで）終了後の現行価格は公式への直接確認が必要。購入検討の際は必ずEngineAI公式に見積もりを依頼すること。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">⚠️</div>
+        <div>
+          <div class="caution-title">humanoid.guideのSE01データは全て誤り。身長・重量・DoF・速度がすべて別機種の数値</div>
+          <div class="caution-desc">ファクトチェックにより、humanoid.guideのEngineAI SE01ページは全スペックが誤りと判明。身長「180cm」（正: 170cm）・重量「80kg」（正: 約55kg）・DoF「12」（正: 32）・歩行速度「3 km/h」（正: 7.2 km/h）とすべてが別機種の数値と混同されている可能性が高い。SE01の導入検討では公式サイト（en.engineai.com.cn）・Robots International・originofbotsを参照し、humanoid.guideのデータは参照しないこと。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">日本代理店なし・技適PSE未確認。演算TOPS値も非公開で性能評価が困難</div>
+          <div class="caution-desc">日本国内の正規代理店・サポート拠点が未設定で、OTA更新等に使用する通信規格の技適取得状況も確認されていない。日本での商用運用前に電波法・電気用品安全法への準拠確認が必要。また演算ユニットの具体的なチップ型番・TOPS値が非公開のため、AI推論性能の客観的比較評価が困難。価格・技適・TOPSの3点を購入前に必ずメーカーに確認することを推奨する。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">人間的歩容のフィールド実証から、AI研究・産業展示まで。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🚶</div><div class="usecase-title">二足歩行・歩容研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">複雑環境歩行実証研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤖</div><div class="usecase-title">E2E NN・強化学習研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🧑‍🤝‍🧑</div><div class="usecase-title">ヒューマンロボットインタラクション</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">産業研究・物流ハンドリング</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎪</div><div class="usecase-title">展示会・商業デモ</div></div>
+      <div class="usecase-card"><div class="usecase-icon">💻</div><div class="usecase-title">SDK活用・自律制御開発</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🌐</div><div class="usecase-title">マルチロボット群制御研究</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要フルサイズ研究用ヒューマノイドとの比較</h2>
+    <p class="section-sub">2026年時点の主要な研究・産業向けフルサイズヒューマノイドとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">EngineAI SE01 ★</th>
+          <th>Unitree H1</th>
+          <th>Fourier GR-1</th>
+          <th>EngineAI PM01（同社）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">研究・産業展示</td><td>研究・産業</td><td>研究・開発</td><td>研究・教育</td></tr>
+        <tr><td>身長</td><td class="highlight">170cm</td><td class="highlight">180cm</td><td>165cm</td><td>138.8cm</td></tr>
+        <tr><td>重量</td><td>約55kg</td><td class="highlight">47kg</td><td>55kg</td><td class="highlight">40kg</td></tr>
+        <tr><td>最高速度</td><td class="highlight">2.0 m/s（7.2 km/h）</td><td class="highlight">5.4 km/h</td><td>4 km/h</td><td class="highlight">2.0 m/s</td></tr>
+        <tr><td>自由度</td><td>32 DOF</td><td>19 DOF</td><td class="highlight">40 DOF</td><td>24 DOF</td></tr>
+        <tr><td>ハンド</td><td class="highlight">Revo 2 Basic 5指</td><td>グリッパー</td><td class="highlight">5指（力センサー）</td><td>なし（3rd party）</td></tr>
+        <tr><td>可搬重量</td><td class="highlight">15kg（片腕）</td><td>—</td><td>3kg</td><td>15kg（デッドリフト）</td></tr>
+        <tr><td>稼働時間</td><td>約2時間</td><td class="highlight">約2時間</td><td>約2時間</td><td>約2時間</td></tr>
+        <tr><td>参考価格</td><td>$54,000（⚠️乖離あり）</td><td class="highlight">$85,000〜</td><td>約$55,000</td><td class="highlight">$12,000〜（要確認）</td></tr>
+        <tr><td>日本代理店</td><td class="cross">なし</td><td class="check">TechShare Japan</td><td class="cross">なし</td><td class="cross">なし</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">EngineAI SE01 の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">正式価格・技適PSE確認・演算スペック照会まで、日本語でご支援します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© Engine AI / 深圳引智科技（<a href="https://en.engineai.com.cn/" target="_blank">engineai.com.cn</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

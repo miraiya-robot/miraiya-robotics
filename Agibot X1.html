@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGIBOT X1 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://jp.agibot.com/products/X1" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/Agibot X1.png" alt="AGIBOT X1">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">AGIBOT</div>
+      <h1 class="product-name">X1</h1>
+      <p class="product-tagline">約$20,000・フルスタックオープンソースの研究向けコンパクトヒューマノイド。<br>CAD・ファームウェア・制御コードをすべて公開。AimRT + ROS2対応、34 DOF・PowerFlow準直接駆動サーボ搭載。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">参考価格（研究・教育機関向け）</div>
+        <div class="price-main">約$20,000</div>
+        <div class="price-sub">約¥3,000,000（¥150換算）<br>公式価格は要問い合わせ。humanoid.guide確認値（$20,000）</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🔬 研究・教育向け</span>
+        <span class="badge">🦾 34 DOF</span>
+        <span class="badge">📖 フルスタックOSS</span>
+        <span class="badge">🐧 ROS2 / AimRT対応</span>
+        <span class="badge">⚡ PowerFlowサーボ</span>
+        <span class="badge">🔧 31/41 DoFカスタマイズ可</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">130cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">≤33kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">34 DOF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">≥0.5kg</div><div class="qstat-key">片腕可搬</div></div>
+    <div class="qstat"><div class="qstat-val">2〜4h</div><div class="qstat-key">連続稼働（⚠️要確認）</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-31）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能2(r=20, top):             (150, 130)
+               身体能力1(r=10, upper-right): (159, 145)
+               器用さ3(r=30, lower-right):   (176, 165)
+               連続稼働5(r=50, bottom):      (150, 200)
+               耐久性2(r=20, lower-left):    (133, 160)
+               安全性1(r=10, upper-left):    (141, 145) -->
+          <polygon points="150,130 159,145 176,165 150,200 133,160 141,145"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="150"  cy="130" r="4.5" fill="#ef4444"/>
+          <circle cx="159"  cy="145" r="4.5" fill="#ef4444"/>
+          <circle cx="176"  cy="165" r="4.5" fill="#f97316"/>
+          <circle cx="150"  cy="200" r="4.5" fill="#f59e0b"/>
+          <circle cx="133"  cy="160" r="4.5" fill="#ef4444"/>
+          <circle cx="141"  cy="145" r="4.5" fill="#ef4444"/>
+          <!-- Score labels -->
+          <text x="150"  y="124"  text-anchor="middle" fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="166"  y="143"  text-anchor="start"  fill="#ef4444" font-size="12" font-weight="900">1</text>
+          <text x="183"  y="167"  text-anchor="start"  fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="150"  y="214"  text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="900">5</text>
+          <text x="126"  y="165"  text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="134"  y="143"  text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">1</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">オンボード計算なし・外部ホストPC / Jetson依存 · LLM統合なし（ROS2/AimRT経由でDIY実装可能）· DCU: EtherCAT 1kHz · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">1</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:10%"></div></div>
+          <div class="param-bar-note">可搬≥0.5 kg · 速度≥1 m/s（3.6 km/h）· 自重33kgに対しペイロード比1.5%と研究特化最低水準 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">34 DOF（31/41 DoFカスタマイズ可）· OmniPickerグリッパー×2（5本指なし）· クランプ力30 N · 開閉0.7秒 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:50%"></div></div>
+          <div class="param-bar-note">⚠️公式JP「≥4時間」と公式EN・外部複数ソース「2時間」で矛盾あり · 充電時間非公開 · 実稼働は2時間の可能性が高い · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">安全規格認証なし · IP等級非公開 · 軽量≤33kg研究室向け設計 · 産業環境への実投入は想定外 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">1</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:10%"></div></div>
+          <div class="param-bar-note">安全規格認証未取得 · 技適PSE未確認 · 軽量設計によるパッシブ安全のみ · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">2×0.20 + 1×0.15 + 3×0.15 + 5×0.20 + 2×0.15 + 1×0.15</div>
+      </div>
+      <div class="radar-total-val">2.5<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">AGIBOT 公式チャンネルより。X1 ヒューマノイドパッケージの概要と研究プラットフォームとしての特長をご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=rayedzqtlaw" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/rayedzqtlaw/maxresdefault.jpg" alt="AGIBOT X1 Humanoid Package" onerror="this.src='https://img.youtube.com/vi/rayedzqtlaw/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">AGIBOT X1 Humanoid Package Pre-sale Channel</div>
+          <div class="yt-thumb-label">AGIBOT 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">AGIBOT公式（jp.agibot.com / agibot.com）・humanoid.guide・robozapsより。ファクトチェック済（2026-05-31）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-joint')">🦾 関節・DoF</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-compute')">💻 演算・通信</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-software')">📖 ソフトウェア・OSS</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">130cmは中学生相当の身長。大人の腰〜胸の高さに腕の作業空間が集中するため、標準的な実験台・デスク高さの研究環境に適合。humanoid.guide確認値</div></div><div class="spec-val-wrap"><span class="spec-val">130 cm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">≤33kgは研究者1人でも運搬可能な軽量設計。Walker X（63kg）やWalker S（76kg）と比べて大幅に軽く、研究室内での取り回し・設置変更が容易。jp.agibot.com公式確認値</div></div><div class="spec-val-wrap"><span class="spec-val">≤33 kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">片腕可搬重量</div><div class="spec-lbl-desc">公式値≥0.5kg/アーム（OmniPickerグリッパー）。自重33kgに対するペイロード比は約1.5%と研究用途に特化した最低水準。工業部品の搬送・産業作業への適用は不向き</div></div><div class="spec-val-wrap"><span class="spec-val">≥0.5 kg</span><span class="spec-note-sm">OmniPickerグリッパー時</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高歩行速度</div><div class="spec-lbl-desc">公式JP値≥1 m/s（3.6 km/h）。人間の普通歩き（1.4 m/s）の約70%で、研究室内の移動・デモンストレーションには十分な速度</div></div><div class="spec-val-wrap"><span class="spec-val">≥1 m/s</span><span class="spec-note-sm">3.6 km/h</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">使用環境</div><div class="spec-lbl-desc">IP等級は全ソースで公開情報なし。軽量・研究向け設計から屋内研究室・教育施設専用と推定。産業環境・屋外・水気のある環境での使用は想定外</div></div><div class="spec-val-wrap"><span class="spec-val">屋内研究用</span><span class="spec-note-sm">IP等級非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">モーター方式</div><div class="spec-lbl-desc">AGIBOT独自のPowerFlow準直接駆動サーボ（R86/R52/L28シリーズ）。遊星減速機一体型（ギア比＜10:1）で高バックドライバビリティと安全性を両立。R86-3: ピーク200 N·m / R86-2: 80 N·m / R52: 19 N·m</div></div><div class="spec-val-wrap"><span class="spec-val">PowerFlow 準直接駆動</span><span class="spec-note-sm">R86/R52/L28 / ピーク200 N·m</span></div></div>
+      </div>
+    </div>
+
+    <!-- 関節・DoF -->
+    <div class="spec-panel" id="tab-joint">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">標準自由度（DOF）</div><div class="spec-lbl-desc">英語公式サイトで「Active Degrees of Freedom: 34DoF」と明記。29本体関節＋3頭部軸（オプション）＋2グリッパーで構成。日本語公式は「31/41 DoFカスタマイズ可能」と表記揺れあり</div></div><div class="spec-val-wrap"><span class="spec-val">34 DOF</span><span class="spec-note-sm">（31/41 DoFカスタマイズ可）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">カスタマイズオプション</div><div class="spec-lbl-desc">31 DoF（標準構成から頭部軸を省略）または41 DoF（追加関節モジュール搭載）へのカスタマイズが可能。研究目的に応じた柔軟な構成変更をメーカーレベルで対応</div></div><div class="spec-val-wrap"><span class="spec-val">31 / 41 DoFカスタマイズ可</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">エンドエフェクター</div><div class="spec-lbl-desc">OmniPicker グリッパー×2（5本指なし）。クランプ力30 N・開閉サイクル0.7秒。一般的な研究用物体把持・配置タスクに対応するが、精密な力制御・複雑なマニピュレーション研究には制約がある</div></div><div class="spec-val-wrap"><span class="spec-val">OmniPickerグリッパー × 2</span><span class="spec-note-sm">クランプ力30 N / 開閉0.7秒</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">PowerFlowサーボ特性</div><div class="spec-lbl-desc">準直接駆動（Quasi-Direct-Drive）方式は減速比＜10:1と低く、関節の透明性（backdrivability）が高い。外力への追従性が良く安全なインタラクションに適している。精密位置制御より力制御・コンプライアント制御研究に有利</div></div><div class="spec-val-wrap"><span class="spec-val">低バックドライバビリティ</span><span class="spec-note-sm">ギア比＜10:1</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">頭部軸（オプション）</div><div class="spec-lbl-desc">3 DOFの頭部軸はオプション搭載。パン・チルト・ロール方向への頭部動作が可能で、視線追跡・HRI（ヒューマンロボットインタラクション）研究に活用できる</div></div><div class="spec-val-wrap"><span class="spec-val">3 DOF（頭部・オプション）</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間【⚠️重要】</div><div class="spec-lbl-desc">公式日本語サイト（jp.agibot.com）は「≥4時間」と記載。しかし英語公式（agibot.com）・robozaps・originofbots・humanoid.guideの複数独立ソースが「2時間（Runtime: 2h）」を明記。英語公式が正確な可能性が高く、導入前に必ず実機確認を推奨</div></div><div class="spec-val-wrap"><span class="spec-val">2〜4時間</span><span class="spec-note-sm">⚠️JP公式4h vs EN公式・外部ソース2h の矛盾</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">全公開ソースで充電時間の記載なし。導入後の実験スケジュール計画に影響するため、購入前にAGIBOT公式または代理店への問い合わせで確認することを推奨</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">要メーカー確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電方式</div><div class="spec-lbl-desc">公開情報なし。ホットスワップや自律充電については情報なく、手動有線充電が前提と推定。充電方式の詳細はメーカーへ要確認</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">稼働時間の影響</div><div class="spec-lbl-desc">仮に実稼働2時間の場合、1日の実験時間が制限される。予備バッテリーの入手可否・価格・交換の容易さを購入前に確認し、研究スケジュールに合わせた運用計画を立てることが重要</div></div><div class="spec-val-wrap"><span class="spec-val">運用計画の事前確認を推奨</span></div></div>
+      </div>
+    </div>
+
+    <!-- 演算・通信 -->
+    <div class="spec-panel" id="tab-compute">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">オンボード計算</div><div class="spec-lbl-desc">機体内部に推論・学習用の計算ユニットを搭載しない完全オープンアーキテクチャ。ユーザーが外部ホストPC（Linux PC / NVIDIA Jetson等）を準備して接続する構成。計算リソースをユーザーが自由に選択できる研究向け設計</div></div><div class="spec-val-wrap"><span class="spec-val">オンボード計算なし</span><span class="spec-note-sm">外部ホストPC / Jetson必要</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">域控制器（DCU）</div><div class="spec-lbl-desc">機体内蔵のDCU（Domain Control Unit）はEtherCAT-FDCAN変換ブリッジとして機能。1kHzのリアルタイム通信ループで外部PCから34関節のサーボを制御。100 Mbpsの帯域でセンサーデータと制御指令を高速伝送</div></div><div class="spec-val-wrap"><span class="spec-val">DCU（EtherCAT 1kHz）</span><span class="spec-note-sm">100 Mbps / リアルタイム制御</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">主要通信インターフェース</div><div class="spec-lbl-desc">Ethernet（外部PC接続・高帯域）/ FDCAN/CAN-FD（関節・センサーバス）/ USB-C（デバッグ・データ転送）/ GPIO / UART（周辺機器拡張）</div></div><div class="spec-val-wrap"><span class="spec-val">Ethernet / FDCAN / USB-C</span><span class="spec-note-sm">GPIO / UART</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">カメラ・センサー</div><div class="spec-lbl-desc">RGB-Dカメラはオプション搭載。カラー映像と深度情報を同時取得し、物体認識・姿勢推定・ナビゲーション研究に活用。標準構成では機体側にカメラを内蔵せず、ユーザーが目的に合わせて選択・搭載できる拡張性を持つ</div></div><div class="spec-val-wrap"><span class="spec-val">オプションRGB-Dカメラ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">外部LLMフック</div><div class="spec-lbl-desc">バンドルされたLLM/VLAモデルはないが、AimRT/ROS2のミドルウェア経由で外部LLM（GPT-4・Gemini・オープンソースLLM等）に接続するフックが設計上サポートされている。ユーザーが独自のAIパイプラインを実装できる</div></div><div class="spec-val-wrap"><span class="spec-val">外部LLMフック対応</span><span class="spec-note-sm">バンドルモデルなし</span></div></div>
+      </div>
+    </div>
+
+    <!-- ソフトウェア・OSS -->
+    <div class="spec-panel" id="tab-software">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">オープンソース公開範囲</div><div class="spec-lbl-desc">フルスタックオープンソース：ハードウェアCAD（機械設計図面）・制御ファームウェア・ロコモーション制御コードをすべてGitHub上で公開。研究機関・スタートアップが購入直後から独自開発に着手できる唯一に近いヒューマノイドプラットフォーム</div></div><div class="spec-val-wrap"><span class="spec-val">CAD / ファームウェア / 制御コード</span><span class="spec-note-sm">フルスタック公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ミドルウェア・OS</div><div class="spec-lbl-desc">AimRT（AGIBOT製Linuxベースミドルウェア）+ ROS2（Robot Operating System 2）対応。ROSの豊富なエコシステム（MoveIt・Nav2・ROS-Control等）を活用しながら、AimRTの高性能リアルタイム制御を組み合わせられる</div></div><div class="spec-val-wrap"><span class="spec-val">AimRT + ROS2</span><span class="spec-note-sm">Linuxベース</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">学習フレームワーク</div><div class="spec-lbl-desc">強化学習（RL）・模倣学習（IL）対応。AGIBOT Worldオープンソースデータセット（身体化AI五大研究パスカバー）との連携により、データ収集から実機検証まで一貫したワークフローを構築できる</div></div><div class="spec-val-wrap"><span class="spec-val">強化学習 / 模倣学習</span><span class="spec-note-sm">AGIBOT Worldデータセット連携</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">シミュレーション対応</div><div class="spec-lbl-desc">URDF・Gazebo等の標準ロボットシミュレーション環境に対応。CADが公開されているためシミュレーション環境の構築も容易で、sim-to-real転移研究のための一貫したプラットフォームを提供</div></div><div class="spec-val-wrap"><span class="spec-val">URDF / Gazebo対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">EtherCATリアルタイム制御</div><div class="spec-lbl-desc">DCU経由のEtherCAT 1kHz制御ループにより、100Mbpsの帯域で外部PCから34関節を精密にリアルタイム制御。力制御・インピーダンス制御・ロコモーション研究に必要な決定論的制御周期を保証</div></div><div class="spec-val-wrap"><span class="spec-val">EtherCAT 1kHz / 100Mbps</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">推奨開発環境</div><div class="spec-lbl-desc">外部ホストPCはLinux（Ubuntu）推奨。GPUを搭載したPC（NVIDIA GeForce/RTX系）またはNVIDIA Jetsonシリーズが強化学習・深層学習推論に適している。Jetson AGX OrinやOrin NXは現地処理を最小化しつつリアルタイム制御を維持するバランスの良い選択肢</div></div><div class="spec-val-wrap"><span class="spec-val">Linux + NVIDIA GPU推奨</span><span class="spec-note-sm">Jetson AGX Orin対応</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">なし（公開情報なし）</span><span class="spec-note-sm">jp.agibot.com 日本語サイトは存在</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本語問い合わせ</div><div class="spec-val-wrap"><span class="spec-val">jp.agibot.com経由</span><span class="spec-note-sm">メーカー直接問い合わせ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売価格</div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">humanoid.guide推定: 約$20,000（¥3,000,000）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">Ethernet/FDCAN搭載・取得未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本導入事例</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">同社上位モデル</div><div class="spec-val-wrap"><span class="spec-val">AGIBOT X2 / A2</span><span class="spec-note-sm">X2: $24,240〜 / A2: $100,000〜</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">競合（研究用）</div><div class="spec-val-wrap"><span class="spec-val">Unitree G1 EDU / Fourier GR-1</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">X1 が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">研究・教育向け最低水準価格とフルスタックオープンソースによる即座の開発着手。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📖</div>
+        <div class="feature-title">フルスタックOSS：CAD・ファームウェア・制御コードを完全公開</div>
+        <div class="feature-desc">ハードウェアCAD図面・制御ファームウェア・ロコモーションコードをすべてGitHub上で公開。購入直後から独自の制御アルゴリズム・AI統合・機械設計の改造に着手できる。機体の内部を完全に理解した上で研究を進められる、研究向けヒューマノイドの理想形。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">約$20,000（¥300万）・研究向け最低水準価格帯</div>
+        <div class="feature-desc">Unitree G1 EDU（$16,000〜）・Fourier GR-1（約$55,000）と並ぶ研究向けヒューマノイド最低水準価格。大学・研究機関の予算内で複数台の調達・並列実験が現実的になる唯一に近い価格帯。同社産業機（A2-W: $80,000〜）と比べ約1/4の投資で研究着手が可能。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🐧</div>
+        <div class="feature-title">AimRT + ROS2・強化学習・AGIBOT Worldデータセット対応</div>
+        <div class="feature-desc">AGIBOTの高性能ミドルウェアAimRTとROS2を標準搭載。強化学習・模倣学習に対応し、AGIBOT Worldオープンソースデータセット（身体化AI五大研究パスカバー）と連携したデータ駆動研究が可能。外部LLMフックでGPT-4等の大規模モデル統合も自在。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">PowerFlow準直接駆動サーボ（R86/R52/L28）・ピーク200 N·m</div>
+        <div class="feature-desc">AGIBOT独自設計のPowerFlow準直接駆動サーボはギア比＜10:1の低減速で高い透明性（backdrivability）を実現。R86-3ピーク200 N·mの高トルクを持ちながら外力への追従性が良く、安全なコンプライアント制御・インピーダンス制御研究に理想的な機構。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔧</div>
+        <div class="feature-title">31/41 DoFカスタマイズ対応・オープンアーキテクチャ</div>
+        <div class="feature-desc">標準34 DoFを31（頭部省略）または41（追加関節）にカスタマイズ可能。オンボード計算なしの完全オープンアーキテクチャにより、ユーザーが外部PC/Jetsonを自由に選択・交換できる。機体をハードウェアプラットフォームとして最大限に活用できる研究向け設計。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <div class="feature-title">DCU EtherCAT 1kHz・100Mbps リアルタイム制御</div>
+        <div class="feature-desc">機体内蔵のDCU（域控制器）がEtherCAT-FDCAN変換を行い、1kHzの制御周期で34関節を100Mbpsの帯域でリアルタイム制御。精密な力制御・高速ロコモーション研究に必要な決定論的な制御ループを外部PCから直接扱える、研究プラットフォームとしての高い制御透明性。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🔋</div>
+        <div>
+          <div class="caution-title">稼働時間が日本語公式「≥4時間」と英語公式・外部複数ソース「2時間」で矛盾。実機確認が必須</div>
+          <div class="caution-desc">公式日本語サイト（jp.agibot.com）は「≥4時間」と記載している一方、英語公式（agibot.com）・robozaps・originofbots・humanoid.guideの4つの独立ソースが「Runtime: 2h（約2時間）」と明記している。ファクトチェックでは英語公式が正確な可能性が高いと判定。実際2時間の場合、1日の実験セッションは2時間ごとの充電停止が必要となる。購入前に必ず実機または販売担当者に正確な稼働時間と測定条件（歩行中/作業中/スタンバイ）を確認されたい。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🖥</div>
+        <div>
+          <div class="caution-title">オンボード計算なし・外部PC必須。AI推論には別途NVIDIA GPU環境の準備が必要</div>
+          <div class="caution-desc">X1には推論・学習用の計算ユニットが搭載されていないため、すべてのAI処理は外部ホストPC（Linux推奨）で行う必要がある。強化学習・深層学習・LLM推論には別途NVIDIAのGPU搭載PC（RTX 4090等）またはNVIDIA Jetson AGX Orinが必要で、機体本体の$20,000に加えて追加投資が発生する。研究予算にGPUサーバー・Jetsonのコストを含めた総所有コストでの検討を推奨する。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">⚙️</div>
+        <div>
+          <div class="caution-title">可搬≥0.5kg・OmniPickerグリッパー（5本指なし）は産業・商業用途には根本的に不足</div>
+          <div class="caution-desc">X1の可搬重量≥0.5kgと5本指なしのOmniPickerグリッパーは、研究・アルゴリズム検証目的に特化した仕様であり産業・商業用途には根本的に不足する。工場での部品搬送・組立作業への導入を検討している場合は、同社A2-W（可搬5kg）・UBTECH Walker S2（片腕15kg）等の産業向けモデルへの変更を強く推奨する。X1は「研究プラットフォーム」として購入・評価する前提が必要。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">日本正規代理店なし・技適PSE未確認。日本国内での正式商用運用には法的確認が必要</div>
+          <div class="caution-desc">現時点でAGIBOT X1の日本国内正規代理店・サポート拠点が公開されていない。有線通信主体の設計だが技適・PSE認証の取得状況が不明。jp.agibot.com の日本語サイト経由でメーカーへ直接問い合わせが可能。研究機関での利用でも国内電気用品安全法・電波法の準拠が必要なため、購入前に認証書の確認を強く推奨する。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">大学・研究機関でのアルゴリズム研究から、AIスタートアップの実機プロトタイピングまで。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">二足歩行制御研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤖</div><div class="usecase-title">強化学習・模倣学習の実機検証</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🧑‍🤝‍🧑</div><div class="usecase-title">ヒューマンロボットインタラクション（HRI）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎓</div><div class="usecase-title">大学院・高等教育ロボット工学</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🌐</div><div class="usecase-title">sim-to-real転移研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">💻</div><div class="usecase-title">ROS2を活用したシステム開発</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🧠</div><div class="usecase-title">身体化AI（Embodied AI）研究</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🚀</div><div class="usecase-title">AIスタートアップの実機プロト</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要研究向けヒューマノイドとの比較</h2>
+    <p class="section-sub">2026年時点の主要な研究・教育向けヒューマノイドとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">AGIBOT X1 ★</th>
+          <th>Unitree G1 EDU</th>
+          <th>Fourier GR-1</th>
+          <th>AGIBOT X2（上位）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">研究・教育</td><td>研究・産業</td><td>研究・開発</td><td>研究・上位</td></tr>
+        <tr><td>身長</td><td>130cm</td><td class="highlight">127cm</td><td>165cm</td><td>非公開</td></tr>
+        <tr><td>重量</td><td class="highlight">≤33kg</td><td>35kg</td><td>55kg</td><td>非公開</td></tr>
+        <tr><td>自由度</td><td>34 DOF（カスタマイズ可）</td><td class="highlight">43 DOF</td><td>40 DOF</td><td>非公開</td></tr>
+        <tr><td>ハンド</td><td>OmniPickerグリッパー</td><td class="highlight">Dex3-1（5指）</td><td>5指（力センサー）</td><td>非公開</td></tr>
+        <tr><td>稼働時間</td><td>2〜4h（⚠️要確認）</td><td class="highlight">約2時間</td><td>約2時間</td><td>非公開</td></tr>
+        <tr><td>参考価格</td><td class="highlight">約$20,000</td><td class="highlight">$16,000〜</td><td>約$55,000</td><td>$24,240〜</td></tr>
+        <tr><td>OSS公開</td><td class="check">フルスタック公開</td><td class="check">SDK公開</td><td class="cross">非公開</td><td class="check">部分公開</td></tr>
+        <tr><td>日本代理店</td><td class="cross">なし</td><td class="check">TechShare Japan</td><td class="cross">なし</td><td class="cross">なし</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">AGIBOT X1 の研究導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">価格・稼働時間・技適PSE等の確認から、日本語でのサポートをご提供します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© AGIBOT（<a href="https://jp.agibot.com" target="_blank">jp.agibot.com</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

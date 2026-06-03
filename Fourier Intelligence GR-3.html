@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fourier Intelligence GR-3 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+@media(max-width:768px){.product-inner{grid-template-columns:1fr}.quick-stats-inner{grid-template-columns:repeat(3,1fr)}.product-info{padding:24px 0 40px}}
+@media(max-width:480px){.quick-stats-inner{grid-template-columns:repeat(2,1fr)}}
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://www.fftai.com/products-gr3" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/Fourier Intelligence GR-3.png" alt="Fourier Intelligence GR-3">
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="product-brand">FOURIER INTELLIGENCE（傅利叶智能）</div>
+      <h1 class="product-name">GR-3 Care-bot</h1>
+      <p class="product-tagline">LLM統合ハイブリッド決定アーキテクチャ・全身31分散型圧力センサー・ソフトポリマーシェル全身設計のケア特化ヒューマノイド。<br>165 cm / 71 kg / 55 DoF / 5指×2（12 DoF/手）/ デュアルホットスワップ3時間。CES 2026初公開・量産出荷中。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">参考価格（複数ソース確認）</div>
+        <div class="price-main">$80,000〜$119,995</div>
+        <div class="price-sub">¥12,000,000〜¥17,999,250（¥150換算）<br>humanoid.guide: $80,000 / Robots International小売: $119,995 / 4〜6週間納期で購入可能</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🏥 ケア・コンパニオン特化</span>
+        <span class="badge">🤖 LLM統合（ハイブリッド決定）</span>
+        <span class="badge">🫁 全身31圧力センサー</span>
+        <span class="badge">🛡 ソフトポリマーシェル全身</span>
+        <span class="badge">🔋 デュアルホットスワップ</span>
+        <span class="badge">🎤 4マイクアレイ全方位音声</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">165cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">71kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">55 DOF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">3kg</div><div class="qstat-key">片手可搬（持続）</div></div>
+    <div class="qstat"><div class="qstat-val">〜3h</div><div class="qstat-key">稼働（デュアルHS）</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-30・要修正0件）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="50" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能5(r=50, top):              (150, 100)
+               身体能力2(r=20, upper-right):  (167, 140)
+               器用さ7(r=70, lower-right):    (211, 185)
+               連続稼働3(r=30, bottom):       (150, 180)
+               耐久性2(r=20, lower-left):     (133, 160)
+               安全性4(r=40, upper-left):     (115, 130) -->
+          <polygon points="150,100 167,140 211,185 150,180 133,160 115,130"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <circle cx="150" cy="100" r="4.5" fill="#f59e0b"/>
+          <circle cx="167" cy="140" r="4.5" fill="#ef4444"/>
+          <circle cx="211" cy="185" r="4.5" fill="#0bd0c8"/>
+          <circle cx="150" cy="180" r="4.5" fill="#f97316"/>
+          <circle cx="133" cy="160" r="4.5" fill="#ef4444"/>
+          <circle cx="115" cy="130" r="4.5" fill="#f59e0b"/>
+          <text x="150" y="94"  text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="900">5</text>
+          <text x="174" y="138" text-anchor="start"  fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="218" y="187" text-anchor="start"  fill="#0bd0c8" font-size="12" font-weight="900">7</text>
+          <text x="150" y="194" text-anchor="middle" fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="126" y="165" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="108" y="128" text-anchor="end"    fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <div class="radar-bars">
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:50%"></div></div>
+          <div class="param-bar-note">LLM統合確認（ハイブリッド決定アーキテクチャ: 反射制御 + 言語モデル推論）· TOPS非公開 · マルチモーダル全知覚 · 重み 20%</div>
+        </div>
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">可搬3 kg（片手・持続）· 5 km/h（1.39 m/s）· 自重比4.2% · ケア用途特化 · 重み 15%</div>
+        </div>
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score">7</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:70%"></div></div>
+          <div class="param-bar-note">55 DoF · 5指×2 · 12 DoF/手 · 全身31分散型圧力センサー（力/形状/材料）· 重み 15%</div>
+        </div>
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">約3時間（1パック）· デュアルホットスワップ（電源断なし交換）· 充電時間非公開 · 重み 20%</div>
+        </div>
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">IP等級非公開 · ソフトポリマーシェル外装（屋内ケア環境専用設計）· 重み 15%</div>
+        </div>
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">全身ソフトポリマーシェル · 31圧力センサー全身リアルタイム検知 · LLM動的障害物回避 · 安全規格認証未確認 · 技適PSE未取得 · 重み 15%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">5×0.20 + 2×0.15 + 7×0.15 + 3×0.20 + 2×0.15 + 4×0.15</div>
+      </div>
+      <div class="radar-total-val">3.9<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">人に寄り添い、介護・生活支援・コミュニケーションをこなすGR-3 Care-botの公式紹介映像。全身ソフトポリマーシェル・31分散型圧力センサー・LLM自然対話が融合した「ケアできるコンパニオン」としての日常シーンをご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=bkzXjzlEKrU" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/bkzXjzlEKrU/maxresdefault.jpg" alt="A Caring and Capable Companion" onerror="this.src='https://img.youtube.com/vi/bkzXjzlEKrU/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">A Caring and Capable Companion</div>
+          <div class="yt-thumb-label">Fourier Intelligence 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">Fourier Intelligence公式（fftai.com）・Robots International・PR Newswire・humanoid.guideより。ファクトチェック済（2026-05-30・要修正0件）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-hand')">✋ ハンド・DoF</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-ai')">🧠 AI・LLM</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー・音声</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">TechNode「165cm」で確認済み。GR-2（175cm）より低く、日本人女性平均（158cm）より少し高い。介護施設・病院・家庭での利用者（高齢者・車椅子使用者）と目線を合わせやすい設計を意識した高さ</div></div><div class="spec-val-wrap"><span class="spec-val">165 cm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">Robots International「71 kg（156 lbs）」確認済み。GR-2（63 kg）より重いが、ソフトポリマーシェルと自動車グレード内装の安全設計が重量増の主因と推定</div></div><div class="spec-val-wrap"><span class="spec-val">71 kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">外装素材</div><div class="spec-lbl-desc">ソフトポリマーシェル全身＋高級自動車グレード内装（環境配慮型ウレタン発泡フォームパッド）を採用（公式fftai.com「premium automotive-grade upholstery with environmentally friendly foam padding」確認）。人との接触時の衝撃を全身で吸収するケアロボット専用設計</div></div><div class="spec-val-wrap"><span class="spec-val">ソフトポリマーシェル全身</span><span class="spec-note-sm">自動車グレード内装 + エコフォーム</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高速度</div><div class="spec-lbl-desc">humanoid.guide「Max Speed: 5 km/h」確認済み（1.39 m/s）。GR-2と同速度で、介護施設・病院廊下での安全な移動ペースに最適化。高速走行より安全・なめらかな移動を重視したケアロボット設計方針</div></div><div class="spec-val-wrap"><span class="spec-val">5 km/h（1.39 m/s）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">片手可搬重量</div><div class="spec-lbl-desc">Robots International「Hand Load Capacity: 3 kg per hand」確認済み。3 kgは飲み物・薬品・食器・ケア用品などの把持・運搬に十分な値。⚠️ humanoid.guideは「Strength capacity: 15 kg」と記載しているが別指標の可能性あり・要確認</div></div><div class="spec-val-wrap"><span class="spec-val">3 kg（片手・持続）</span><span class="spec-note-sm">⚠️humanoid.guideの15kgは別指標の可能性</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">アクチュエーター</div><div class="spec-lbl-desc">高性能電動アクチュエーター（humanoid.guide「High-performance electric actuators」確認）。具体的なメーカー・モデル・トルク値の公開情報なし。GR-2のFSA 2.0と同系列の可能性あるが公式未確認</div></div><div class="spec-val-wrap"><span class="spec-val">高性能電動アクチュエーター</span><span class="spec-note-sm">詳細仕様非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">使用環境</div><div class="spec-lbl-desc">IP等級の公開情報なし。ソフトポリマーシェル外装・車内グレード内装から屋内ケア環境（介護施設・病院・家庭）専用の設計と推定。屋外・水洗浄環境への適用は要確認</div></div><div class="spec-val-wrap"><span class="spec-val">屋内ケア環境</span><span class="spec-note-sm">IP等級非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- ハンド・DoF -->
+    <div class="spec-panel" id="tab-hand">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身自由度（DOF）・内訳</div><div class="spec-lbl-desc">55 DoF（Robots International内訳確認: 頭部2＋腕7×2＋腰3＋脚6×2＋手12×2=55）。GR-2（53 DoF）より2 DoF多く、頭部2軸追加によりうなずき・首振りの自然な表情動作がケアコミュニケーションに寄与</div></div><div class="spec-val-wrap"><span class="spec-val">55 DOF</span><span class="spec-note-sm">頭2+腕14+腰3+脚12+手24</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンド自由度・指</div><div class="spec-lbl-desc">humanoid.guide「Fingers: 5 per hand / Degrees of Freedom (hands): 12」確認済み。5本指×2・各手12 DoFでGR-2と同水準の高自由度ハンドを搭載。ケアタスク（薬瓶・コップ・衣服・医療機器）の精密把持に対応</div></div><div class="spec-val-wrap"><span class="spec-val">5指 × 2（12 DoF/手）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">頭部自由度</div><div class="spec-lbl-desc">頭部2 DoF（うなずき・首回転）はGR-2にはなかったGR-3の追加要素。ケアロボットとして利用者と目を合わせる・うなずいて返事するといった非言語コミュニケーション動作に不可欠な自由度</div></div><div class="spec-val-wrap"><span class="spec-val">2 DOF（頭部・新規追加）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身31分散型圧力センサー</div><div class="spec-lbl-desc">公式fftai.com「Thirty-one distributed pressure sensors enable real-time touch detection」確認済み。全身31カ所に分散配置した圧力センサーで、どこに触れられても即座に検知。ケアロボットとしての人との物理的インタラクション安全性と自然なタッチ応答を実現</div></div><div class="spec-val-wrap"><span class="spec-val">31分散型圧力センサー（全身）</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">Robots International「Runtime: Up to 3 hours per battery (hot-swappable)」確認済み。3時間は介護施設のケアセッション・通勤介護の半日サービス相当。デュアルホットスワップとの組み合わせで稼働継続時間を延長できる</div></div><div class="spec-val-wrap"><span class="spec-val">約3時間（1パック）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">デュアルホットスワップ</div><div class="spec-lbl-desc">PR Newswire「dual hot-swappable battery system allowing up to 3 hours of continuous runtime without powering down」確認済み。2基のバッテリーを同時搭載し、一方を交換中も電源断なしで稼働継続。ケア施設での長時間連続サービス提供に対応</div></div><div class="spec-val-wrap"><span class="spec-val">デュアルホットスワップ</span><span class="spec-note-sm">電源断なしで交換可能</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">全公開ソースで充電時間の記載なし。導入施設での運用計画では充電時間の確認をFourier Intelligence公式または代理店に問い合わせて確認することを推奨</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- AI・LLM -->
+    <div class="spec-panel" id="tab-ai">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">LLM統合（ハイブリッド決定アーキテクチャ）</div><div class="spec-lbl-desc">PR Newswire「hybrid decision architecture — merging fast reflexive control with advanced language-model reasoning」確認済み。高速反射制御（センサー即応・回避動作）と言語モデルによる高レベル判断（意図理解・会話・タスク計画）を統合した独自アーキテクチャ。ケア現場の突発事態への即応と複雑なコミュニケーションを両立</div></div><div class="spec-val-wrap"><span class="spec-val">LLM統合（公式確認済み）</span><span class="spec-note-sm">反射制御 + 言語モデル推論</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全知覚マルチモーダル学習</div><div class="spec-lbl-desc">全身31圧力センサー・RGB+構造光カメラ・4マイクアレイの多次元センサーデータを統合したマルチモーダル学習に対応。視覚・聴覚・触覚の同時処理で、複雑なケア環境での適応的な行動を実現</div></div><div class="spec-val-wrap"><span class="spec-val">全知覚マルチモーダル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">模倣学習</div><div class="spec-lbl-desc">模倣学習（Imitation Learning）対応。ケアワーカーのデモンストレーション動作からGR-3が学習することで、施設ごとの特殊なケアルーティンや個別利用者への対応方法を効率的に習得できる</div></div><div class="spec-val-wrap"><span class="spec-val">模倣学習対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット</div><div class="spec-lbl-desc">演算チップ・TOPS値の公開情報なし。LLM統合（ハイブリッド決定アーキテクチャ）を実行できる演算性能を内蔵しているが、具体的なスペックは非公開</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信方式</div><div class="spec-lbl-desc">Ethernet・Wi-Fi対応（humanoid.guide確認）。Wi-Fi搭載のため日本での使用には技適マーク取得が必要。介護施設・病院のネットワークへの接続、クラウドAIとのリアルタイム連携に対応</div></div><div class="spec-val-wrap"><span class="spec-val">Ethernet / Wi-Fi</span><span class="spec-note-sm">技適要確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー・音声 -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身31分散型圧力センサー</div><div class="spec-lbl-desc">全身31カ所に分散配置した圧力センサー（公式確認）でリアルタイムタッチ検知。力・形状・材料の3次元情報を全身で取得することで、転倒しそうな利用者のサポート・抱擁への感知応答・不意の接触への安全回避が可能になる</div></div><div class="spec-val-wrap"><span class="spec-val">31分散型圧力センサー</span><span class="spec-note-sm">全身配置・リアルタイム</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">RGB+構造光カメラ</div><div class="spec-lbl-desc">RGB（カラー映像）と構造光（3D深度計測）を組み合わせたカメラシステム。顔認識（利用者の識別・感情認識）と深度情報（空間把握・物体位置）を同時取得し、個人ケアの継続性と安全な移動を実現</div></div><div class="spec-val-wrap"><span class="spec-val">RGB + 構造光カメラ</span><span class="spec-note-sm">顔認識 + 深度計測</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">4マイクアレイ</div><div class="spec-lbl-desc">公式「A four-mic array enables omnidirectional voice activation, echo cancellation, and precise sound source localization」確認済み。360°全方位の音声認識・エコーキャンセル・音源定位を実現。騒がしいケア施設でも自分を呼ぶ声を正確に認識し、呼んだ方向に向かって応答できる</div></div><div class="spec-val-wrap"><span class="spec-val">4マイクアレイ（全方位）</span><span class="spec-note-sm">エコーキャンセル / 音源定位</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">安全設計</div><div class="spec-lbl-desc">ソフトポリマーシェル全身・31分散型圧力センサー全身・LLMによる動的障害物回避の三重安全設計。万一の接触でも全身の柔らかいシェルが衝撃を吸収。圧力センサーが過負荷を検知して動作を停止、LLMが経路を予測して回避するという多層的な安全機構</div></div><div class="spec-val-wrap"><span class="spec-val">三重安全設計</span><span class="spec-note-sm">ソフトシェル + 全身センサー + LLM回避</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">なし（公開情報なし）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">購入方法（現時点）</div><div class="spec-val-wrap"><span class="spec-val">Robots International経由</span><span class="spec-note-sm">$119,995 / 4〜6週間納期</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">直販参考価格</div><div class="spec-val-wrap"><span class="spec-val">$80,000（humanoid.guide）</span><span class="spec-note-sm">詳細はfftai.comへ要問い合わせ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">販売状況</div><div class="spec-val-wrap"><span class="spec-val">量産出荷中</span><span class="spec-note-sm">2025年8月発表 / CES 2026 米国初公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">Wi-Fi搭載・取得未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">国内導入事例</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">同社モデル</div><div class="spec-val-wrap"><span class="spec-val">GR-2（精密マニピュレーション）/ GR-1</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">GR-3 Care-bot が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">LLM × 全身触覚 × ソフトシェル——ケア・コンパニオン特化の安全設計と自然なコミュニケーション能力。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">LLMハイブリッド決定アーキテクチャ——反射制御と言語推論の融合</div>
+        <div class="feature-desc">PR Newswire公式確認済みの「ハイブリッド決定アーキテクチャ」は、高速反射制御（センサー即応・転倒回避）と言語モデルによる高レベル判断（会話・意図理解・タスク計画）を統合。突然の接触には瞬時に反応しながら、複雑なケアコミュニケーションをLLMで処理する二層構造がケアロボット設計の模範例。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🫁</div>
+        <div class="feature-title">全身31分散型圧力センサー——全身がリアルタイム触覚センサー</div>
+        <div class="feature-desc">全身31カ所に配置した分散型圧力センサーは、どこを触れられても力・形状・材料情報を即座に検知。転倒しそうな利用者の腕への接触、抱擁動作への応答、不意の衝突検知まで「全身で感じる」設計はケアロボットとして他社にない圧倒的な安全インタラクション基盤を形成する。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡</div>
+        <div class="feature-title">ソフトポリマーシェル全身 + 自動車グレード内装——人との接触を本質的に安全に</div>
+        <div class="feature-desc">全身をソフトポリマーシェルで覆い、内部には環境配慮型ウレタン発泡フォームパッドを採用（公式確認）。機械的な部品が直接人体に触れない構造で、転倒・接触・衝突時の怪我リスクを本質的に低減。ケア用途での「心理的な安心感」も含めた設計思想がケアロボットとしての差別化を実現。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎤</div>
+        <div class="feature-title">4マイクアレイ全方位音声 + RGB構造光カメラで自然なコミュニケーション</div>
+        <div class="feature-desc">360°全方位音声認識・エコーキャンセル・精密音源定位を実現する4マイクアレイで、どこから呼ばれても応答可能。RGB+構造光カメラによる顔認識で利用者個人を識別し、その人に合わせたコミュニケーションをLLMが実行。視覚・聴覚・触覚が連携した自然なケアインタラクションを提供。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔋</div>
+        <div class="feature-title">デュアルホットスワップバッテリー——電源断なしで3時間×連続稼働</div>
+        <div class="feature-desc">2基のバッテリーを同時搭載するデュアルホットスワップ設計で、バッテリー交換時も機体のシャットダウン不要（PR Newswire確認）。1パック約3時間稼働と組み合わせ、ケア施設での長時間サービスをバッテリー交換の中断最小化で実現。介護・医療シフト勤務に合わせた稼働計画が可能。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛒</div>
+        <div class="feature-title">量産出荷中・Robots International経由で4〜6週間納期購入可能</div>
+        <div class="feature-desc">2025年8月発表・2026年1月CES 2026米国初公開を経て量産出荷中。Robots International経由で$119,995（4〜6週間納期）で発注可能な状態は、まだパイロット供給段階の競合ケアロボットと比較して調達の確実性が高い。GR-2の量産実績を持つFourier Intelligenceの生産能力が背景にある。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🏥</div>
+        <div>
+          <div class="caution-title">ケア・コンパニオン特化設計。産業・物流用途には根本的に不適</div>
+          <div class="caution-desc">GR-3はケアロボット（Care-bot）として明確に設計されており、可搬重量3kg・最高速度5km/h・ソフトポリマーシェル設計はすべてケア環境に最適化された仕様。産業部品搬送・製造ライン作業・重量物扱いなどの産業用途への導入を検討する場合はGR-2や他の産業向けモデルを選択すること。GR-3の安全性スコア4点の評価は「ケア用途での安全機構が整備されている」という意味であり、産業規格（ISO 10218等）への準拠は未確認。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🖥</div>
+        <div>
+          <div class="caution-title">演算TOPS非公開・可搬重量の二重記載（3kg vs 15kg）——仕様確認が必要</div>
+          <div class="caution-desc">演算ユニットのTOPS値が非公開のため、LLMの推論品質・応答速度の客観的評価が困難。加えてhumanoid.guideは「Strength capacity: 15 kg」と記載しているが、Robots Internationalの公式仕様書は「Hand Load Capacity: 3 kg per hand」と記載しており乖離がある。15 kgが全身デッドリフトや異なる計測方法の値である可能性があるが確認できていない。ケアタスクで可搬重量が重要な場合は購入前にFourier Intelligence公式へ確認を依頼すること。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">💰</div>
+        <div>
+          <div class="caution-title">価格が$80,000〜$119,995とソース間で乖離。正確な価格は問い合わせ必要</div>
+          <div class="caution-desc">humanoid.guideの$80,000（¥12,000,000）とRobots Internationalの小売価格$119,995（¥17,999,250）に$40,000（約¥6,000,000）の乖離がある。Robots Internationalは流通コスト込みの小売価格の可能性が高く、メーカー直販では$80,000付近になる可能性もある。いずれにしても公式見積もりはfftai.com（info@fftai.com）への直接問い合わせが必要。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">日本代理店・技適・PSEすべて未設定。日本国内での合法運用には整備が必要</div>
+          <div class="caution-desc">日本国内の正規代理店・サポート体制が未設定。Wi-Fi搭載のため日本での使用には技適マーク取得が必要だが、取得情報なし。PSE認証も未確認。介護保険適用を視野に入れた日本の介護施設・病院への導入では、医療機器規制・電気用品安全法・電波法の準拠確認がすべて必要になる。日本展開に向けた動きは2026年8月の上海APIEXPO等での確認を推奨する。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">ケア・コンパニオン特化設計ならではのソフト接触・自然対話・全身触覚を活かした用途。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🏥</div><div class="usecase-title">介護施設での見守り・同伴</div></div>
+      <div class="usecase-card"><div class="usecase-icon">💊</div><div class="usecase-title">服薬サポート・健康モニタリング</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤝</div><div class="usecase-title">コンパニオン・会話インタラクション</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🦽</div><div class="usecase-title">リハビリ支援・歩行補助</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏠</div><div class="usecase-title">ホームケア・日常生活支援</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📋</div><div class="usecase-title">受付案内・患者誘導</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎓</div><div class="usecase-title">教育・学習支援</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">HRI（ヒューマンロボットインタラクション）研究</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要ケア・コンパニオン向けロボットとの比較</h2>
+    <p class="section-sub">2026年時点の主要なケア・コンパニオン向けヒューマノイドとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">Fourier GR-3 ★</th>
+          <th>Fourier GR-2（同社）</th>
+          <th>Figure 03</th>
+          <th>1X NEO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">ケア・コンパニオン</td><td>研究・医療精密</td><td>家庭・汎用</td><td>家庭・汎用</td></tr>
+        <tr><td>身長</td><td>165cm</td><td>175cm</td><td>168cm</td><td class="highlight">168cm</td></tr>
+        <tr><td>重量</td><td>71kg</td><td>63kg</td><td class="highlight">60kg</td><td class="highlight">30kg</td></tr>
+        <tr><td>自由度</td><td class="highlight">55 DOF（頭部含む）</td><td>53 DOF</td><td>44 DOF</td><td>非公開</td></tr>
+        <tr><td>LLM統合</td><td class="highlight">ハイブリッド決定アーキテクチャ</td><td class="cross">非公開</td><td class="highlight">Helix VLA</td><td class="cross">非公開</td></tr>
+        <tr><td>全身触覚</td><td class="highlight">31分散型圧力センサー</td><td>手部6種のみ</td><td>3g触覚センサー</td><td>力覚センサー</td></tr>
+        <tr><td>安全外装</td><td class="highlight">ソフトポリマーシェル全身</td><td>非公開</td><td>ソフト外装</td><td>非公開</td></tr>
+        <tr><td>稼働時間</td><td>約3h+デュアルHS</td><td>約2h+HS</td><td class="highlight">5h+ワイヤレス充電</td><td class="highlight">4h</td></tr>
+        <tr><td>参考価格</td><td>$80,000〜$119,995</td><td>約$125,000</td><td>$20,000未満（目標）</td><td class="highlight">$20,000</td></tr>
+        <tr><td>日本代理店</td><td class="cross">なし</td><td class="cross">なし</td><td class="cross">なし</td><td class="cross">なし</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">Fourier Intelligence GR-3 の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">価格・技適PSE確認・日本展開スケジュールまで、日本語でご支援します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© Fourier Intelligence（<a href="https://www.fftai.com" target="_blank">fftai.com</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

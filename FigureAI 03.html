@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure AI Figure 03 | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://www.figure.ai/news/introducing-figure-03" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/FigureAI 03.png" alt="Figure AI Figure 03">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">FIGURE AI</div>
+      <h1 class="product-name">Figure 03</h1>
+      <p class="product-tagline">家庭用汎用ヒューマノイドを目指すFigure AIの第3世代機。<br>Helix VLA搭載・指先3g触覚・ワイヤレス充電・BotQ工場で量産進行中。目標価格$20,000未満。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">一般向け目標価格（未確定・発売時点）</div>
+        <div class="price-main">$20,000未満</div>
+        <div class="price-sub">現行B2Bエンタープライズ向け価格は非公開 ／ 一般販売開始: 2026〜2027年予定<br>¥3,000,000未満（¥150換算・目標値）</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🏠 家庭用汎用設計</span>
+        <span class="badge">🦾 44 DoF</span>
+        <span class="badge">🧠 Helix VLA搭載</span>
+        <span class="badge">🔋 5時間稼働</span>
+        <span class="badge">⚡ ワイヤレス充電</span>
+        <span class="badge">✋ 指先3g触覚センサー</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">168cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">60kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">44 DoF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">20kg</div><div class="qstat-key">可搬重量</div></div>
+    <div class="qstat"><div class="qstat-val">5h</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-29）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能7(r=70, top):            (150, 80)
+               身体能力4(r=40, upper-right): (185, 130)
+               器用さ9(r=90, lower-right):  (228, 195)
+               連続稼働5(r=50, bottom):     (150, 200)
+               耐久性2(r=20, lower-left):   (133, 160)
+               安全性3(r=30, upper-left):   (124, 135) -->
+          <polygon points="150,80 185,130 228,195 150,200 133,160 124,135"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="150"  cy="80"  r="4.5" fill="#0bd0c8"/>
+          <circle cx="185"  cy="130" r="4.5" fill="#f59e0b"/>
+          <circle cx="228"  cy="195" r="4.5" fill="#0bd0c8"/>
+          <circle cx="150"  cy="200" r="4.5" fill="#f59e0b"/>
+          <circle cx="133"  cy="160" r="4.5" fill="#ef4444"/>
+          <circle cx="124"  cy="135" r="4.5" fill="#f97316"/>
+          <!-- Score labels -->
+          <text x="150"  y="74"  text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">7</text>
+          <text x="192"  y="128" text-anchor="start"  fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="235"  y="197" text-anchor="start"  fill="#0bd0c8" font-size="12" font-weight="900">9</text>
+          <text x="150"  y="210" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="900">5</text>
+          <text x="126"  y="168" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="117"  y="133" text-anchor="end"    fill="#f97316" font-size="12" font-weight="900">3</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score">7</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:70%"></div></div>
+          <div class="param-bar-note">Helix VLA（視覚+触覚+音声→44 DoFリアルタイム）· デュアル組み込みGPU · オンデバイス推論 · TOPS非公開 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">歩行1.2 m/s（4.3 km/h）· 可搬20 kg · 階段・スロープ・不整地対応 · 速度は競合最低水準 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score">9</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:90%"></div></div>
+          <div class="param-bar-note">44 DoF · 5指16 DoF/手 · 指先3g感知触覚センサー · 掌中カメラ · 業界最高水準の手先性能 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">5</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:50%"></div></div>
+          <div class="param-bar-note">5時間稼働 · ワイヤレス誘導充電2kW（足底コイル・パッドに乗るだけ）· 自動帰巣詳細非公開 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">IP等級非公開 · ソフトテキスタイル外装（着脱・洗濯可）· 屋内家庭用専用設計 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">ソフト外装・多密度フォーム · UN38.3認証バッテリー · 技適・PSE未取得 · 日本展開未発表 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">7×0.20 + 4×0.15 + 9×0.15 + 5×0.20 + 2×0.15 + 3×0.15</div>
+      </div>
+      <div class="radar-total-val">5.1<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">Figure AI 公式チャンネルより。Figure 03 の発表と家庭・世界向けビジョンをご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=Eu5mYMavctM" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/Eu5mYMavctM/maxresdefault.jpg" alt="Introducing Figure 03" onerror="this.src='https://img.youtube.com/vi/Eu5mYMavctM/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">Introducing Figure 03</div>
+          <div class="yt-thumb-label">Figure AI 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">Figure AI公式・humanoid.guide・humanoidapplications・robozapsより。ファクトチェック済（2026-05-29）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-hand')">✋ ハンド・DoF</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー・AI</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-safety')">🛡 安全性</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">168cmは日本人成人女性の平均（158cm）より高く、男性平均（172cm）に近いサイズ。一般家庭のドア・廊下・キッチンと同じ寸法感で設計</div></div><div class="spec-val-wrap"><span class="spec-val">168cm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">Figure 02比9%の軽量化を達成。humanoid.guideは60kg、robozapsは61kgと記載（公式は相対値のみ公表）</div></div><div class="spec-val-wrap"><span class="spec-val">60kg</span><span class="spec-note-sm">Figure 02比9%軽量</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">可搬重量</div><div class="spec-lbl-desc">20kgはスーツケース満杯相当の重量。家庭内での買い物袋・洗濯物・段ボール運搬から軽めの家具移動まで対応できる実用的なペイロード</div></div><div class="spec-val-wrap"><span class="spec-val">20kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">外装素材</div><div class="spec-lbl-desc">着脱可能なソフトテキスタイル外装を採用。家庭内で人やペットと接触した際の衝撃を吸収し、洗濯機で丸洗いできる衛生設計</div></div><div class="spec-val-wrap"><span class="spec-val">ソフトテキスタイル</span><span class="spec-note-sm">着脱・洗濯可能</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">フレーム構造</div><div class="spec-lbl-desc">スタンプ鋼・ダイカストアルミ・構造用接着剤を組み合わせた高剛性軽量フレーム。量産コスト削減と耐久性を両立</div></div><div class="spec-val-wrap"><span class="spec-val">スタンプ鋼＋ダイカストアルミ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">モーター</div><div class="spec-lbl-desc">フレームレスBLDCモーター（ブラシレス直流モーター）をFigure 02比2倍の高速化。ストレインウェーブ（ハーモニック）とサイクロイダルギアを組み合わせた高トルク低バックラッシュ駆動</div></div><div class="spec-val-wrap"><span class="spec-val">フレームレス BLDC</span><span class="spec-note-sm">Figure 02比2倍高速 / ストレインウェーブ+サイクロイダル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">移動能力</div><div class="spec-lbl-desc">平地歩行だけでなく家庭内の階段・スロープ・不整地（玄関段差など）にも対応。1.2 m/sは人間の普通歩き（約1.4 m/s）よりやや遅い</div></div><div class="spec-val-wrap"><span class="spec-val">歩行 1.2 m/s</span><span class="spec-note-sm">4.3 km/h · 階段・不整地対応</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">使用環境</div><div class="spec-lbl-desc">IP等級は非公開。ソフトテキスタイル外装の設計から屋内家庭環境専用。雨天・屋外・水回りの連続使用は想定外</div></div><div class="spec-val-wrap"><span class="spec-val">屋内専用</span><span class="spec-note-sm">IP等級非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- ハンド・DoF -->
+    <div class="spec-panel" id="tab-hand">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身自由度（DoF）</div><div class="spec-lbl-desc">humanoidapplications.com確認の44 DoFを採用。なお humanoid.guide は30 DoFと記載しておりソース間に不一致あり。公式スペックシートでの確認を推奨</div></div><div class="spec-val-wrap"><span class="spec-val">44 DoF</span><span class="spec-note-sm">※出典間不一致あり（30 DoFの記載も）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンド自由度</div><div class="spec-lbl-desc">片手16軸の独立制御。両手で32軸の合計。人間の手（約27DoF）を超える自由度で、ドアノブ・ペン・卵など多様な形状・重さの物体を把持できる</div></div><div class="spec-val-wrap"><span class="spec-val">16 DoF × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">指の本数</div><div class="spec-lbl-desc">人間と同じ5本指構造。様々なグリップパターン（精密把持・力把持・ピンチ）に対応。家庭内の道具・器具の多くを人間と同じ方法で扱える</div></div><div class="spec-val-wrap"><span class="spec-val">5指（片手）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">指先触覚センサー</div><div class="spec-lbl-desc">3グラムの極小荷重から感知できる業界最高感度の触覚センサー。卵を割らずに掴む・薄いシートをめくる・柔らかい果物を傷つけずに扱うといった繊細作業が可能</div></div><div class="spec-val-wrap"><span class="spec-val">3g感知</span><span class="spec-note-sm">業界最高水準</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">掌中カメラ</div><div class="spec-lbl-desc">手のひら内側にカメラを内蔵。近距離での把持対象の認識・位置合わせに使用。目のカメラが届きにくい手元・内側の作業を高精度で実行できる</div></div><div class="spec-val-wrap"><span class="spec-val">搭載</span><span class="spec-note-sm">掌中カメラ（両手）</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">フル充電から5時間の連続稼働が可能。朝の家事スタートから昼食準備まで途切れなく動く実用的な稼働時間</div></div><div class="spec-val-wrap"><span class="spec-val">5時間</span><span class="spec-note-sm">1充電あたり</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電方式</div><div class="spec-lbl-desc">ロボットが充電パッドの上に乗るだけで足底の誘導コイルから2kWの電力を非接触給電。プラグの抜き差し不要で、バッテリー残量が少なくなれば自動で充電エリアへ向かう準自動帰巣設計</div></div><div class="spec-val-wrap"><span class="spec-val">ワイヤレス誘導充電</span><span class="spec-note-sm">2kW · 足底コイル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">充電時間の公開情報なし。2kWの給電能力から算出すると概算1〜2時間台が想定されるが、メーカー公式確認を推奨</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">2kW給電 / 要公式確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー認証</div><div class="spec-lbl-desc">UN38.3は国際的な輸送安全規格で、リチウム電池の振動・衝撃・熱安定性を認証。多層の安全保護機構を内蔵しており、家庭内での発火・爆発リスクを最小化</div></div><div class="spec-val-wrap"><span class="spec-val">UN38.3認証</span><span class="spec-note-sm">多層安全保護機構</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー・AI -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">カメラ（頭部）</div><div class="spec-lbl-desc">6つのカメラを搭載（Figure 02比：2倍のフレームレート・1/4の遅延・60%広い視野角）。高速・広視野の映像認識で家庭内の複雑な環境に対応</div></div><div class="spec-val-wrap"><span class="spec-val">6眼カメラ</span><span class="spec-note-sm">2倍FPS · 1/4遅延 · 60%広FoV</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">カメラ（手部）</div><div class="spec-lbl-desc">両手のひらに内蔵した掌中カメラ。近距離での把持・操作時に手元の詳細映像をHelix VLAに提供し、繊細な手先作業の精度を大幅に向上</div></div><div class="spec-val-wrap"><span class="spec-val">掌中カメラ × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">AIシステム</div><div class="spec-lbl-desc">Helix VLA（Vision-Language-Action）はFigure AI独自のVLAモデル。6眼カメラの映像・指先触覚・音声をリアルタイムで統合し、44 DoF全体を200Hz制御ループで同時制御するオンデバイス推論エンジン</div></div><div class="spec-val-wrap"><span class="spec-val">Helix VLA</span><span class="spec-note-sm">視覚+触覚+音声 → 44 DoFリアルタイム</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット</div><div class="spec-lbl-desc">デュアルの低消費電力組み込みGPUをオンボードに搭載し、クラウドに依存せず全推論をロボット本体内で完結。プライバシー保護と低遅延応答を両立</div></div><div class="spec-val-wrap"><span class="spec-val">デュアル組み込みGPU</span><span class="spec-note-sm">オンデバイス推論 / TOPS非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信</div><div class="spec-lbl-desc">10 Gbps mmWave無線によるデータオフロード（訓練データ・モデル更新の高速転送）。Wi-Fi・Bluetoothも搭載（詳細スペック非公開）</div></div><div class="spec-val-wrap"><span class="spec-val">10 Gbps mmWave</span><span class="spec-note-sm">Wi-Fi / Bluetooth（詳細非公開）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">OS</div><div class="spec-lbl-desc">Ubuntu Linux LTSを搭載。オープンソースのロボットOSエコシステムと親和性が高く、将来的なSDK提供・カスタム開発の基盤になりうる</div></div><div class="spec-val-wrap"><span class="spec-val">Ubuntu Linux LTS</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">sim-to-real転移</div><div class="spec-lbl-desc">シミュレーション環境で学習した動作をゼロショット（追加学習なし）で実機に転移する技術を搭載。新しい家事タスクへの対応速度を大幅に短縮できる</div></div><div class="spec-val-wrap"><span class="spec-val">ゼロショット転移</span><span class="spec-note-sm">sim-to-real</span></div></div>
+      </div>
+    </div>
+
+    <!-- 安全性 -->
+    <div class="spec-panel" id="tab-safety">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">外装安全設計</div><div class="spec-lbl-desc">ソフトテキスタイルと多密度フォームパッドの組み合わせで全身を覆う。人・ペット・家具との接触時の衝撃を吸収し、怪我・破損リスクを低減</div></div><div class="spec-val-wrap"><span class="spec-val">ソフトテキスタイル</span><span class="spec-note-sm">多密度フォームパッド</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー安全性</div><div class="spec-lbl-desc">UN38.3認証リチウムバッテリーに多層の安全保護回路を搭載。過充電・過放電・短絡・高温検知による自動シャットダウンで家庭内の発火リスクを最小化</div></div><div class="spec-val-wrap"><span class="spec-val">UN38.3認証</span><span class="spec-note-sm">多層安全保護</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IP等級（防水・防塵）</div><div class="spec-lbl-desc">公式から防水・防塵規格の記載なし。ソフトテキスタイル外装の設計から屋内家庭環境専用であることが示唆される</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">屋内専用</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">技適取得状況</div><div class="spec-lbl-desc">mmWave・Wi-Fi・Bluetooth搭載のため日本での使用には技適マーク取得が必要。現時点で日本展開の公式発表がなく技適取得の報告もない</div></div><div class="spec-val-wrap"><span class="spec-val">未取得</span><span class="spec-note-sm">日本展開未発表</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">PSE認証</div><div class="spec-lbl-desc">日本国内での電気製品販売に必要な安全規格。公式未発表</div></div><div class="spec-val-wrap"><span class="spec-val">未取得</span><span class="spec-note-sm">公式未発表</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">なし</span><span class="spec-note-sm">2026年3月時点で日本展開の公式発表なし</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売予定</div><div class="spec-val-wrap"><span class="spec-val">未発表</span><span class="spec-note-sm">現在の展開は米国・ドイツBMW工場</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本販売価格</div><div class="spec-val-wrap"><span class="spec-val">未発表</span><span class="spec-note-sm">目標$20,000未満 ≒ ¥3,000,000（未確定）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">未取得</span><span class="spec-note-sm">mmWave / Wi-Fi / Bluetooth搭載</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">公式未発表</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">一般販売開始予定</div><div class="spec-val-wrap"><span class="spec-val">2026〜2027年（予定）</span><span class="spec-note-sm">現行はB2Bエンタープライズ向けのみ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">BotQ生産能力</div><div class="spec-val-wrap"><span class="spec-val">12,000台/年</span><span class="spec-note-sm">4年で100,000台規模へ拡大計画</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">現行出荷実績</div><div class="spec-val-wrap"><span class="spec-val">350台以上出荷済</span><span class="spec-note-sm">2025年10月時点 / 1台/時の生産レートへ改善</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">Figure 03が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">家庭用汎用ヒューマノイドとしての業界最高水準のAIと手先性能。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">Helix VLA：視覚×触覚×音声のリアルタイム統合</div>
+        <div class="feature-desc">Figure AI独自のVLA（Vision-Language-Action）モデルが、6眼カメラ・指先触覚・音声を同時統合し、44 DoF全関節をオンデバイスでリアルタイム制御。クラウド非依存でプライバシーと低遅延を両立。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✋</div>
+        <div class="feature-title">指先3g感知触覚センサー＋掌中カメラ</div>
+        <div class="feature-desc">3グラムの極小荷重まで感知する業界最高感度の触覚センサーと、手のひら内側の掌中カメラを組み合わせた世界最高水準の手先性能。卵・グラス・薄い紙の繊細なハンドリングが可能。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">ワイヤレス誘導充電（足底コイル）</div>
+        <div class="feature-desc">充電パッドに乗るだけで非接触2kW給電。プラグの抜き差し不要で、バッテリー残量が下がれば自律的に充電エリアへ向かう準自動帰巣設計。5時間稼働と組み合わせ、家庭での実用運用をサポート。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <div class="feature-title">6眼強化カメラ＋10 Gbps mmWave</div>
+        <div class="feature-desc">Figure 02比2倍FPS・1/4遅延・60%広視野の6眼カメラで動きの速い家庭環境を高精度認識。10 Gbps mmWave無線で訓練データをオフロードし、AIモデルを継続的にアップデートする成長型設計。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏭</div>
+        <div class="feature-title">BotQ工場で1台/時・12,000台/年の量産体制</div>
+        <div class="feature-desc">専用量産ファシリティ「BotQ」が稼働開始。1台/日から1台/時へ生産レートを改善し、350台以上の出荷実績を確立。2026〜2027年の一般向け販売に向けた確かな供給基盤が整いつつある。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏠</div>
+        <div class="feature-title">目標$20,000未満・洗濯可能な着替えスーツ</div>
+        <div class="feature-desc">家庭用汎用ロボットとして目標$20,000未満の価格帯を掲げる業界最安値水準。着脱可能なソフトテキスタイル外装は洗濯機で丸洗いでき、清潔な家庭環境での長期使用を想定した設計。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🚶</div>
+        <div>
+          <div class="caution-title">歩行速度1.2 m/s（4.3 km/h）は主要競合中で最低水準。広い空間での移動効率に制約</div>
+          <div class="caution-desc">Figure 03の最高歩行速度1.2 m/sは、1X NEO（6.2 m/s）・UBTECH Walker S2（2 m/s）・Unitree G1（2 m/s）と比較して大幅に遅い。広い家屋・施設内で素早い移動が求められる業務や、階をまたぐ頻繁な移動が必要なシーンでは作業効率に影響が出る可能性がある。家庭内の家事・介護補助用途では実用上問題ないレベルとも言えるが、導入前にユースケースを確認されたい。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🛒</div>
+        <div>
+          <div class="caution-title">現在非売品。一般消費者向け販売は2026〜2027年予定・目標価格$20,000は未確定</div>
+          <div class="caution-desc">2026年5月時点でFigure 03は一般消費者向けには販売されておらず、現行はBMW等のB2Bエンタープライズパートナー向けのみ。目標価格「$20,000未満」は発売時点での目標値であり確定価格ではない。一部サードパーティサイトでは現行B2B価格として$130,000が表示されているが出典・性質が不明。一般向け発売時期・価格は公式アナウンスを待つ必要がある。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">⚠️</div>
+        <div>
+          <div class="caution-title">DoF数値がソース間で不一致（44 DoF vs 30 DoF）。公式スペックシートでの確認が必要</div>
+          <div class="caution-desc">humanoidapplications.comは「全身44 DoF・手16 DoF/側」と記載し、humanoid.guideは「30 DoF・手20 DoF」と異なる数値を記載している。Figure AI公式の製品ページにはDoFの具体的数値の明示がなく、どちらが正確かを現時点で断定できない。精密な比較評価や導入判断を行う際は、公式スペックシートまたはFigure AIへの直接問い合わせで確認することを推奨。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">日本向け代理店・技適・PSEが未設定。日本での購入・運用は当面困難</div>
+          <div class="caution-desc">2026年3月時点で日本展開の公式発表はなく、日本国内の正規代理店・販売チャネルが存在しない。mmWave・Wi-Fi・Bluetoothを搭載しており、日本で使用するには技適マーク取得が必要だが未取得。Figure AIの現在の展開拠点は米国とドイツ（BMW工場）に限られており、日本市場への投入時期は不明。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">家庭内の家事・介護から、現行のB2Bエンタープライズ用途まで。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🧺</div><div class="usecase-title">洗濯物の仕分け・折りたたみ</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🍽</div><div class="usecase-title">食器の片付け・食洗機の操作</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🧹</div><div class="usecase-title">掃除・片付け・整頓</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🛒</div><div class="usecase-title">買い物袋・荷物の運搬</div></div>
+      <div class="usecase-card"><div class="usecase-icon">👴</div><div class="usecase-title">高齢者・介護サポート</div></div>
+      <div class="usecase-card"><div class="usecase-icon">💬</div><div class="usecase-title">会話・個人AIアシスタント</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">製造ライン（現行B2B）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📦</div><div class="usecase-title">物品整理・倉庫補助</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要家庭用ヒューマノイドとの比較</h2>
+    <p class="section-sub">2026年時点の主要な家庭用・汎用ヒューマノイドとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">Figure 03 ★</th>
+          <th>1X NEO</th>
+          <th>Tesla Optimus</th>
+          <th>Unitree H2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">家庭・汎用</td><td>家庭・汎用</td><td>工場（Tesla）</td><td>研究・産業</td></tr>
+        <tr><td>身長</td><td>168cm</td><td class="highlight">168cm</td><td>173cm</td><td>180cm</td></tr>
+        <tr><td>重量</td><td>60kg</td><td class="highlight">30kg</td><td>约57kg</td><td>70kg</td></tr>
+        <tr><td>歩行速度</td><td>1.2 m/s</td><td class="highlight">1.4 m/s（最高6.2 m/s）</td><td>非公開</td><td>&lt;2 m/s</td></tr>
+        <tr><td>可搬重量</td><td class="highlight">20kg</td><td>25kg（運搬）</td><td>非公開</td><td>7kg（連続）</td></tr>
+        <tr><td>ハンド精度</td><td class="highlight">3g触覚・掌中カメラ</td><td>力覚センサー（高精度）</td><td>非公開</td><td>5指（Dex5-1）</td></tr>
+        <tr><td>稼働時間</td><td>5時間</td><td class="highlight">4時間（急速充電あり）</td><td>非公開</td><td>約3時間</td></tr>
+        <tr><td>充電方式</td><td class="highlight">ワイヤレス誘導（足底）</td><td>有線（急速充電対応）</td><td>非公開</td><td>有線</td></tr>
+        <tr><td>目標価格</td><td class="highlight">$20,000未満（未確定）</td><td>$20,000</td><td>非公開</td><td>$29,900〜</td></tr>
+        <tr><td>日本代理店</td><td class="cross">なし（未展開）</td><td class="cross">なし（2027年〜）</td><td class="cross">なし</td><td class="check">TechShare Japan</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">Figure 03の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">最新の入手可能性・価格・日本展開情報について、日本語で丁寧にご案内します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© Figure AI（<a href="https://www.figure.ai" target="_blank">figure.ai</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

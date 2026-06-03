@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UBTECH Walker C | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* SINGLE IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-item{}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-left{}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://www.ubtrobot.com" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/Ubitech Walker C.png" alt="UBTECH Walker C">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">UBTECH ROBOTICS</div>
+      <h1 class="product-name">UBTECH Walker C</h1>
+      <p class="product-tagline">マルチモーダルLLM統合の商業サービス向けヒューマノイド。<br>空港・ショッピングモール・展示会場でのガイド・受付に特化した即戦力AI接客ロボット。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">参考価格（推定値・公式価格は要確認）</div>
+        <div class="price-main">$30,000〜$99,999</div>
+        <div class="price-sub">日本向け価格・詳細はGA Robotics株式会社にお問い合わせ<br>公式価格は未公表（ソース間で差異あり）</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🏪 商業サービス向け</span>
+        <span class="badge">🦿 20 DoF</span>
+        <span class="badge">🧠 LLM統合</span>
+        <span class="badge">📡 U-SLAM搭載</span>
+        <span class="badge">🌍 多言語対応</span>
+        <span class="badge">🇯🇵 GA Robotics取扱</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">163cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">43kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">20 DoF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">6 km/h</div><div class="qstat-key">最高速度</div></div>
+    <div class="qstat"><div class="qstat-val">2h歩行</div><div class="qstat-key">連続稼働（歩行時）</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-29 再検証）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能4(r=40, top): (150, 110)
+               身体能力3(r=30, upper-right): (176, 135)
+               器用さ3(r=30, lower-right): (176, 165)
+               連続稼働2(r=20, bottom): (150, 170)
+               耐久性2(r=20, lower-left): (133, 160)
+               安全性3(r=30, upper-left): (124, 135) -->
+          <polygon points="150,110 176,135 176,165 150,170 133,160 124,135"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots at each score vertex -->
+          <circle cx="150"  cy="110" r="4.5" fill="#f59e0b"/>
+          <circle cx="176"  cy="135" r="4.5" fill="#f97316"/>
+          <circle cx="176"  cy="165" r="4.5" fill="#f97316"/>
+          <circle cx="150"  cy="170" r="4.5" fill="#ef4444"/>
+          <circle cx="133"  cy="160" r="4.5" fill="#ef4444"/>
+          <circle cx="124"  cy="135" r="4.5" fill="#f97316"/>
+          <!-- Score value labels -->
+          <text x="150"  y="104" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <text x="183"  y="133" text-anchor="start"  fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="183"  y="168" text-anchor="start"  fill="#f97316" font-size="12" font-weight="900">3</text>
+          <text x="150"  y="180" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="126"  y="168" text-anchor="end"    fill="#ef4444" font-size="12" font-weight="900">2</text>
+          <text x="117"  y="133" text-anchor="end"    fill="#f97316" font-size="12" font-weight="900">3</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">UBTECH独自 Embodied Interactive Large Model（マルチモーダルLLM）· TOPS値非公開 · 多言語対話対応 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">最高6 km/h（1.67 m/s）· 可搬5〜6 kg · 商業施設ガイド用途に特化 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">20 DoF · 手先エンドエフェクター詳細非公開 · 精密操作能力は限定的 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">歩行時約2時間 · 静止時約4時間 · 充電1.5時間 · 自動帰巣充電なし · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-red">2</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-red" style="width:20%"></div></div>
+          <div class="param-bar-note">IP等級非公開 · 屋内専用商業施設向け · 防水性能は非対応 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-orange">3</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-orange" style="width:30%"></div></div>
+          <div class="param-bar-note">U-SLAM自律障害物回避 · GA Robotics日本展開実績 · 技適・PSE取得未確認 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">4×0.20 + 3×0.15 + 3×0.15 + 2×0.20 + 2×0.15 + 3×0.15</div>
+      </div>
+      <div class="radar-total-val">2.9<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">UBTECH Robotics 公式チャンネルより。Walker C のAIツアーガイドデモをご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=ZyUDaRwDtuc" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://i.ytimg.com/vi/ZyUDaRwDtuc/maxresdefault.jpg" alt="Meet UBTECH Humanoid Service Robot Walker C" onerror="this.src='https://i.ytimg.com/vi/ZyUDaRwDtuc/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">Meet UBTECH Humanoid Service Robot Walker C: Your First Embodied AI "Tour Guide"!</div>
+          <div class="yt-thumb-label">UBTECH Robotics 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">humanoid.guide・originofbots・GA Robotics公開情報より。ファクトチェック済（2026-05-29）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-motion')">⚡ 速度・稼働</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー・AI</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-safety')">🛡 安全性</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">直立時の全高。日本人成人男性の平均（約172cm）に近い人間比率デザインで、商業施設の接客シーンに自然に溶け込む</div></div><div class="spec-val-wrap"><span class="spec-val">163cm</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">本体重量</div><div class="spec-lbl-desc">軽量設計を採用。43kgは商業施設への搬入・設置が比較的容易なサイズ感</div></div><div class="spec-val-wrap"><span class="spec-val">43kg</span><span class="spec-note-sm">軽量ビルド</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">可搬重量</div><div class="spec-lbl-desc">腕部で扱える重量の上限。パンフレット・軽量物の受け渡し程度に対応。重作業には不向き</div></div><div class="spec-val-wrap"><span class="spec-val">5〜6kg</span><span class="spec-note-sm">腕部ペイロード</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">関節自由度（DoF）</div><div class="spec-lbl-desc">20 DoFは商業サービス向けとして必要最小限の設計。研究用途（Walker X: 41 DoF）や家庭用（NEO: 200+ DoF）と比べ低い</div></div><div class="spec-val-wrap"><span class="spec-val">20 DoF</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">使用環境</div><div class="spec-lbl-desc">屋内専用設計。IP等級非公開のため雨天・屋外での使用は不可</div></div><div class="spec-val-wrap"><span class="spec-val">屋内専用</span><span class="spec-note-sm">IP等級非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">外装・素材</div><div class="spec-lbl-desc">詳細は公開情報なし。商業施設での見栄えを重視した外観設計</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- 速度・稼働 -->
+    <div class="spec-panel" id="tab-motion">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高速度</div><div class="spec-lbl-desc">ジョギング動作時の最高移動速度。人間の早歩き（約6 km/h）と同程度で、空港・ショッピングモールの誘導に適したペース</div></div><div class="spec-val-wrap"><span class="spec-val">6 km/h</span><span class="spec-note-sm">≒ 1.67 m/s</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">歩行モード</div><div class="spec-lbl-desc">通常の歩行に加えて自律ナビゲーション（U-SLAM）により、障害物を回避しながら目的地まで自律移動できる</div></div><div class="spec-val-wrap"><span class="spec-val">自律歩行対応</span><span class="spec-note-sm">U-SLAM制御</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間（歩行）</div><div class="spec-lbl-desc">フル充電から連続歩行した場合の稼働上限。シフト業務1ラウンド（2時間）に相当するが、1日8時間のフル稼働には充電休憩が必要</div></div><div class="spec-val-wrap"><span class="spec-val">約2時間</span><span class="spec-note-sm">歩行動作時</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間（静止）</div><div class="spec-lbl-desc">受付台や展示ブースで静止待機しながら会話・インタラクションする場合の稼働時間。歩行より消費電力が少なく約4時間持続</div></div><div class="spec-val-wrap"><span class="spec-val">約4時間</span><span class="spec-note-sm">静止・インタラクション時</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">フル充電にかかる時間。約1.5時間で完了する高速充電設計。昼休みや展示間の休憩時間を活用して充電可能</div></div><div class="spec-val-wrap"><span class="spec-val">約1.5時間</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">バッテリー仕様</div><div class="spec-lbl-desc">参考情報として48V 15Ahのリチウムバッテリーとの記載がある（robotsinternational）が、メーカー公式確認が取れていないため要注意</div></div><div class="spec-val-wrap"><span class="spec-val">非公式情報あり</span><span class="spec-note-sm">公式要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">自動帰巣充電</div><div class="spec-lbl-desc">バッテリー残量低下時に自動で充電ステーションへ移動する機能。Walker Cは非対応のため、スタッフによる充電管理が必要</div></div><div class="spec-val-wrap"><span class="spec-val">非対応</span><span class="spec-note-sm">手動充電管理が必要</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電方式</div><div class="spec-lbl-desc">有線充電方式。公式情報に基づく確認済み</div></div><div class="spec-val-wrap"><span class="spec-val">有線充電</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー・AI -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">RGBDカメラ</div><div class="spec-lbl-desc">通常のカラー映像（RGB）に加え深度情報（D）を同時取得できるカメラを2基搭載。人物認識・ジェスチャー検出・距離計測に使用</div></div><div class="spec-val-wrap"><span class="spec-val">RGBDカメラ × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">構造光3Dカメラ</div><div class="spec-lbl-desc">全方位二眼構造光方式の3Dカメラを2基搭載。空間の3Dマッピングと自律ナビゲーション（U-SLAM）の主要センサー。暗い環境でも高精度に機能</div></div><div class="spec-val-wrap"><span class="spec-val">全方位構造光3D × 2</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IMU</div><div class="spec-lbl-desc">慣性計測ユニット（高精度）。ロボットの傾き・加速度・角速度をリアルタイム計測し、安定した歩行バランスと転倒防止に使用</div></div><div class="spec-val-wrap"><span class="spec-val">高精度IMU</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">AIモデル</div><div class="spec-lbl-desc">UBTECH独自の「Embodied Interactive Large Model」。映像・音声・テキストを統合したマルチモーダルLLMで、多言語での自然な接客会話を実現</div></div><div class="spec-val-wrap"><span class="spec-val">Embodied Interactive<br>Large Model</span><span class="spec-note-sm">UBTECH独自 / TOPS非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">自律ナビゲーション</div><div class="spec-lbl-desc">U-SLAM（Simultaneous Localization and Mapping）により、施設内の地図を自動生成・更新しながら自律移動・障害物回避が可能</div></div><div class="spec-val-wrap"><span class="spec-val">U-SLAM</span><span class="spec-note-sm">自律マッピング＆測位</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">対応言語</div><div class="spec-lbl-desc">多言語対話に対応（詳細言語リスト非公開）。大阪万博 中国館での展示実績あり</div></div><div class="spec-val-wrap"><span class="spec-val">多言語対応</span><span class="spec-note-sm">詳細リスト非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信方式</div><div class="spec-lbl-desc">Wi-FiとBluetoothを内蔵。施設のネットワークへの接続・スマートデバイスとの連携が可能</div></div><div class="spec-val-wrap"><span class="spec-val">Wi-Fi / Bluetooth</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算性能（TOPS）</div><div class="spec-lbl-desc">AI処理に使用するチップの演算性能。UBTECH独自チップを搭載しているが、具体的なTOPS値は非公開のため他機種との比較が困難</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">独自チップ搭載</span></div></div>
+      </div>
+    </div>
+
+    <!-- 安全性 -->
+    <div class="spec-panel" id="tab-safety">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">自律障害物回避</div><div class="spec-lbl-desc">U-SLAMと複数のカメラにより、動く人や障害物をリアルタイム検知して経路変更。混雑した商業施設での安全な移動を実現</div></div><div class="spec-val-wrap"><span class="spec-val">対応</span><span class="spec-note-sm">U-SLAM リアルタイム回避</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IP等級（防水）</div><div class="spec-lbl-desc">公式から防水規格の明示なし。屋内専用設計のため水や雨への暴露は想定外。屋外・雨天での使用は不可</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">屋内専用</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">技適取得状況</div><div class="spec-lbl-desc">Wi-Fi・Bluetooth搭載のため日本での使用には技適マークが必要。現時点で総務省技適データベースへの登録確認なし</div></div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">要GA Robotics確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">PSE認証</div><div class="spec-lbl-desc">日本国内での電気製品販売に必要な安全規格。現時点で公式発表なし</div></div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">公式未発表</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">GA Robotics株式会社</span><span class="spec-note-sm">2025年5月12日 代理店契約締結</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本での展示実績</div><div class="spec-val-wrap"><span class="spec-val">大阪万博 中国館</span><span class="spec-note-sm">2025年 AIガイドロボットとして展示中</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本向け販売価格</div><div class="spec-val-wrap"><span class="spec-val">要問い合わせ</span><span class="spec-note-sm">GA Roboticsへ直接確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本語サポート</div><div class="spec-val-wrap"><span class="spec-val">GA Robotics経由</span><span class="spec-note-sm">詳細は要確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">国内修理・サポート拠点</div><div class="spec-val-wrap"><span class="spec-val">GA Robotics</span><span class="spec-note-sm">ga-robotics.co.jp/contact/</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">Wi-Fi / Bluetooth搭載 / 技適登録確認なし</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">公式未発表</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">販売ステータス</div><div class="spec-val-wrap"><span class="spec-val">要確認</span><span class="spec-note-sm">ソース間で「量産中」vs「Prototype」の矛盾あり</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">Walker Cが際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">商業施設向けAI接客ロボットとして際立つポイント。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏪</div>
+        <div class="feature-title">商業施設専用設計</div>
+        <div class="feature-desc">空港・ショッピングモール・展示会場でのガイド・受付に特化した設計。163cmの人間に近い身長で来場者に自然に寄り添えるサイズ感。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">マルチモーダルLLM統合</div>
+        <div class="feature-desc">UBTECH独自の「Embodied Interactive Large Model」を搭載。映像・音声・テキストを統合的に理解し、文脈に沿った自然な接客会話を実現。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <div class="feature-title">多言語対話対応</div>
+        <div class="feature-desc">複数言語でのコミュニケーションに対応。インバウンド需要の多い空港・観光施設・国際展示会での活躍が期待できる。大阪万博 中国館での展示実績あり。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📡</div>
+        <div class="feature-title">U-SLAM自律ナビゲーション</div>
+        <div class="feature-desc">独自のU-SLAM技術により施設の地図を自動生成し、混雑する商業施設内でも障害物を回避しながら目的地まで来場者を安全に誘導。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👁</div>
+        <div class="feature-title">高度なセンサー群</div>
+        <div class="feature-desc">RGBDカメラ×2＋全方位二眼構造光3Dカメラ×2＋高精度IMUの組み合わせで、人物認識・3D空間把握・安定歩行を実現。暗い環境にも対応。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🇯🇵</div>
+        <div class="feature-title">日本展開済み・GA Robotics対応</div>
+        <div class="feature-desc">2025年5月にGA Robotics株式会社と代理店契約締結済み。大阪万博 中国館での展示実績もあり、他メーカーより先行した日本市場でのプレゼンスが強み。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">🔋</div>
+        <div>
+          <div class="caution-title">歩行時の連続稼働は約2時間。シフト業務での長時間運用にはスタッフによる充電管理が必須</div>
+          <div class="caution-desc">フル充電から歩行動作で約2時間、静止・インタラクションのみで約4時間の稼働が可能。充電時間は約1.5時間。自動帰巣充電機能は非搭載のため、スタッフが充電タイミングを管理する必要がある。朝から夕方までのフル稼働には複数バッテリーまたは計画的な充電休憩が必要。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🔧</div>
+        <div>
+          <div class="caution-title">20 DoFは競合比で低水準。細かい手作業・精密操作には対応不可</div>
+          <div class="caution-desc">Walker Cの20 DoFは商業サービス向けとして必要最小限の設計。同社の研究用上位機種Walker X（41 DoF）や家庭用NEO（200+ DoF）と比べると関節の自由度は大幅に低い。パンフレット手渡し・簡単な誘導動作は対応可能だが、複雑な手作業・物品の精密操作は想定外の用途となる。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">技適・PSE認証が未確認。日本国内での通信機能利用には認証取得確認が必要</div>
+          <div class="caution-desc">Wi-Fi・Bluetooth搭載機器を日本国内で使用するには技適マーク取得が法律上必要（電波法）。現時点で総務省技適データベースでの登録が確認されていない。導入前にGA Robotics株式会社へ技適・PSEの取得状況を直接確認することを強く推奨。未認証状態での運用はリスクがある。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">⚠️</div>
+        <div>
+          <div class="caution-title">販売ステータスにソース間の矛盾あり。価格も推定値であり公式価格は未公表</div>
+          <div class="caution-desc">情報源によって「量産出荷中（2025年発売）」と「Prototype・現在購入不可（humanoid.guide）」の矛盾した記載がある。また価格は$30,000（humanoid.guide）〜$99,999（Robots International）と大きなレンジがあり、いずれも公式価格ではない。正確な販売状況・価格はGA Robotics株式会社へ直接問い合わせることを推奨。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">商業施設・イベントでのAI接客ロボットとして幅広く活躍。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">✈️</div><div class="usecase-title">空港・駅でのガイド誘導</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏬</div><div class="usecase-title">ショッピングモール案内</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎪</div><div class="usecase-title">展示会・博覧会での接客</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏨</div><div class="usecase-title">ホテル・施設の受付</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🌍</div><div class="usecase-title">インバウンド向け多言語接客</div></div>
+      <div class="usecase-card"><div class="usecase-icon">📣</div><div class="usecase-title">プロモーション・PR活動</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏦</div><div class="usecase-title">銀行・窓口での案内補助</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🎓</div><div class="usecase-title">学校・教育施設での活用</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">商業サービス向けロボットとの比較</h2>
+    <p class="section-sub">2026年時点の主要な商業サービス向けロボットとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">UBTECH Walker C ★</th>
+          <th>UBTECH Walker X</th>
+          <th>SoftBank Pepper</th>
+          <th>Unitree G1</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>主な用途</td><td class="highlight">商業ガイド・受付</td><td>研究・開発</td><td>接客・案内</td><td>研究・展示</td></tr>
+        <tr><td>身長</td><td class="highlight">163cm</td><td>170cm</td><td>120cm</td><td>127cm</td></tr>
+        <tr><td>自由度（DoF）</td><td>20 DoF</td><td class="highlight">41 DoF</td><td>約17 DoF</td><td>43 DoF</td></tr>
+        <tr><td>LLM統合</td><td class="check">✓ Embodied LLM</td><td class="cross">—</td><td class="cross">△ 旧世代AI</td><td class="cross">—</td></tr>
+        <tr><td>多言語対応</td><td class="check">✓</td><td class="cross">—</td><td class="check">✓</td><td class="cross">—</td></tr>
+        <tr><td>自律ナビ（SLAM）</td><td class="check">✓ U-SLAM</td><td class="check">✓</td><td class="cross">△ 限定的</td><td class="check">✓</td></tr>
+        <tr><td>稼働時間</td><td>歩行2h / 静止4h</td><td>非公開</td><td>約12時間</td><td>約2時間</td></tr>
+        <tr><td>日本代理店</td><td class="highlight">GA Robotics（確定）</td><td>非公開</td><td class="check">SoftBank直営</td><td class="check">TechShare Japan</td></tr>
+        <tr><td>参考価格</td><td>$30,000〜（推定）</td><td>$149,000〜</td><td>生産終了</td><td>$16,000〜</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカー・代理店へお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">UBTECH Walker Cの導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">価格・導入サポート・レンタルプランについて、日本語で丁寧にご案内します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・見積もり依頼</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© UBTECH Robotics（<a href="https://www.ubtrobot.com" target="_blank">ubtrobot.com</a>）／ 日本代理店：<a href="https://ga-robotics.co.jp" target="_blank">GA Robotics株式会社</a></p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

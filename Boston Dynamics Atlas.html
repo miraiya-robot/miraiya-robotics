@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boston Dynamics Atlas | 未来屋ロボティクス</title>
+<style>
+:root{
+  --navy:#0f1923;--accent:#0bd0c8;--text:#111827;--muted:#6b7280;
+  --white:#ffffff;--border:#e2e8ec;--grey:#f2f4f5;--green:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);text-decoration:none;font-size:13.5px;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid rgba(255,255,255,.2)}
+.back-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.official-btn{display:inline-flex;align-items:center;gap:6px;color:var(--navy);background:var(--accent);text-decoration:none;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:6px;transition:.18s;border:1px solid var(--accent)}
+.official-btn:hover{background:#09b8b0;border-color:#09b8b0}
+
+/* PRODUCT HERO */
+.product-hero{background:var(--navy);padding:60px 24px 100px;position:relative;overflow:hidden}
+.product-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(11,208,200,0.08) 0%,transparent 60%)}
+.product-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.18));pointer-events:none;z-index:0}
+.product-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;position:relative;z-index:1}
+
+/* IMAGE VIEWER */
+.image-viewer{display:flex;flex-direction:column;align-items:center;gap:16px}
+.image-wrap{background:#f8f8f8;border-radius:20px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%}
+.image-wrap img{width:100%;height:100%;object-fit:contain;padding:32px}
+
+/* PRODUCT INFO */
+.product-info{padding:40px 0 60px;color:#fff}
+.product-brand{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.product-name{font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.product-tagline{font-size:17px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:28px}
+.product-price-box{background:rgba(11,208,200,.08);border:1px solid rgba(11,208,200,.3);border-radius:16px;padding:20px 24px;margin-bottom:28px}
+.price-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-bottom:4px}
+.price-main{font-size:28px;font-weight:900;color:var(--accent)}
+.price-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.badge{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(11,208,200,.4);color:var(--accent);background:rgba(11,208,200,.08)}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#0f1923}
+.btn-primary:hover{background:#09b8b0;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.1)}
+
+/* QUICK STATS */
+.quick-stats{background:rgba(11,208,200,.06);border-top:1px solid rgba(11,208,200,.15)}
+.quick-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:28px 24px;gap:8px}
+.qstat{text-align:center;padding:16px 8px}
+.qstat-val{font-size:22px;font-weight:900;color:var(--accent)}
+.qstat-key{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DETAIL SECTIONS */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:8px}
+.section-title{font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+
+/* SPECS */
+.specs-tabs{display:flex;gap:4px;margin-bottom:32px;flex-wrap:wrap}
+.spec-tab{padding:10px 20px;border-radius:24px;border:1px solid var(--border);font-size:13.5px;font-weight:600;cursor:pointer;background:#fff;color:var(--muted);transition:.18s}
+.spec-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.spec-panel{display:none}
+.spec-panel.active{display:block}
+.spec-list{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
+.spec-row{display:flex;align-items:flex-start;padding:15px 22px;gap:12px;border-bottom:1px solid var(--border);transition:background .15s}
+.spec-row:nth-child(2n){border-left:1px solid var(--border)}
+.spec-row:hover{background:#f0fdfc}
+.spec-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+.spec-lbl{flex:1;font-size:12.5px;font-weight:700;color:var(--muted);line-height:1.5}
+.spec-lbl-wrap{flex:1;display:flex;flex-direction:column;gap:3px}
+.spec-lbl-wrap .spec-lbl{flex:none}
+.spec-lbl-desc{font-size:11px;color:var(--muted);line-height:1.55;opacity:.8}
+.spec-val-wrap{text-align:right;flex-shrink:0;max-width:55%}
+.spec-val{font-size:15px;font-weight:900;color:var(--navy);display:block}
+.spec-note-sm{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.4}
+@media(max-width:640px){.spec-list{grid-template-columns:1fr}.spec-row:nth-child(2n){border-left:none}}
+
+/* FEATURES */
+.bg-dark{background:var(--navy)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.feature-card{background:rgba(255,255,255,.05);border:1px solid rgba(11,208,200,.2);border-radius:16px;padding:24px;transition:.2s}
+.feature-card:hover{background:rgba(11,208,200,.08);border-color:var(--accent)}
+.feature-icon{font-size:28px;margin-bottom:12px}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px}
+.feature-desc{font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* COMPARISON */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--navy);color:#fff;padding:14px 16px;text-align:left;font-weight:700}
+.compare-table th:first-child{border-radius:10px 0 0 0}
+.compare-table th:last-child{border-radius:0 10px 0 0}
+.compare-table td{padding:13px 16px;border-bottom:1px solid var(--border)}
+.compare-table tr:hover td{background:#f0fdfc}
+.compare-table .highlight{color:var(--accent);font-weight:800}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .cross{color:#9ca3af}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.usecase-card{background:linear-gradient(135deg,#f0fdfc,#e6faf9);border:1px solid rgba(11,208,200,.2);border-radius:14px;padding:20px;text-align:center}
+.usecase-icon{font-size:32px;margin-bottom:10px}
+.usecase-title{font-size:14px;font-weight:700;color:var(--text)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center;font-size:13px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .product-inner{grid-template-columns:1fr}
+  .quick-stats-inner{grid-template-columns:repeat(3,1fr)}
+  .product-info{padding:24px 0 40px}
+}
+@media(max-width:480px){
+  .quick-stats-inner{grid-template-columns:repeat(2,1fr)}
+}
+
+/* VIDEO THUMBNAIL */
+.yt-thumb{display:block;position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.22);aspect-ratio:16/9;text-decoration:none;background:var(--navy)}
+.yt-thumb-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.yt-thumb:hover .yt-thumb-img{transform:scale(1.04)}
+.yt-thumb-overlay{position:absolute;inset:0;background:rgba(15,25,35,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:background .25s}
+.yt-thumb:hover .yt-thumb-overlay{background:rgba(15,25,35,.32)}
+.yt-play-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-shadow:0 4px 28px rgba(11,208,200,.55);transition:transform .2s,box-shadow .2s}
+.yt-play-btn svg{width:28px;height:28px;fill:var(--navy)}
+.yt-thumb:hover .yt-play-btn{transform:scale(1.12);box-shadow:0 8px 36px rgba(11,208,200,.75)}
+.yt-thumb-meta{text-align:center}
+.yt-thumb-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.02em}
+.yt-thumb-label{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* CAUTIONS */
+.caution-list{display:flex;flex-direction:column;gap:12px}
+.caution-item{display:flex;gap:18px;align-items:flex-start;padding:20px 24px;background:#fff;border-radius:14px;border:1.5px solid #fde68a;border-left:5px solid #f59e0b;transition:.2s}
+.caution-item:hover{box-shadow:0 4px 16px rgba(245,158,11,.12)}
+.caution-icon{font-size:22px;flex-shrink:0}
+.caution-title{font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.caution-desc{font-size:13px;color:var(--muted);line-height:1.8}
+
+/* RADAR CHART */
+.radar-layout{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-top:8px}
+.radar-chart-wrap{display:flex;justify-content:center;align-items:center}
+.radar-svg{width:100%;max-width:300px;overflow:visible}
+.radar-bars{display:flex;flex-direction:column;gap:20px}
+.param-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.param-name{font-size:13.5px;font-weight:700;color:#fff}
+.param-score-wrap{display:flex;align-items:baseline;gap:2px}
+.param-score{font-size:18px;font-weight:900;color:var(--accent)}
+.param-max{font-size:12px;font-weight:400;color:rgba(255,255,255,.3);margin-left:2px}
+.param-score-amber{color:#f59e0b}
+.param-score-red{color:#ef4444}
+.param-score-orange{color:#f97316}
+.param-bar-track{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;margin-bottom:5px}
+.param-bar-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.param-bar-fill-teal{background:linear-gradient(90deg,#0bd0c8,#04e0d8)}
+.param-bar-fill-amber{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.param-bar-fill-red{background:linear-gradient(90deg,#ef4444,#f87171)}
+.param-bar-fill-orange{background:linear-gradient(90deg,#f97316,#fb923c)}
+.param-bar-note{font-size:11px;color:rgba(255,255,255,.38);line-height:1.55}
+.radar-total-box{margin-top:44px;padding:22px 28px;background:rgba(11,208,200,.07);border:1px solid rgba(11,208,200,.22);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.radar-total-label{font-size:14px;color:rgba(255,255,255,.65);font-weight:600;margin-bottom:4px}
+.radar-total-formula{font-size:10.5px;color:rgba(255,255,255,.22);line-height:1.5;font-family:monospace}
+.radar-total-val{font-size:40px;font-weight:900;color:var(--accent);line-height:1}
+.radar-total-val small{font-size:16px;color:rgba(255,255,255,.3);font-weight:400;margin-left:4px}
+@media(max-width:900px){.radar-layout{grid-template-columns:1fr}}
+@media(max-width:640px){.radar-chart-wrap{max-width:280px;margin:0 auto 8px}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="miraiya_robot_site.html" class="logo"><span>未来屋</span>ロボティクス</a>
+    <div class="nav-right">
+      <a href="miraiya_robot_site.html" class="back-btn">← ロボット一覧に戻る</a>
+      <a href="https://bostondynamics.com/products/atlas/" target="_blank" rel="noopener" class="official-btn">公式サイト ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="product-inner">
+
+    <!-- IMAGE VIEWER -->
+    <div class="image-viewer">
+      <div class="image-wrap">
+        <img src="images/Boston Dynamics Atlas.png" alt="Boston Dynamics Atlas">
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info">
+      <div class="product-brand">BOSTON DYNAMICS（Hyundai Motor Group）</div>
+      <h1 class="product-name">Atlas</h1>
+      <p class="product-tagline">Google DeepMind Gemini Robotics統合・IP67・56 DOFを誇る産業用フルサイズヒューマノイド。<br>190 cm / 持続可搬30 kg（瞬間50 kg）/ リーチ2.3 m / 自律バッテリー交換対応。Hyundai RMAC・Google DeepMind との産業展開進行中。</p>
+
+      <div class="product-price-box">
+        <div class="price-label">価格（公式非公開・業界推定値）</div>
+        <div class="price-main">$150,000〜$500,000</div>
+        <div class="price-sub">¥22,500,000〜（¥150換算・業界推定）<br>robozaps: ~$150,000 / originofbots: $320,000〜$500,000 — ソース間に大幅乖離あり。公式価格は企業向け直販・要問い合わせ</div>
+      </div>
+
+      <div class="product-badges">
+        <span class="badge">🤖 Gemini Robotics統合</span>
+        <span class="badge">💧 IP67</span>
+        <span class="badge">🦾 56 DOF</span>
+        <span class="badge">💪 持続30kg / 瞬間50kg</span>
+        <span class="badge">🔋 自律バッテリー交換</span>
+        <span class="badge">❄️ -20〜40°C対応</span>
+      </div>
+
+      <div class="cta-btns">
+        <a href="miraiya_robot_site.html#contact" class="btn btn-primary">📩 導入相談・見積もり</a>
+        <a href="miraiya_robot_site.html" class="btn btn-outline">← 一覧に戻る</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUICK STATS -->
+<div class="quick-stats">
+  <div class="quick-stats-inner">
+    <div class="qstat"><div class="qstat-val">190cm</div><div class="qstat-key">身長</div></div>
+    <div class="qstat"><div class="qstat-val">90kg</div><div class="qstat-key">重量</div></div>
+    <div class="qstat"><div class="qstat-val">56 DOF</div><div class="qstat-key">自由度</div></div>
+    <div class="qstat"><div class="qstat-val">30kg持続</div><div class="qstat-key">可搬重量</div></div>
+    <div class="qstat"><div class="qstat-val">4h</div><div class="qstat-key">連続稼働時間</div></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE RADAR -->
+<section class="bg-dark" style="border-top:1px solid rgba(11,208,200,.15);border-bottom:1px solid rgba(11,208,200,.15);padding:72px 24px">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">PERFORMANCE ANALYSIS</div>
+    <h2 class="section-title" style="color:#fff">6軸パフォーマンス評価</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">未来屋リサーチ独自スコア（ファクトチェック済 2026-05-29）。各軸10点満点・加重平均算出。</p>
+
+    <div class="radar-layout">
+
+      <!-- SVG Radar Chart -->
+      <div class="radar-chart-wrap">
+        <svg viewBox="0 0 300 300" class="radar-svg">
+          <!-- Grid polygons -->
+          <polygon points="150,50 236.6,100 236.6,200 150,250 63.4,200 63.4,100"
+                   fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"/>
+          <polygon points="150,75 215,112.5 215,187.5 150,225 85,187.5 85,112.5"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,100 193.3,125 193.3,175 150,200 106.7,175 106.7,125"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <polygon points="150,125 171.65,137.5 171.65,162.5 150,175 128.35,162.5 128.35,137.5"
+                   fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <!-- Axis lines -->
+          <line x1="150" y1="150" x2="150" y2="50"       stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="100"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="236.6" y2="200"    stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="150" y2="250"      stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="200"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="63.4" y2="100"     stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          <!-- Data polygon:
+               知能8(r=80, top):              (150, 70)
+               身体能力7(r=70, upper-right):  (211, 115)
+               器用さ6(r=60, lower-right):    (202, 180)
+               連続稼働7(r=70, bottom):       (150, 220)
+               耐久性8(r=80, lower-left):     (81, 190)
+               安全性4(r=40, upper-left):     (115, 130) -->
+          <polygon points="150,70 211,115 202,180 150,220 81,190 115,130"
+                   fill="rgba(11,208,200,0.16)" stroke="#0bd0c8" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="150"  cy="70"  r="4.5" fill="#0bd0c8"/>
+          <circle cx="211"  cy="115" r="4.5" fill="#0bd0c8"/>
+          <circle cx="202"  cy="180" r="4.5" fill="#0bd0c8"/>
+          <circle cx="150"  cy="220" r="4.5" fill="#0bd0c8"/>
+          <circle cx="81"   cy="190" r="4.5" fill="#0bd0c8"/>
+          <circle cx="115"  cy="130" r="4.5" fill="#f59e0b"/>
+          <!-- Score labels -->
+          <text x="150"  y="64"  text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">8</text>
+          <text x="218"  y="113" text-anchor="start"  fill="#0bd0c8" font-size="12" font-weight="900">7</text>
+          <text x="209"  y="182" text-anchor="start"  fill="#0bd0c8" font-size="12" font-weight="900">6</text>
+          <text x="150"  y="234" text-anchor="middle" fill="#0bd0c8" font-size="12" font-weight="900">7</text>
+          <text x="74"   y="195" text-anchor="end"    fill="#0bd0c8" font-size="12" font-weight="900">8</text>
+          <text x="108"  y="128" text-anchor="end"    fill="#f59e0b" font-size="12" font-weight="900">4</text>
+          <!-- Grid scale labels -->
+          <text x="153" y="98"  fill="rgba(255,255,255,0.2)" font-size="8.5">5</text>
+          <text x="153" y="148" fill="rgba(255,255,255,0.2)" font-size="8.5">0</text>
+          <!-- Axis labels -->
+          <text x="150"  y="36"  text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">知能</text>
+          <text x="249"  y="96"  text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">身体能力</text>
+          <text x="249"  y="208" text-anchor="start"  fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">器用さ</text>
+          <text x="150"  y="268" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">連続稼働</text>
+          <text x="51"   y="208" text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">耐久性</text>
+          <text x="51"   y="96"  text-anchor="end"    fill="rgba(255,255,255,0.9)" font-size="11" font-weight="700">安全性</text>
+        </svg>
+      </div>
+
+      <!-- Parameter Bars -->
+      <div class="radar-bars">
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🧠 知能</span>
+            <span class="param-score-wrap"><span class="param-score">8</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:80%"></div></div>
+          <div class="param-bar-note">Google DeepMind Gemini Robotics VLA統合 · 強化学習 · ファウンデーションモデル · Orbitフリートソフトウェア · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">⚡ 身体能力</span>
+            <span class="param-score-wrap"><span class="param-score">7</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:70%"></div></div>
+          <div class="param-bar-note">持続可搬30 kg · 瞬間50 kg · リーチ2.3 m · 最高約8 km/h（参考値・公式未記載）· 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🖐 器用さ</span>
+            <span class="param-score-wrap"><span class="param-score">6</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:60%"></div></div>
+          <div class="param-bar-note">56 DOF · 360°連続回転関節 · 3指（触覚センサー搭載）· 3指設計により精密把持に制約あり · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🔋 連続稼働</span>
+            <span class="param-score-wrap"><span class="param-score">7</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:70%"></div></div>
+          <div class="param-bar-note">4時間稼働（公式確認）· 自律バッテリー自己交換で無停止連続運用可能 · 充電時間非公開 · 重み 20%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">🛡 耐久性</span>
+            <span class="param-score-wrap"><span class="param-score">8</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-teal" style="width:80%"></div></div>
+          <div class="param-bar-note">IP67（防塵完全 · 水深1m耐水30分）· 動作温度-20〜40°C · 軽量チタン+アルミ3D構造 · 重み 15%</div>
+        </div>
+
+        <div class="param-bar-item">
+          <div class="param-bar-header">
+            <span class="param-name">✅ 安全性</span>
+            <span class="param-score-wrap"><span class="param-score param-score-amber">4</span><span class="param-max">/ 10</span></span>
+          </div>
+          <div class="param-bar-track"><div class="param-bar-fill param-bar-fill-amber" style="width:40%"></div></div>
+          <div class="param-bar-note">360°視覚 · 動的障害物回避 · Geminiによる予測的安全判断 · 技適・PSE・ISO規格準拠いずれも未確認 · 重み 15%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="radar-total-box">
+      <div class="radar-total-left">
+        <div class="radar-total-label">加重平均スコア</div>
+        <div class="radar-total-formula">8×0.20 + 7×0.15 + 6×0.15 + 7×0.20 + 8×0.15 + 4×0.15</div>
+      </div>
+      <div class="radar-total-val">6.8<small>/ 10</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICIAL VIDEO -->
+<section style="background:#f8fafb;padding:56px 24px">
+  <div class="section-inner">
+    <div class="section-label">OFFICIAL VIDEO</div>
+    <h2 class="section-title">公式デモ動画</h2>
+    <p class="section-sub">Boston Dynamics 公式チャンネルより。Electric Atlasの製品機能紹介映像。IP67耐久性・56 DOF・Gemini Robotics統合・自律バッテリー交換など産業版Atlasの主要特長をご覧ください。</p>
+    <a href="https://www.youtube.com/watch?v=rrUHZKlrxms" target="_blank" rel="noopener" class="yt-thumb">
+      <img class="yt-thumb-img" src="https://img.youtube.com/vi/rrUHZKlrxms/maxresdefault.jpg" alt="Atlas | Product Features | Boston Dynamics" onerror="this.src='https://img.youtube.com/vi/rrUHZKlrxms/hqdefault.jpg'">
+      <div class="yt-thumb-overlay">
+        <div class="yt-play-btn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="yt-thumb-meta">
+          <div class="yt-thumb-title">Atlas | Product Features | Boston Dynamics</div>
+          <div class="yt-thumb-label">Boston Dynamics 公式 · YouTubeで視聴 ↗</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- SPECS SECTION -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">SPECIFICATIONS</div>
+    <h2 class="section-title">詳細スペック</h2>
+    <p class="section-sub">Boston Dynamics公式（bostondynamics.com/products/atlas/）・humanoid.guide・robozaps・automate.orgより。ファクトチェック済（2026-05-29）。</p>
+
+    <div class="specs-tabs">
+      <button class="spec-tab active" onclick="switchTab(this,'tab-body')">🤖 ボディ</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-joint')">🦾 関節・ハンド</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-battery')">🔋 バッテリー</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-ai')">🧠 AI・演算</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-sensor')">📡 センサー・通信</button>
+      <button class="spec-tab" onclick="switchTab(this,'tab-japan')">🇯🇵 日本市場・展開状況</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="spec-panel active" id="tab-body">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">身長</div><div class="spec-lbl-desc">公式「Height 1.9 m (6.2 ft)」と明記。190cmは現行産業用ヒューマノイドの中で最大クラス。成人男性平均（172cm）を大幅に超え、工場の高棚や大型設備への作業アクセスに適したサイズ</div></div><div class="spec-val-wrap"><span class="spec-val">190 cm</span><span class="spec-note-sm">公式確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">重量</div><div class="spec-lbl-desc">公式「Weight 90 kg (198 lbs)」確認済み。90kgは産業ロボットとして重い部類だが、持続可搬30kg・瞬間50kgというペイロードを実現するために必要な堅牢な構造を持つ</div></div><div class="spec-val-wrap"><span class="spec-val">90 kg</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">リーチ</div><div class="spec-lbl-desc">公式「Reach: 2.3 m (7.5 ft)」と明記。2.3mのリーチは190cmの身長と組み合わせ、高い棚・大型工業機器の上部・人間では届かない場所へのアクセスを可能にする産業向け設計</div></div><div class="spec-val-wrap"><span class="spec-val">2.3 m</span><span class="spec-note-sm">片腕リーチ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">最高速度</div><div class="spec-lbl-desc">公式サイトには速度の数値記載なし。humanoid.guideは「8 km/h」・humanoid.pressは「2.5 m/s（≒9 km/h）」と記載。参考値として約8 km/hを使用しているが、公式確認は未取得</div></div><div class="spec-val-wrap"><span class="spec-val">約8 km/h</span><span class="spec-note-sm">⚠️参考値・公式未記載</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">IP等級 / 動作温度</div><div class="spec-lbl-desc">公式「IP Rating IP67 / Operating Temp −20° to 40°C」確認済み。IP67は防塵完全・水深1m耐水30分を意味し、屋外・工場の水洗浄環境でも使用可能。-20°Cから40°Cの動作温度は寒冷地での屋外作業にも対応</div></div><div class="spec-val-wrap"><span class="spec-val">IP67</span><span class="spec-note-sm">-20〜40°C / 防塵完全・耐水</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">フレーム材料</div><div class="spec-lbl-desc">軽量チタンとアルミニウムの3Dプリント構造を採用（出典ページの現在確認不能⚠️）。Hyundai Mobis製のカスタム全電動アクチュエータを搭載。チタン骨格は重量対剛性比が優れており、90kgの重量ながら産業作業に耐える高強度フレームを実現</div></div><div class="spec-val-wrap"><span class="spec-val">チタン + アルミ 3Dプリント</span><span class="spec-note-sm">⚠️現在ソース確認不能</span></div></div>
+      </div>
+    </div>
+
+    <!-- 関節・ハンド -->
+    <div class="spec-panel" id="tab-joint">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">全身自由度（DOF）</div><div class="spec-lbl-desc">公式「Degrees of Freedom: 56」と明記。56 DOFは現行産業用ヒューマノイドで最高クラス。さらに360°連続回転関節を採用することで、人間の解剖学的な可動域を超えた姿勢での作業が可能</div></div><div class="spec-val-wrap"><span class="spec-val">56 DOF</span><span class="spec-note-sm">360°連続回転関節</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">360°連続回転関節</div><div class="spec-lbl-desc">関節が人間の可動域（通常±180°以下）を超えて360°回転可能な独自設計。腕・胴体の各関節が連続回転できるため、狭い空間での複雑な工業作業や、人間が取れない姿勢でのタスク実行が可能。他のヒューマノイドにない最大の差別化要素</div></div><div class="spec-val-wrap"><span class="spec-val">360°連続回転対応</span><span class="spec-note-sm">人間の可動域を超える</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">ハンド・指の本数</div><div class="spec-lbl-desc">3指設計（触覚センサー搭載）。humanoid.guide「Fingers per hand: 3 per hand」確認済み。3指は5指より少なく精密把持に制約があるが、触覚センサーとGemini AIの組み合わせで把持力・接触力をリアルタイム制御し、工業部品の把持に対応</div></div><div class="spec-val-wrap"><span class="spec-val">3指 × 2</span><span class="spec-note-sm">触覚センサー搭載</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">持続可搬重量</div><div class="spec-lbl-desc">公式「Weight Capacity (Sustained) 30 kg (66 lbs)」と明記。30kgの持続可搬は自動車部品・大型工業部品・資材の連続搬送に対応。Walker S（片腕15kg）・Figure 03（両腕20kg）を大幅に上回る産業向け高ペイロード</div></div><div class="spec-val-wrap"><span class="spec-val">30 kg（持続）</span><span class="spec-note-sm">公式確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">瞬間最大可搬重量</div><div class="spec-lbl-desc">公式「Weight Capacity (Instant) 50 kg (110 lbs)」と明記。瞬間50kgは短時間の重量物持ち上げ・投入に対応。持続30kgと瞬間50kgの2段階ペイロード設計は、実際の産業現場での多様なシナリオをカバー</div></div><div class="spec-val-wrap"><span class="spec-val">50 kg（瞬間最大）</span><span class="spec-note-sm">公式確認済み</span></div></div>
+      </div>
+    </div>
+
+    <!-- バッテリー -->
+    <div class="spec-panel" id="tab-battery">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">連続稼働時間</div><div class="spec-lbl-desc">公式「Battery Life 4 hours」と明記。4時間の稼働は半日の産業シフトをカバーするには不十分だが、自律バッテリー交換機能との組み合わせで実質的な連続稼働を実現</div></div><div class="spec-val-wrap"><span class="spec-val">4 時間</span><span class="spec-note-sm">公式確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">自律バッテリー自己交換</div><div class="spec-lbl-desc">Atlas自身が自律的にバッテリーを交換できる機能を搭載。人間のオペレーターの介入なしにバッテリー交換ができるため、24時間産業ラインの無停止稼働を実現できる。交換所要時間の公式値は未公開</div></div><div class="spec-val-wrap"><span class="spec-val">自律バッテリー交換対応</span><span class="spec-note-sm">無停止連続運用 / 所要時間非公開</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">充電時間</div><div class="spec-lbl-desc">充電時間の公開情報なし。自律バッテリー交換設計により、稼働中の機体は充電待機なしに次のバッテリーで継続稼働できる設計のため、充電時間よりも予備バッテリーの数が運用計画の鍵になる</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span></div></div>
+      </div>
+    </div>
+
+    <!-- AI・演算 -->
+    <div class="spec-panel" id="tab-ai">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">Google DeepMind Gemini Robotics</div><div class="spec-lbl-desc">公式「Google DeepMind Gemini Robotics integration」確認済み。GoogleのGemini大規模言語・視覚モデルをロボティクス向けに特化したGemini Roboticsを統合。自然言語指示の理解・複雑タスクの計画・物体認識を産業現場で実行できる業界最先端のAI統合</div></div><div class="spec-val-wrap"><span class="spec-val">Gemini Robotics統合</span><span class="spec-note-sm">Google DeepMind / 公式確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">強化学習・ファウンデーションモデル</div><div class="spec-lbl-desc">強化学習（RL）とファウンデーションモデルを組み合わせた学習システムを採用（公式確認済み）。Gemini Roboticsのファウンデーションモデルにより、新しいタスクへの素早い適応と汎用的な物体操作能力を実現</div></div><div class="spec-val-wrap"><span class="spec-val">強化学習 + ファウンデーションモデル</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">Orbitフリートソフトウェア</div><div class="spec-lbl-desc">Boston Dynamics独自のOrbitフリート管理ソフトウェアと連携（公式確認済み）。複数台Atlasの一元管理・タスク割り当て・パフォーマンス監視・OTAアップデートを産業現場のダッシュボードから制御できる企業向け管理プラットフォーム</div></div><div class="spec-val-wrap"><span class="spec-val">Orbit フリートソフトウェア</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">演算ユニット</div><div class="spec-lbl-desc">演算チップ・TOPS値の公式公開情報なし。NVIDIA Jetson Thor搭載との報告がある（⚠️ソース現在確認不能）。Gemini Roboticsのオンデバイス推論を実行できる十分な演算性能を持つと推定されるが、具体的な数値はBoston Dynamics直接確認が必要</div></div><div class="spec-val-wrap"><span class="spec-val">非公開</span><span class="spec-note-sm">⚠️Jetson Thor報告あり・未確認</span></div></div>
+      </div>
+    </div>
+
+    <!-- センサー・通信 -->
+    <div class="spec-panel" id="tab-sensor">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">360°視覚システム</div><div class="spec-lbl-desc">公式「360-degree vision」確認済み。タクタイル・RGB・ステレオカメラを組み合わせた全周囲視覚システム。後方・側方からの障害物・人の接近をリアルタイムに検知し、Gemini AIの予測的安全判断と組み合わせた動的障害物回避を実現</div></div><div class="spec-val-wrap"><span class="spec-val">360°視覚</span><span class="spec-note-sm">タクタイル + RGB + ステレオ</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">LiDAR / 深度センサー / IMU</div><div class="spec-lbl-desc">LiDAR・深度センサー・IMUを搭載（公式確認済み）。LiDARで精密な3D環境マッピング、深度センサーで物体の正確な距離・位置推定、IMUで動的な姿勢・バランス制御を行う高精度センサーフュージョン</div></div><div class="spec-val-wrap"><span class="spec-val">LiDAR / 深度 / IMU</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">触覚センサー</div><div class="spec-lbl-desc">3指ハンドに触覚センサーを搭載（公式確認済み）。把持力・接触面積・力の方向をリアルタイム計測し、繊細な部品の把持・工業製品の精密なハンドリングに活用</div></div><div class="spec-val-wrap"><span class="spec-val">タクタイルセンサー搭載</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl-wrap"><div class="spec-lbl">通信方式</div><div class="spec-lbl-desc">Wi-Fi対応・Orbitフリートソフトウェアとの連携（humanoid.guide確認済み）。企業ネットワーク経由でのOrbitダッシュボードとのリアルタイム通信、OTAアップデート、リモート監視に使用</div></div><div class="spec-val-wrap"><span class="spec-val">Wi-Fi / Orbit連携</span></div></div>
+      </div>
+    </div>
+
+    <!-- 日本市場・展開状況 -->
+    <div class="spec-panel" id="tab-japan">
+      <div class="spec-list">
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本正規代理店</div><div class="spec-val-wrap"><span class="spec-val">未確認</span><span class="spec-note-sm">東北エンタープライズ（Spot専用パートナー）/ Atlas適用は確認不能</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">現在の出荷状況</div><div class="spec-val-wrap"><span class="spec-val">2026年分全量割当済み</span><span class="spec-note-sm">Hyundai RMAC + Google DeepMind向け</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">一般企業向け受付</div><div class="spec-val-wrap"><span class="spec-val">2027年以降予定</span><span class="spec-note-sm">automate.org（CES 2026）確認済み</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">年間生産目標</div><div class="spec-val-wrap"><span class="spec-val">30,000台/年（2028年目標）</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">技適マーク</div><div class="spec-val-wrap"><span class="spec-val">不明</span><span class="spec-note-sm">取得報告なし / 米国製品</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">PSE認証</div><div class="spec-val-wrap"><span class="spec-val">未確認</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">日本国内導入事例</div><div class="spec-val-wrap"><span class="spec-val">公開情報なし</span><span class="spec-note-sm">米国：Hyundai RMAC・Google DeepMindで展開中</span></div></div>
+        <div class="spec-row"><div class="spec-dot"></div><div class="spec-lbl">同社他製品</div><div class="spec-val-wrap"><span class="spec-val">Spot（四足歩行）/ Stretch（物流特化）</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="bg-dark">
+  <div class="section-inner">
+    <div class="section-label" style="color:var(--accent)">KEY FEATURES</div>
+    <h2 class="section-title" style="color:#fff">Atlas が際立つ6つの特長</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.6)">Gemini Robotics × IP67 × 56 DOF 360°回転関節——世界最高水準のAIと産業耐久性を一体化した孤高のフルサイズヒューマノイド。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">Google DeepMind Gemini Robotics統合——業界最先端AI</div>
+        <div class="feature-desc">GoogleのGemini大規模モデルをロボティクス向けに特化したGemini Roboticsを産業ヒューマノイドとして初めて本格統合。自然言語指示の理解・複雑タスクの自律計画・ゼロショット物体認識をオンデバイスで処理。強化学習・ファウンデーションモデルとの組み合わせで新作業への素早い適応を実現。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💧</div>
+        <div class="feature-title">IP67・-20〜40°C——屋外・過酷工場環境で稼働</div>
+        <div class="feature-desc">IP67（防塵完全・水深1m耐水30分）と-20〜40°Cの動作温度は、現行産業用ヒューマノイドで最高クラスの耐久規格。水洗浄が行われる食品工場・屋外作業・寒冷地工場など、他のヒューマノイドが踏み込めない過酷環境での連続稼働を可能にする。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title">56 DOF・360°連続回転関節——人体を超える動作自由度</div>
+        <div class="feature-desc">56自由度と人間の解剖学的限界を超えた360°連続回転関節の組み合わせは、現行ヒューマノイド最高水準。人間が取れない姿勢での溶接・組付け・点検作業が可能で、狭い工場通路でのアクセスも360°回転を活かして自在に対応できる。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💪</div>
+        <div class="feature-title">持続30 kg・瞬間50 kg・リーチ2.3 m——産業最高クラスのペイロード</div>
+        <div class="feature-desc">持続可搬30 kg・瞬間最大50 kgのペイロードはFigure 03（両腕20kg）・AGIBOT G2（5kg/アーム）を大幅に超える産業最高水準。2.3 mのリーチと190 cmの身長と組み合わせ、大型部品・重量資材の把持・搬送・設置まで工場内の最も重い作業をカバーする。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔋</div>
+        <div class="feature-title">自律バッテリー自己交換——無停止24/7産業稼働</div>
+        <div class="feature-desc">人間の介入なしにAtlas自身がバッテリーを交換できる自律交換機能。4時間稼働ごとに自律充電ステーションへ移動してバッテリーを交換し、ラインを止めることなく24時間365日の連続稼働を実現。Orbitフリートソフトウェアで複数台の稼働スケジュールを一元管理できる。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏭</div>
+        <div class="feature-title">Hyundai RMAC・Google DeepMindとの産業導入実績</div>
+        <div class="feature-desc">2026年の全生産量をHyundai Motor Group RMAC（ロボット・メカトロニクス研究センター）とGoogle DeepMindに割り当てた実量産体制。2028年には年産30,000台規模の専用工場設立を計画。ロボティクス業界最大手2社との協業が、産業ヒューマノイドとしての信頼性を裏付ける。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAUTIONS -->
+<section style="background:#fffbf0;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a">
+  <div class="section-inner">
+    <div class="section-label" style="color:#d97706">IMPORTANT NOTES</div>
+    <h2 class="section-title">導入前に確認すべき4つのポイント</h2>
+    <p class="section-sub">2026年5月時点の公開情報をもとにした未来屋リサーチより。</p>
+    <div class="caution-list">
+      <div class="caution-item">
+        <div class="caution-icon">📅</div>
+        <div>
+          <div class="caution-title">2026年分全量割当済み。新規顧客向け受付は2027年以降——長期待機が必要</div>
+          <div class="caution-desc">automate.orgのCES 2026レポートで「All 2026 production units are committed to Hyundai's RMAC and Google DeepMind. Broader availability planned for early 2027.」と確認済み。現時点での新規発注は2027年以降の納期となる。早期導入を検討する場合は今すぐBoston Dynamicsへのコンタクトを開始し、ウェイティングリストへの登録を推奨する。2028年には年産30,000台規模の工場稼働が計画されており、供給体制は大幅に改善される見通し。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">💰</div>
+        <div>
+          <div class="caution-title">公式価格非公開・業界推定$150,000〜$500,000でソース間に大幅乖離</div>
+          <div class="caution-desc">Boston Dynamics公式サイトに価格記載なし。業界推定価格はrobozaps（~$150,000）・originofbots（$320,000〜$500,000）・humanoid.guide（$120,000）で大幅に乖離しており、実際の価格は企業ごとの契約条件に依存する可能性が高い。エンタープライズ向け直販のみで、問い合わせフォームからのコンタクトが必要。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">✋</div>
+        <div>
+          <div class="caution-title">3指設計は精密把持に制約あり。5指競合機との用途の違いを事前整理</div>
+          <div class="caution-desc">Atlasの3指ハンドは触覚センサーとGemini AIの組み合わせで多様な把持に対応するが、精密電子部品の挿入・細いワイヤーの配線・薄いシートの取扱いなど5本指が必要な細密作業には限界がある。AGIBOT G2（OmniHand Pro・0.3mm精度）やFigure 03（3g触覚センサー）など5指モデルとの用途の使い分けを事前に検討することを推奨する。</div>
+        </div>
+      </div>
+      <div class="caution-item">
+        <div class="caution-icon">🇯🇵</div>
+        <div>
+          <div class="caution-title">日本代理店・技適PSE未確認。日本展開時期・サポート体制ともに不透明</div>
+          <div class="caution-desc">Spot（四足歩行）の日本パートナーとして東北エンタープライズが確認されるが、Atlas向けの日本代理店機能は公式情報で未確認。Wi-Fi搭載のため日本での使用には技適マーク取得が必要だが、取得報告なし。現時点でAtlasの日本国内での商用展開はされておらず、技適・PSE・サポート体制すべてを購入前にBoston Dynamics直接に確認することを強く推奨する。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">USE CASES</div>
+    <h2 class="section-title">主な用途・活用シーン</h2>
+    <p class="section-sub">Hyundai RMAC・Google DeepMindとの協業で実証が進む産業・研究用途。</p>
+    <div class="usecases-grid">
+      <div class="usecase-card"><div class="usecase-icon">🚗</div><div class="usecase-title">自動車製造ライン（Hyundai RMAC）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔬</div><div class="usecase-title">AI研究・Embodied AI開発</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏗</div><div class="usecase-title">重量部品搬送・設置（持続30kg）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🌧</div><div class="usecase-title">屋外・過酷環境作業（IP67）</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🌙</div><div class="usecase-title">24/7無人産業ライン稼働</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🔍</div><div class="usecase-title">品質検査・高所点検</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🤝</div><div class="usecase-title">人ロボット協調作業</div></div>
+      <div class="usecase-card"><div class="usecase-icon">🏭</div><div class="usecase-title">工場自動化・フレキシブル製造</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section style="background:#f8fafb">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">主要産業用フルサイズヒューマノイドとの比較</h2>
+    <p class="section-sub">2026年時点の主要な産業向けフルサイズヒューマノイドとの比較。</p>
+    <div style="overflow-x:auto">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th style="color:var(--accent)">Atlas ★</th>
+          <th>Figure 03</th>
+          <th>UBTECH Walker S2</th>
+          <th>AGIBOT G2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>タイプ</td><td class="highlight">二足歩行・産業</td><td>二足歩行・汎用</td><td>二足歩行・産業</td><td>車輪型・産業</td></tr>
+        <tr><td>身長</td><td class="highlight">190cm</td><td>168cm</td><td>172cm</td><td>122〜180cm</td></tr>
+        <tr><td>重量</td><td>90kg</td><td class="highlight">60kg</td><td class="highlight">60〜73kg</td><td>185kg</td></tr>
+        <tr><td>自由度</td><td class="highlight">56 DOF（360°回転）</td><td>44 DOF</td><td>52 DOF</td><td>50 DOF</td></tr>
+        <tr><td>ハンド</td><td>3指・触覚センサー</td><td class="highlight">3g触覚センサー</td><td class="highlight">第4世代5本指</td><td class="highlight">OmniHand Pro 5指</td></tr>
+        <tr><td>可搬重量</td><td class="highlight">30kg持続 / 50kg瞬間</td><td>20kg（両腕）</td><td class="highlight">15kg/アーム</td><td>5kg/アーム</td></tr>
+        <tr><td>IP等級</td><td class="highlight">IP67</td><td>非公開</td><td>非公開</td><td>IP42</td></tr>
+        <tr><td>LLM / AI</td><td class="highlight">Gemini Robotics</td><td class="highlight">Helix VLA</td><td>BrainNet 2.0</td><td class="highlight">GO-1 LLM</td></tr>
+        <tr><td>参考価格</td><td>$150K〜$500K（推定）</td><td>$20,000未満（目標）</td><td>$68,000〜$120,000</td><td>$138,000</td></tr>
+        <tr><td>日本代理店</td><td class="cross">未確認</td><td class="cross">なし</td><td class="check">GA Robotics</td><td class="cross">なし</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">※比較データは公開情報をもとにした参考値です。詳細は各メーカーへお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--navy);text-align:center">
+  <div class="section-inner">
+    <h2 style="color:#fff;font-size:clamp(24px,3vw,36px);font-weight:900;margin-bottom:16px">Boston Dynamics Atlas の導入を検討中ですか？</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:16px;margin-bottom:32px;line-height:1.7">2027年以降の導入に向けたウェイティングリスト登録から、技適・PSE確認まで日本語でご支援します。</p>
+    <a href="miraiya_robot_site.html#contact" class="btn btn-primary" style="font-size:16px;padding:16px 36px">📩 無料相談・お問い合わせ</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 未来屋ロボティクス ／ <a href="miraiya_robot_site.html">トップページに戻る</a></p>
+  <p style="margin-top:8px;font-size:11px">製品画像・スペック出典：© Boston Dynamics（<a href="https://bostondynamics.com" target="_blank">bostondynamics.com</a>）</p>
+</footer>
+
+<script>
+function switchTab(btn, tabId){
+  document.querySelectorAll('.spec-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.spec-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+</body>
+</html>

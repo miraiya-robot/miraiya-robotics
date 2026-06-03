@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>未来屋 Miraiya | ロボット比較・販売・レンタル</title>
+<style>
+:root {
+  --navy:   #0f1923;
+  --blue:   #0891b2;
+  --accent: #0bd0c8;
+  --light:  #e0f7f6;
+  --grey:   #f2f4f5;
+  --text:   #111827;
+  --muted:  #6b7280;
+  --white:  #ffffff;
+  --border: #e2e8ec;
+  --green:  #059669;
+  --shadow: 0 4px 24px rgba(11,208,200,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;color:var(--text);background:#fff;font-size:15px}
+
+/* ─── NAV ─── */
+nav{position:sticky;top:0;z-index:1000;background:var(--navy);box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px}
+.logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:.04em;text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;padding:8px 13px;border-radius:6px;font-size:13.5px;transition:.18s}
+.nav-links a:hover{background:rgba(255,255,255,.15);color:#fff}
+.nav-cta{background:var(--accent);color:#fff !important;padding:8px 16px !important;border-radius:20px !important;font-weight:700}
+.nav-cta:hover{background:#d04e2a !important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:24px;height:2px;background:#fff;border-radius:2px;transition:.2s}
+
+/* ─── HERO ─── */
+.hero{background:url("images/背景.png") center center / cover no-repeat;color:#fff;padding:90px 24px 80px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(7,13,20,0.72) 0%,rgba(15,25,35,0.60) 55%,rgba(12,42,46,0.65) 100%);z-index:0}
+.hero-inner{position:relative;z-index:1;max-width:780px;margin:0 auto}
+.hero-badge{display:inline-block;background:rgba(11,208,200,.12);border:1px solid var(--accent);color:#0bd0c8;padding:5px 16px;border-radius:20px;font-size:12.5px;font-weight:600;margin-bottom:20px;letter-spacing:.08em}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.2;margin-bottom:18px}
+.hero h1 span{color:#0bd0c8}
+.hero p{font-size:17px;color:rgba(255,255,255,.8);max-width:560px;margin:0 auto 36px;line-height:1.7}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:28px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;border:none}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(232,96,60,.4)}
+.btn-primary:hover{background:#d04e2a;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5)}
+.btn-outline:hover{background:rgba(255,255,255,.1);border-color:#fff}
+.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:52px;flex-wrap:wrap;position:relative;z-index:1}
+.stat{text-align:center}
+.stat-num{font-size:32px;font-weight:900;color:#0bd0c8}
+.stat-label{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px}
+
+/* ─── SECTIONS ─── */
+section{padding:72px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:48px}
+.section-label{color:var(--accent);font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.section-title{font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--navy);line-height:1.3}
+.section-sub{color:var(--muted);margin-top:10px;font-size:15px}
+.bg-grey{background:var(--grey)}
+
+/* ─── FILTERS ─── */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
+.filter-label{font-size:13px;font-weight:600;color:var(--muted);margin-right:4px}
+.filter-btn{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:13px;cursor:pointer;transition:.16s;color:var(--text);font-weight:500}
+.filter-btn:hover{border-color:var(--blue);color:var(--blue)}
+.filter-btn.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:24px;padding:8px 16px;min-width:220px}
+.search-box input{border:none;outline:none;font-size:14px;color:var(--text);width:100%;background:transparent}
+.search-box svg{color:var(--muted);flex-shrink:0}
+
+/* ─── ROBOT GRID ─── */
+.robot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+.robot-card{background:#fff;border-radius:14px;border:1.5px solid var(--border);overflow:hidden;transition:.22s;cursor:pointer;position:relative}
+.robot-card:hover{box-shadow:var(--shadow);transform:translateY(-3px);border-color:var(--blue)}
+.robot-card.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,96,60,.2)}
+.card-img{height:180px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.robot-emoji{font-size:72px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.12))}
+.card-category{position:absolute;top:10px;left:10px;background:var(--navy);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px}
+.card-compare-cb{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:6px;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;transition:.15s}
+.robot-card.selected .card-compare-cb{background:var(--accent);border-color:var(--accent);color:#fff}
+.card-body{padding:16px}
+.card-brand{font-size:11.5px;font-weight:600;color:var(--blue);margin-bottom:3px}
+.card-name{font-size:16.5px;font-weight:800;color:var(--navy);margin-bottom:8px}
+.card-specs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.spec-chip{background:var(--light);color:var(--blue);font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px}
+.card-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-footer{display:flex;align-items:center;justify-content:space-between}
+.card-price{font-size:14px;font-weight:800;color:var(--navy)}
+.card-price span{font-size:11px;font-weight:400;color:var(--muted)}
+.card-btns{display:flex;gap:6px}
+.btn-sm{padding:6px 13px;border-radius:16px;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;text-decoration:none;border:none}
+.btn-buy{background:var(--accent);color:#fff}
+.btn-buy:hover{background:#d04e2a}
+.btn-detail{background:var(--light);color:var(--blue);border:1.5px solid var(--border)}
+.btn-detail:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-official{background:#fff;color:var(--navy);border:1.5px solid var(--border);display:inline-flex;align-items:center;gap:4px}
+.btn-official:hover{border-color:var(--navy);background:var(--light)}
+.btn-consult{background:var(--blue);color:#fff}
+.btn-consult:hover{background:var(--navy)}
+.badge-pending{position:absolute;bottom:10px;left:10px;background:rgba(232,96,60,.15);border:1px solid var(--accent);color:var(--accent);font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;letter-spacing:.04em}
+
+/* ─── COMPARE BAR ─── */
+.compare-bar{position:fixed;bottom:0;left:0;right:0;z-index:900;background:var(--navy);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:16px;transform:translateY(100%);transition:.3s;box-shadow:0 -4px 20px rgba(0,0,0,.25)}
+.compare-bar.visible{transform:translateY(0)}
+.compare-bar-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;width:100%;flex-wrap:wrap}
+.compare-bar-label{font-size:13.5px;font-weight:600;flex-shrink:0}
+.compare-bar-robots{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+.compare-chip{background:rgba(255,255,255,.15);border-radius:20px;padding:5px 12px;font-size:12.5px;display:flex;align-items:center;gap:6px}
+.compare-chip button{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:15px;line-height:1;padding:0}
+.compare-chip button:hover{color:#fff}
+.btn-compare-go{background:var(--accent);color:#fff;padding:9px 22px;border-radius:20px;font-size:13.5px;font-weight:700;cursor:pointer;border:none;white-space:nowrap}
+.btn-compare-clear{background:transparent;color:rgba(255,255,255,.65);border:1.5px solid rgba(255,255,255,.3);padding:9px 16px;border-radius:20px;font-size:13px;cursor:pointer}
+
+/* ─── MODAL ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:18px;width:100%;max-width:820px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-header{background:linear-gradient(135deg,#0f1923,#0c2a2e);color:#fff;padding:28px 32px;border-bottom:2px solid rgba(11,208,200,0.3);display:flex;align-items:center;gap:20px}
+.modal-robot-img{font-size:60px}
+.modal-header-info h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.modal-header-info p{font-size:13px;color:rgba(255,255,255,.75)}
+.modal-close{margin-left:auto;background:rgba(255,255,255,.15);border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-close:hover{background:rgba(255,255,255,.3)}
+.modal-body{padding:28px 32px}
+.modal-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:24px}
+.modal-tab{padding:10px 20px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s}
+.modal-tab.active{color:var(--navy);border-bottom-color:var(--accent)}
+.modal-tab-content{display:none}
+.modal-tab-content.active{display:block}
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px}
+.spec-item{background:var(--grey);border-radius:10px;padding:12px 16px}
+.spec-key{font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:3px}
+.spec-val{font-size:14.5px;font-weight:700;color:var(--navy)}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.use-cases{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.use-case-item{background:var(--light);border-radius:10px;padding:12px;font-size:13px;display:flex;align-items:center;gap:8px}
+
+/* ─── COMPARE PAGE ─── */
+#compare-view{display:none}
+.compare-table-wrap{overflow-x:auto}
+.compare-table{width:100%;border-collapse:collapse;min-width:600px}
+.compare-table th,.compare-table td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--border);font-size:14px;vertical-align:top}
+.compare-table thead th{background:var(--navy);color:#fff;font-weight:700;font-size:13px;white-space:nowrap}
+.compare-table thead th:first-child{background:var(--grey);color:var(--text);width:130px}
+.compare-table tbody tr:nth-child(even) td{background:#fafbfd}
+.compare-table .robot-col-header{text-align:center}
+.compare-table .robot-col-header .robot-emoji-sm{font-size:36px;display:block;margin-bottom:4px}
+.compare-best{background:rgba(11,208,200,.08) !important;font-weight:700;color:var(--accent)}
+.row-label{font-weight:600;color:var(--muted);font-size:13px}
+
+/* ─── NEWS ─── */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
+.news-card{background:#fff;border-radius:14px;border:1.5px solid var(--border);overflow:hidden;transition:.2s}
+.news-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.news-img{height:150px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#e8f7f7,#f0f9f9)}
+.news-body{padding:16px}
+.news-tag{font-size:11px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:.06em}
+.news-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:7px;line-height:1.5}
+.news-date{font-size:12px;color:var(--muted)}
+
+/* ─── ABOUT ─── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.about-text h2{font-size:28px;font-weight:800;color:var(--navy);margin-bottom:16px;line-height:1.3}
+.about-text p{color:var(--muted);line-height:1.8;margin-bottom:14px;font-size:15px}
+.about-values{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
+.value-card{background:var(--light);border-radius:12px;padding:16px;border-left:4px solid var(--accent)}
+.value-card h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.value-card p{font-size:12.5px;color:var(--muted);line-height:1.6}
+.about-visual{background:linear-gradient(135deg,#0f1923,#0c2a2e);border-radius:20px;padding:40px;color:#fff;text-align:center}
+.about-visual .big-num{font-size:56px;font-weight:900;color:#0bd0c8;line-height:1}
+.about-visual .big-label{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:28px}
+
+/* ─── CONTACT ─── */
+.contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:48px;align-items:start}
+.contact-info h3{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:16px}
+.contact-info p{color:var(--muted);line-height:1.8;margin-bottom:20px}
+.contact-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+.contact-icon{width:40px;height:40px;border-radius:10px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.contact-item-text strong{display:block;font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.contact-item-text span{font-size:13px;color:var(--muted)}
+.form-card{background:#fff;border-radius:16px;padding:32px;box-shadow:var(--shadow);border:1.5px solid var(--border)}
+.form-row{margin-bottom:16px}
+.form-row label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;color:var(--text);outline:none;transition:.15s;font-family:inherit;background:#fff}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(46,95,163,.1)}
+.form-row textarea{height:120px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-submit{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:28px;font-size:15.5px;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit;margin-top:8px}
+.form-submit:hover{background:#d04e2a;transform:translateY(-1px)}
+
+/* ─── FEATURES SECTION ─── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.feature-card{background:#fff;border-radius:14px;padding:24px;border:1.5px solid var(--border);transition:.2s}
+.feature-card:hover{box-shadow:var(--shadow);border-color:var(--blue)}
+.feature-icon{font-size:34px;margin-bottom:14px}
+.feature-card h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.feature-card p{font-size:13px;color:var(--muted);line-height:1.65}
+.feature-badge{display:inline-block;background:rgba(232,96,60,.1);color:var(--accent);font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;margin-bottom:8px}
+
+/* ─── RENTAL CTA ─── */
+.cta-banner{background:linear-gradient(135deg,#0f1923,#0c2a2e);color:#fff;border-radius:20px;border:1px solid rgba(11,208,200,0.2);padding:48px 40px;text-align:center;margin:0 auto;max-width:900px}
+.cta-banner h3{font-size:26px;font-weight:800;margin-bottom:12px}
+.cta-banner p{color:rgba(255,255,255,.8);margin-bottom:28px;font-size:15.5px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ─── FOOTER ─── */
+footer{background:#070d14;color:rgba(255,255,255,.7);padding:48px 24px 24px}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand .logo{font-size:18px;margin-bottom:12px;display:inline-flex}
+.footer-brand p{font-size:13px;line-height:1.7;color:rgba(255,255,255,.55);max-width:260px}
+.footer-col h5{color:#fff;font-size:13.5px;font-weight:700;margin-bottom:14px}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:8px}
+.footer-col ul a{color:rgba(255,255,255,.55);text-decoration:none;font-size:13px;transition:.15s}
+.footer-col ul a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap}
+.footer-bottom p{font-size:12.5px;color:rgba(255,255,255,.4)}
+
+/* ─── SUCCESS MSG ─── */
+.success-msg{display:none;background:#d1fae5;border:1.5px solid #34d399;border-radius:10px;padding:14px 18px;color:#065f46;font-weight:600;text-align:center;margin-top:12px}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:80px;right:24px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:10px;font-size:13.5px;z-index:3000;transform:translateY(20px);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  .about-grid,.contact-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .nav-links{display:none;position:absolute;top:62px;left:0;right:0;background:var(--navy);flex-direction:column;padding:12px 16px 20px;gap:2px}
+  .nav-links.open{display:flex}
+  .hamburger{display:flex}
+  .hero{padding:60px 16px 50px}
+  .hero-stats{gap:24px}
+  .footer-grid{grid-template-columns:1fr}
+  .about-values{grid-template-columns:1fr}
+  .compare-bar-inner{gap:8px}
+}
+
+/* ── Near-Future Polish ── */
+nav { border-bottom: 1px solid rgba(11,208,200,0.15); }
+.logo span { color: #0bd0c8 !important; }
+.nav-cta { background: #0bd0c8 !important; color: #0f1923 !important; font-weight: 800 !important; }
+.nav-cta:hover { background: #09b8b0 !important; }
+.hero { box-shadow: inset 0 -60px 80px rgba(11,208,200,0.04); }
+.hero::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:60%; height:1px; background:linear-gradient(90deg,transparent,rgba(11,208,200,0.4),transparent); }
+.btn-primary { box-shadow: 0 4px 20px rgba(11,208,200,0.35) !important; }
+.robot-card:hover { border-color: #0bd0c8 !important; box-shadow: 0 0 0 1px rgba(11,208,200,0.3), 0 8px 24px rgba(11,208,200,0.1) !important; }
+.robot-card.selected { border-color: #0bd0c8 !important; box-shadow: 0 0 0 3px rgba(11,208,200,0.2) !important; }
+
+/* ── SLIDESHOW ── */
+.slideshow-section{width:100%;background:#0a1520;overflow:hidden;position:relative}
+.slideshow-wrap{position:relative;width:100%;height:680px}
+.slideshow-track{width:100%;height:100%;position:relative}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 0.7s ease;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slide.active{opacity:1}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;background:#0a1520;padding:24px 0}
+.slide-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(7,13,20,0.92) 0%,rgba(7,13,20,0.5) 70%,transparent 100%);padding:40px 48px 32px;z-index:2}
+.slide-tag{font-size:11px;font-weight:700;color:#0bd0c8;letter-spacing:.15em;margin-bottom:8px}
+.slide-title{font-size:32px;font-weight:900;color:#fff;margin-bottom:6px}
+.slide-sub{font-size:15px;color:rgba(255,255,255,.75);max-width:500px}
+.slide-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(11,208,200,0.15);border:1px solid rgba(11,208,200,0.4);color:#0bd0c8;width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;z-index:10;transition:background .2s;display:flex;align-items:center;justify-content:center}
+.slide-arrow:hover{background:rgba(11,208,200,0.35)}
+.slide-prev{left:20px}
+.slide-next{right:20px}
+.slide-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.slide-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.35);cursor:pointer;transition:background .2s,transform .2s}
+.slide-dot.active{background:#0bd0c8;transform:scale(1.3)}
+.slide-credit{font-size:11px;color:rgba(255,255,255,0.45);margin-top:8px;letter-spacing:.04em}
+@media(max-width:600px){.slideshow-wrap{height:380px}.slide-caption{padding:20px 20px 16px}.slide-title{font-size:22px}.slide-sub{font-size:13px}}
+.robot-card.selected .card-compare-cb { background:#0bd0c8 !important; border-color:#0bd0c8 !important; }
+.feature-card:hover { border-color: #0bd0c8 !important; box-shadow: 0 4px 20px rgba(11,208,200,0.1) !important; }
+.value-card { border-left: 4px solid #0bd0c8 !important; }
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus { border-color:#0bd0c8 !important; box-shadow:0 0 0 3px rgba(11,208,200,0.12) !important; }
+.compare-table thead th { background: #0f1923 !important; }
+.badge-pending { background:rgba(11,208,200,.1) !important; border-color:#0bd0c8 !important; color:#0bd0c8 !important; }
+.toast { background: #0f1923 !important; border-left: 3px solid #0bd0c8; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo"><span>未来屋</span>ロボティクス</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#robots">ロボット一覧</a></li>
+      <li><a href="#compare-section">比較ツール</a></li>
+      <li><a href="#news">最新ニュース</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🇯🇵 日本最大級のロボット比較プラットフォーム</div>
+    <h1>日本でロボットが<br><span>当たり前になる社会</span>を、<br>最前線でつくる。</h1>
+    <p>ヒューマノイドからサービスロボットまで、あなたのビジネスに最適なロボットを見つけよう。購入・レンタル・導入サポートまで一括対応。</p>
+    <div class="hero-btns">
+      <a href="#robots" class="btn btn-primary">🔍 ロボットを探す</a>
+      <a href="#contact" class="btn btn-outline">📩 無料相談する</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">25+</div><div class="stat-label">ロボットカテゴリ</div></div>
+      <div class="stat"><div class="stat-num">50+</div><div class="stat-label">取扱機種</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">メーカー直接契約</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">日本語サポート</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDESHOW -->
+<section class="slideshow-section">
+  <div class="slideshow-wrap">
+    <div class="slideshow-track" id="slideshowTrack">
+      <div class="slide active">
+        <img src="images/1x.png" alt="1X Neo">
+        <div class="slide-caption">
+          <div class="slide-tag">HUMANOID</div>
+          <div class="slide-title">1X Neo</div>
+          <div class="slide-sub">家庭・施設向けの次世代ヒューマノイドロボット。</div>
+          <div class="slide-credit">© 1X Technologies</div>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="images/figure_ai.png" alt="Figure AI">
+        <div class="slide-caption">
+          <div class="slide-tag">HUMANOID</div>
+          <div class="slide-title">Figure AI</div>
+          <div class="slide-sub">家庭用・産業用もこなせる汎用ヒューマノイド。<br>BMW工場での量産実績あり。</div>
+          <div class="slide-credit">© Figure AI</div>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="images/unitree_g1.png" alt="Unitree G1">
+        <div class="slide-caption">
+          <div class="slide-tag">HUMANOID</div>
+          <div class="slide-title">Unitree G1</div>
+          <div class="slide-sub">研究・産業・サービスの汎用型、普通の人を超える柔軟性。<br>非常に広い関節可動角度範囲、23～43個の関節モーター。</div>
+          <div class="slide-credit">© Unitree Robotics</div>
+        </div>
+      </div>
+    </div>
+    <button class="slide-arrow slide-prev" onclick="moveSlide(-1)">&#8592;</button>
+    <button class="slide-arrow slide-next" onclick="moveSlide(1)">&#8594;</button>
+    <div class="slide-dots" id="slideDots"></div>
+  </div>
+</section>
+
+<!-- ROBOT LIST -->
+<section id="robots" class="bg-grey">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Robot Catalog</div>
+      <h2 class="section-title">ロボット一覧</h2>
+      <p class="section-sub">カテゴリ・用途・予算でフィルタリング。気になるロボットを比較ツールに追加できます。</p>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">カテゴリ：</span>
+      <button class="filter-btn active" onclick="filterRobots('all',this)">すべて</button>
+      <button class="filter-btn" onclick="filterRobots('humanoid',this)">🦾 ヒューマノイド</button>
+      <button class="filter-btn" onclick="filterRobots('service',this)">🍽 配膳・清掃</button>
+      <button class="filter-btn" onclick="filterRobots('quadruped',this)">🐕 四足歩行</button>
+      <button class="filter-btn" onclick="filterRobots('companion',this)">💝 コンパニオン</button>
+      <button class="filter-btn" onclick="filterRobots('industrial',this)">🏭 産業・物流</button>
+      <div class="search-box" style="margin-left:auto">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="ロボット名・用途で検索..." id="searchInput" oninput="searchRobots()">
+      </div>
+    </div>
+    <div class="robot-grid" id="robotGrid"></div>
+    <div style="text-align:center;margin-top:32px;color:var(--muted);font-size:14px" id="compareHint">
+      💡 カードのチェックボックスをクリックして比較ツールに追加できます（最大4台）
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE SECTION -->
+<section id="compare-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Compare Tool</div>
+      <h2 class="section-title">ロボット比較ツール</h2>
+      <p class="section-sub">ロボット一覧からチェックを入れて「比較する」ボタンを押すか、下から直接選んで比較できます。</p>
+    </div>
+    <div id="compare-select-area">
+      <p style="text-align:center;color:var(--muted);padding:40px;background:var(--grey);border-radius:14px;font-size:15px">
+        🔼 上のロボット一覧でチェックを入れると、ここに比較結果が表示されます
+      </p>
+    </div>
+    <div id="compare-view"></div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news" class="bg-grey">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Latest News</div>
+      <h2 class="section-title">最新ロボットニュース</h2>
+      <p class="section-sub">ロボット業界の最新トレンドをお届けします</p>
+    </div>
+    <div class="news-grid" id="newsGrid"></div>
+  </div>
+</section>
+
+<!-- FEATURES（提案機能） -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Services</div>
+      <h2 class="section-title">未来屋のサービス</h2>
+      <p class="section-sub">購入・レンタル・導入サポートまで、ロボット活用をトータルでサポート</p>
+    </div>
+    <div class="features-grid" id="featuresGrid"></div>
+  </div>
+</section>
+
+<!-- RENTAL CTA -->
+<section style="padding:40px 24px">
+  <div class="section-inner">
+    <div class="cta-banner">
+      <h3>まずは試してみませんか？</h3>
+      <p>購入前に実機を体験できるレンタルプランをご用意しています。<br>1日〜長期まで、ご予算・目的に合わせてご提案します。</p>
+      <div class="cta-btns">
+        <a href="#contact" class="btn btn-primary">🤝 レンタル相談（無料）</a>
+        <a href="#robots" class="btn btn-outline">📋 機種一覧を見る</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="bg-grey">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">About Us</div>
+      <h2 class="section-title">未来屋について</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <h2>日本の人手不足を、<br>ロボットで解決する。</h2>
+        <p>未来屋（Miraiya）は、中国の最先端ロボットメーカーと直接パートナーシップを結ぶ、日本初のヒューマノイド・サービスロボット複合代理店です。</p>
+        <p>2027〜28年に本格化するロボット一般販売の波に先駆け、いまからプラットフォームとノウハウを構築。日本語サポート・導入コンサルという「付加価値」で、単なる販売店ではなく「ロボット活用のパートナー」を目指します。</p>
+        <div class="about-values">
+          <div class="value-card">
+            <h4>🎯 ミッション</h4>
+            <p>人手不足に悩む日本の中小企業に、最先端ロボットを手の届く価格で届ける</p>
+          </div>
+          <div class="value-card">
+            <h4>🔭 ビジョン</h4>
+            <p>日本でロボットが当たり前になる社会を最前線でつくる複合代理店</p>
+          </div>
+          <div class="value-card">
+            <h4>💡 Why now</h4>
+            <p>2027〜28年から一般販売が本格化。今がプラットフォーム構築の最適タイミング</p>
+          </div>
+          <div class="value-card">
+            <h4>🤝 Why us</h4>
+            <p>中国留学経験・直接パイプ・日本語サポートの三位一体で差別化</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="big-num">22兆円</div>
+        <div class="big-label">日本のロボット未活用によるGDP損失規模</div>
+        <div class="big-num" style="margin-top:24px">100万人</div>
+        <div class="big-label">2035年の介護人材不足数</div>
+        <div class="big-num" style="margin-top:24px">5,000万人</div>
+        <div class="big-label">2050年の生産年齢人口（現在比▲2,000万人）</div>
+        <p style="margin-top:28px;font-size:13px;color:rgba(255,255,255,.6);line-height:1.7">これらの社会課題を、人型ロボットが解決する。<br>未来屋はその最前線に立ちます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label">Contact</div>
+      <h2 class="section-title">お問い合わせ</h2>
+      <p class="section-sub">購入・レンタル・導入相談、何でもお気軽にご連絡ください</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>お気軽にご相談ください</h3>
+        <p>ロボット選びから導入後のサポートまで、専任スタッフが日本語で丁寧にご対応します。まずはお気軽にお問い合わせください。</p>
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div class="contact-item-text"><strong>メール</strong><span>info@miraiya.jp</span></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-item-text"><strong>電話</strong><span>（準備中）</span></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div class="contact-item-text"><strong>対応時間</strong><span>平日 10:00〜18:00</span></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🌐</div>
+          <div class="contact-item-text"><strong>対応言語</strong><span>日本語・中国語・英語</span></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <form id="contactForm" onsubmit="submitForm(event)">
+          <div class="form-grid">
+            <div class="form-row">
+              <label>お名前 <span style="color:var(--accent)">*</span></label>
+              <input type="text" placeholder="山田 太郎" required>
+            </div>
+            <div class="form-row">
+              <label>会社名</label>
+              <input type="text" placeholder="株式会社〇〇">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label>メールアドレス <span style="color:var(--accent)">*</span></label>
+              <input type="email" placeholder="example@company.com" required>
+            </div>
+            <div class="form-row">
+              <label>電話番号</label>
+              <input type="tel" placeholder="03-0000-0000">
+            </div>
+          </div>
+          <div class="form-row">
+            <label>お問い合わせ種別</label>
+            <select>
+              <option>ロボット購入について</option>
+              <option>レンタル・試用について</option>
+              <option>導入コンサルについて</option>
+              <option>デモ・見学希望</option>
+              <option>代理店・パートナーについて</option>
+              <option>その他</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>ご興味のあるロボット</label>
+            <input type="text" placeholder="例：Unitree G1、Pudu BellaBot など">
+          </div>
+          <div class="form-row">
+            <label>メッセージ <span style="color:var(--accent)">*</span></label>
+            <textarea placeholder="ご質問・ご要望をお書きください..." required></textarea>
+          </div>
+          <button type="submit" class="form-submit">送信する →</button>
+          <div class="success-msg" id="successMsg">✅ 送信しました！24時間以内にご返信いたします。</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo"><span>未来屋</span>ロボティクス</a>
+        <p>日本でロボットが当たり前になる社会を最前線でつくる複合代理店。購入・レンタル・導入サポートまで一括対応。</p>
+      </div>
+      <div class="footer-col">
+        <h5>ロボット</h5>
+        <ul>
+          <li><a href="#">ヒューマノイド</a></li>
+          <li><a href="#">配膳・清掃</a></li>
+          <li><a href="#">四足歩行</a></li>
+          <li><a href="#">産業・物流</a></li>
+          <li><a href="#">全機種一覧</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>サービス</h5>
+        <ul>
+          <li><a href="#">ロボット購入</a></li>
+          <li><a href="#">レンタル</a></li>
+          <li><a href="#">導入コンサル</a></li>
+          <li><a href="#">保守・サポート</a></li>
+          <li><a href="#">デモ体験</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>会社情報</h5>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">最新ニュース</a></li>
+          <li><a href="#">お問い合わせ</a></li>
+          <li><a href="#">プライバシーポリシー</a></li>
+          <li><a href="#">特定商取引法</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 未来屋 / Miraiya. All rights reserved.</p>
+      <p>合同会社 未来屋</p>
+    </div>
+  </div>
+</footer>
+
+<!-- COMPARE BAR -->
+<div class="compare-bar" id="compareBar">
+  <div class="compare-bar-inner">
+    <span class="compare-bar-label">🔄 比較中：</span>
+    <div class="compare-bar-robots" id="compareBarRobots"></div>
+    <button class="btn-compare-clear" onclick="clearCompare()">クリア</button>
+    <button class="btn-compare-go" onclick="showCompare()">📊 比較する</button>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ──────────────────────────────────────────────
+const robots = [
+  {id:'neo',name:'1X NEO',brand:'1X Technologies',cat:'humanoid',emoji:'🤍',
+   img:'images/1X NEO Robot 白.png',
+   detailPage:'neo.html',
+   price:'$20,000〜',rental:'要相談',
+   desc:'世界初の家庭用量産型ヒューマノイドロボット。独自AIモデルRedwood搭載、22dBの超静音設計、75+DOFの高精度動作。家事・介護・コンパニオンとして2026年より一般出荷開始。',
+   specs:{'身長':'168cm','重量':'約30kg','自由度':'75+ DOF','最高速度':'6.2 m/s','歩行速度':'1.4 m/s','稼働時間':'4時間','バッテリー':'842 Wh','AI性能':'最大2070 FP4 TFLOPS','動作音':'22dB','防水（手）':'IP68','防水（本体）':'IP44','チップセット':'Nvidia Jetson Thor'},
+   useCase:['🏠 家事全般（洗濯・掃除・食器）','💬 会話・情報検索・コンパニオン','👴 高齢者・介護サポート','🏢 オフィス・施設の軽作業','📦 物品の整理・運搬'],
+   tags:['家庭用','コンパニオン','自律AI','IP68防水','超静音','5G対応'],
+   status:'2026年出荷中',statusColor:'var(--green)',contractStatus:'pending',officialUrl:'https://www.1x.tech'},
+  {id:'eve',name:'1X EVE',brand:'1X Technologies',cat:'humanoid',emoji:'🏭',
+   img:'images/1X Technologies EVE.png',
+   detailPage:'1X Technologies EVE.html',
+   price:'要お問い合わせ（法人向け直販）',rental:'要相談',
+   desc:'世界初の商用展開済みフルサイズ産業用アンドロイド。Everon/ADT Commercialで実稼働中。最高14.5 km/hのホイール走行・6時間稼働・GPT-4 LLM搭載。セキュリティ・物流・施設管理に特化。',
+   specs:{身長:'188cm',重量:'87kg',自由度:'25 DoF',最高速度:'14.5 km/h',稼働時間:'6時間',可搬重量:'15 kg',バッテリー:'1.05 kWh',AI:'Intel i7 + NVIDIA Xavier',LLM:'GPT-4ベース（クラウド）',移動方式:'デュアルホイール自己バランス'},
+   useCase:['🔒 夜間セキュリティ・施設巡回','📦 軽量物流・在庫管理','🏥 病院内搬送・介助補助','📊 施設内データ収集','🏭 工場・倉庫内定期点検'],
+   tags:['産業用','施設管理','セキュリティ','物流','GPT-4 LLM','商用展開中'],
+   status:'商用展開中（米国）',statusColor:'var(--green)',contractStatus:'pending',officialUrl:'https://www.1x.tech/eve'},
+  {id:'digit',name:'Agility Digit',brand:'Agility Robotics',cat:'humanoid',emoji:'📦',
+   img:'images/Agility Robotics Digit.png',
+   detailPage:'Agility Robotics Digit.html',
+   price:'$250,000〜 / RaaS $30/時間',rental:'要相談',
+   desc:'Amazon・Toyota工場で実稼働する物流特化型ヒューマノイド。CAT1停止・Safety PLC(PL d)・OSHA認定安全検査合格。RoboFab年産10,000台体制。Intel RealSense×4・LiDAR搭載。',
+   specs:{身長:'175cm',重量:'63.5kg',自由度:'28 DoF',歩行速度:'5.4 km/h',稼働時間:'最大4〜8時間',可搬重量:'16 kg',アクチュエーター:'SEA（直列弾性）',安全認証:'OSHA認定・Safety PLC PL d',充電:'自律ドッキング',AIプラットフォーム:'Agility Arc'},
+   useCase:['📦 倉庫内トート搬送・仕分け','🚗 自動車製造ライン部品供給','🏬 eコマース物流センター','🌙 夜間無人倉庫作業','🤖 AMRと連携した無人化ライン'],
+   tags:['物流特化','製造ライン','OSHA認定','RaaS対応','Amazon連携','商用展開中'],
+   status:'商用展開中（Amazon・Toyota）',statusColor:'var(--green)',contractStatus:'pending',officialUrl:'https://www.agilityrobotics.com/'},
+  {id:'g1',name:'Unitree G1',detailPage:'g1.html',brand:'Unitree',cat:'humanoid',emoji:'🦾',
+   img:'images/g1.png',
+   price:'¥250万〜',rental:'¥30〜50万/日',
+   specs:{身長:'127cm',体重:'35kg',自由度:'43 DOF',最高速度:'2 m/s',バッテリー:'約2時間',耐荷重:'3kg',通信:'WiFi/4G'},
+   tags:['研究・開発','イベントPR','デモ・展示','教育'],
+   desc:'コンパクトなエントリーヒューマノイド。43自由度の高い運動能力と豊富なSDKで研究・開発・デモに最適。127cmで室内環境にぴったり。',
+   useCase:['🔬 研究機関','🎪 イベント・展示','📸 PR・撮影','🎓 教育','🏪 店頭デモ'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.unitree.com/g1/',highlight:true},
+  {id:'r1',name:'Unitree R1',detailPage:'r1.html',brand:'Unitree',cat:'humanoid',emoji:'🤸',
+   img:'images/R1 白.png',
+   price:'¥73.5万〜',rental:'要相談',
+   specs:{身長:'123cm',体重:'〜29kg',自由度:'最大40 DoF',最高速度:'2.5 m/s',バッテリー:'〜1時間',耐荷重:'非公表',通信:'非公表'},
+   tags:['研究・開発','教育','イベントPR','エンターテインメント','ROS2対応'],
+   desc:'世界最安クラスの研究・教育用ヒューマノイド（$4,900〜）。側転・逆立ち対応の高いモビリティと最大40 DoFの器用なハンドを備える。日本正規代理店TechShare経由でサポート対応。2026年6月出荷開始。',
+   useCase:['🔬 AI・ロボット研究','🎓 教育機関','🎪 イベント・展示','🎭 エンターテインメント','🏆 ロボット競技'],
+   status:'2026年6月出荷開始',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://shop.unitree.com/products/unitree-r1',highlight:true},
+  {id:'h2',name:'Unitree H2',detailPage:'h2.html',brand:'Unitree',cat:'humanoid',emoji:'🤖',
+   img:'images/H2.png',
+   price:'$29,900〜',rental:'応相談',
+   specs:{身長:'180cm',体重:'70kg',自由度:'31 DoF',最高速度:'<2 m/s',バッテリー:'約3時間',耐荷重:'7kg（連続）',通信:'WiFi/Ethernet'},
+   tags:['研究・開発','高精度マニピュレーション','産業用','デモ展示','接客'],
+   desc:'生体眼デザイン採用のUnitreeフラッグシップ。EDU版は最大2,070 TOPSのJetson AGX Thor搭載・連続可搬7kg・Dex5-1（5指）対応。TechShare Japan 先行予約準備中。',
+   useCase:['🔬 AI・ロボット研究','🏭 精密製造・組み立て','📦 重量物搬送','🎪 イベント・展示','🤝 接客・案内'],
+   status:'先行予約準備中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://shop.unitree.com/products/unitree-h2',highlight:true},
+  {id:'h1-2',name:'Unitree H1-2',detailPage:'h1-2.html',brand:'Unitree',cat:'humanoid',emoji:'🔧',
+   img:'images/H1-2.png',
+   price:'要問合せ',rental:'応相談',
+   specs:{身長:'180cm',体重:'70kg',自由度:'41 DOF',最高速度:'2.5 m/s',バッテリー:'約2時間',耐荷重:'30kg',通信:'WiFi/4G'},
+   tags:['R&D','カスタム開発','二次開発','研究機関'],
+   desc:'H2をベースに開発者向けAPIを強化した二次開発特化モデル。オープンアーキテクチャで独自アルゴリズム実装・カスタム開発に特化。',
+   useCase:['🔬 R&D・研究','💻 カスタム開発','🎓 大学・研究室','🧪 アルゴリズム研究'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.unitree.com/h1/'},
+
+  {id:'h1',name:'Unitree H1',detailPage:'h1.html',brand:'Unitree',cat:'humanoid',emoji:'🤖',
+   img:'images/H1.png',
+   price:'$90,000〜',rental:'応相談',
+   specs:{身長:'180cm',体重:'47kg',自由度:'18〜19 DoF',最高速度:'3.3 m/s（世界記録）',バッテリー:'1.5〜2時間',耐荷重:'5kg',通信:'WiFi/Ethernet'},
+   tags:['研究機関','速度実証','アジリティ'],
+   desc:'世界最速3.3m/sの走行記録を持つ二足歩行ヒューマノイド。軽量47kgで高機動性を発揮。ROS2対応で研究・大学・産業R&Dに最適。日本価格¥15,800,000（税別・TechShare確認済）。',
+   useCase:['🔬 AI・ロボット研究','🏃 アジリティ・歩行研究','🎓 大学・教育機関','🏭 産業実証実験'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.unitree.com/h1/'},
+
+  {id:'figure03',name:'Figure 03',brand:'Figure AI',cat:'humanoid',emoji:'🏠',
+   img:'images/FigureAI 03.png',
+   detailPage:'FigureAI 03.html',
+   price:'目標$20,000未満（未確定）',rental:'要相談',
+   desc:'家庭用汎用ヒューマノイドを目指すFigure AIの第3世代機。Helix VLA・指先3g触覚・掌中カメラ・ワイヤレス充電。BotQ工場で1台/時・350台以上出荷済。一般向け2026〜2027年予定。',
+   specs:{身長:'168cm',体重:'60kg',自由度:'44 DoF',歩行速度:'1.2 m/s',稼働時間:'5時間',可搬重量:'20 kg',AI:'Helix VLA',充電:'ワイヤレス誘導'},
+   useCase:['🧺 洗濯物の仕分け・折りたたみ','🍽 食器の片付け','🧹 掃除・片付け','👴 高齢者・介護サポート','💬 個人AIアシスタント'],
+   tags:['家庭用','汎用AI','Helix VLA','触覚センサー','ワイヤレス充電','量産中'],
+   status:'2026〜2027年一般向け予定',statusColor:'var(--green)',contractStatus:'pending',officialUrl:'https://www.figure.ai'},
+
+  {id:'walkerC',name:'UBTECH Walker C',brand:'UBTECH Robotics',cat:'humanoid',emoji:'🤝',
+   img:'images/Ubitech Walker C.png',
+   detailPage:'ubtech-walker-c.html',
+   price:'$30,000〜（推定）',rental:'要相談',
+   desc:'商業施設・空港・展示会向けAI接客ヒューマノイド。マルチモーダルLLM統合・U-SLAM自律ナビ・多言語対話対応。大阪万博 中国館展示実績あり。日本代理店GA Robotics確定。',
+   specs:{身長:'163cm',体重:'43kg',自由度:'20 DoF',最高速度:'6 km/h',稼働時間:'歩行2h/静止4h',可搬重量:'5〜6 kg',AI:'LLM統合',通信:'Wi-Fi/Bluetooth'},
+   useCase:['✈️ 空港・駅でのガイド誘導','🏬 ショッピングモール案内','🎪 展示会・博覧会での接客','🏨 ホテル・施設の受付','🌍 インバウンド向け多言語接客'],
+   tags:['商業サービス','接客・案内','LLM統合','多言語対応','U-SLAM','大阪万博'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.ubtrobot.com'},
+
+  {id:'walkerX',name:'UBTECH Walker X',brand:'UBTECH Robotics',cat:'humanoid',emoji:'🔬',
+   img:'images/Ubitech Walker X.png',
+   detailPage:'walker-x.html',
+   price:'約$75,000（要確認）',rental:'要相談',
+   desc:'研究開発・高等教育向け41 DOF 5指ヒューマノイド。各指力センサー・EtherCAT標準搭載・ROS対応・二次開発SDK提供。URDF+Gazebo対応のsim-to-realプラットフォーム。GA Robotics日本代理店（2025年5月契約）あり。',
+   specs:{身長:'130cm',体重:'63kg',自由度:'41 DOF',最高速度:'3 km/h',稼働時間:'2時間',可搬重量:'1.5 kg（伸展時）',AI:'顔認識・音声・ジェスチャー',通信:'Wi-Fi/EtherCAT'},
+   useCase:['🔬 大学・研究機関での基礎研究','🤖 ヒューマノイド制御アルゴリズム研究','✋ マニピュレーション・触覚研究','🎓 高等教育・ロボット工学教育','💻 ROS活用システム開発'],
+   tags:['研究用','高等教育','41DOF','5指力センサー','EtherCAT','ROS','SDK提供'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.ubtrobot.com/en/humanoid/products/walker-x'},
+
+  {id:'walkerS',name:'UBTECH Walker S',brand:'UBTECH Robotics',cat:'humanoid',emoji:'🏗',
+   img:'images/Ubitech Walker S.png',
+   detailPage:'walker-s.html',
+   price:'$50,000〜$150,000',rental:'要相談',
+   desc:'BYD・Dongfeng・Geely等の中国大手EV工場に量産実稼働済みの産業用ヒューマノイド。LLM統合×41 DOF×力コンプライアント関節×航空宇宙グレードアルミ合金フレーム。日本代理店GA Robotics（東京・関東6時間以内対応）完備。',
+   specs:{身長:'170cm',体重:'76kg',自由度:'41 DOF',最高速度:'3 km/h',稼働時間:'2〜5時間',可搬重量:'15 kg',AI:'LLM統合',通信:'非公開'},
+   useCase:['🚗 自動車製造ライン品質検査','🔩 部品組立・締め付け作業','📦 精密部品搬送・ピック&プレース','🏭 スマート工場省人化','🤝 人ロボット協調作業'],
+   tags:['産業用','LLM統合','BYD実績','力コンプライアント','GA Robotics','41DOF'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.ubtrobot.com/en/humanoid/products/walker-s'},
+
+  {id:'walkerS1',name:'UBTECH Walker S1',brand:'UBTECH Robotics',cat:'humanoid',emoji:'🏭',
+   img:'images/Ubitech Walker S1.png',
+   detailPage:'walker-s1.html',
+   price:'$37,500',rental:'$4,500/週',
+   desc:'Zeekr・FAW-VW青島工場に量産導入済みの産業用ヒューマノイド。LLM統合×Semantic VSLAM×41 DoF×可搬16.3kg。日本代理店GA Robotics（関東6時間以内対応）確定。',
+   specs:{身長:'172cm',体重:'76kg',自由度:'41 DoF',最高速度:'5 km/h',稼働時間:'約2時間',可搬重量:'16.3 kg',AI:'LLM統合',通信:'4G/Wi-Fi'},
+   useCase:['🚗 自動車製造ライン作業','📦 部品・資材の搬送','🔩 組み付け・組み立て補助','🏭 スマート工場の省人化','🤝 人間との協働作業'],
+   tags:['産業用','スマート工場','LLM統合','LiDAR搭載','Zeekr実績','GA Robotics'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.ubtrobot.com/en/humanoid/products/walker-s1'},
+
+  {id:'walkerS2',name:'UBTECH Walker S2',brand:'UBTECH Robotics',cat:'humanoid',emoji:'⚡',
+   img:'images/Ubitech Walker S2.png',
+   detailPage:'walker-s2.html',
+   price:'$145,000〜（要確認）',rental:'要相談',
+   desc:'BYD・Foxconn・Audi FAWへの量産納入実績。世界初・自律バッテリーホットスワップ（3分未満）で24/7連続稼働。52DoF・5指第4世代Dexterous Hand・BrainNet 2.0搭載。日本展開2026年春予定。',
+   specs:{身長:'176cm',体重:'73kg',自由度:'52 DoF',最高速度:'2 m/s',バッテリー:'自律ホットスワップ',可搬重量:'15 kg',AI:'BrainNet 2.0',通信:'Wi-Fi 6/BT 5.2'},
+   useCase:['🚗 自動車製造ライン（BYD・Foxconn実績）','🔩 精密組み立て・ねじ締め','📦 部品搬送・ピッキング','🌙 夜間・24時間無人稼働','🏭 スマート工場の無人化'],
+   tags:['産業用','24/7稼働','ホットスワップ','BYD実績','52DoF','2026年春日本展開'],
+   status:'2026年春 日本展開予定',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.ubtrobot.com/en/humanoid/products/walker-s2'},
+
+  {id:'agibotG2',name:'AGIBOT G2',brand:'AGIBOT Innovation',cat:'humanoid',emoji:'🏭',
+   img:'images/Agibot G2.png',
+   detailPage:'Agibot G2.html',
+   price:'$138,000',rental:'要相談',
+   desc:'Jetson Thor T5000（2,070 TFLOPS）＋GO-1 LLM搭載の産業グレード車輪付きヒューマノイド。OmniHand Pro 5指×2（0.3mm精度）でタブレット組立成功率99.9%以上。デュアルホットスワップ＋自律充電で24/7連続稼働。100%車載グレード部品・IP42。',
+   specs:{全高:'122〜180cm（可変）',重量:'185kg',自由度:'50 DOF（総計）',稼働時間:'24/7（デュアルHS）',可搬重量:'5 kg/アーム',演算:'2,570+ TOPS',IP:'IP42',通信:'5G/4G/Wi-Fi/NFC'},
+   useCase:['📱 タブレット・スマホ精密組立','🔌 電子部品・端子挿入作業','🌙 24/7夜間無人ライン稼働','🔩 精密ネジ締め・締結作業','🏭 柔軟製造セル自動化'],
+   tags:['産業グレード','精密組立','24/7稼働','2570TOPS','50DOF','OmniHandPro','IP42'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://jp.agibot.com/products/G2'},
+
+  {id:'agibotG1',name:'AGIBOT G1',brand:'AGIBOT Innovation',cat:'humanoid',emoji:'🧠',
+   img:'images/Agibot G1.png',
+   detailPage:'Agibot G1.html',
+   price:'要お問い合わせ',rental:'要相談',
+   desc:'高さ130〜180cm可変・8カメラ（RGB-D×3＋魚眼×5）搭載のEmbodied AIデータ収集プラットフォーム。Jetson AGX Orin（275 TOPS）・両腕6軸力センサー・VRテレオペレーション対応。iREX2025出展・日本市場積極展開中。',
+   specs:{全高:'130〜180cm（可変）',重量:'150kg',自由度:'26 DOF',稼働時間:'4h+',可搬重量:'3 kg/アーム',演算:'275 TOPS（Orin 64GB）',カメラ:'8台（RGB-D×3+魚眼×5）',VR:'テレオペ対応'},
+   useCase:['🧠 Embodied AIデータ収集','🎮 VRテレオペレーション実験','🏭 工場・産業現場でのAI推論','📊 動作データセット構築','🔬 身体化AIモデル訓練プラット'],
+   tags:['Embodied AI','データ収集','8カメラ','VRテレオペ','275TOPS','高さ可変','iREX2025'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://jp.agibot.com/products/G1'},
+
+  {id:'fourierGR3',name:'Fourier Intelligence GR-3',brand:'Fourier Intelligence（傅利叶智能）',cat:'humanoid',emoji:'🏥',
+   img:'images/Fourier Intelligence GR-3.png',
+   detailPage:'Fourier Intelligence GR-3.html',
+   price:'$80,000〜$119,995',rental:'要相談',
+   desc:'LLM統合ハイブリッド決定アーキテクチャ・全身31分散型圧力センサー・ソフトポリマーシェル全身のケア特化ヒューマノイド（Care-bot）。165cm / 71kg / 55 DoF / 5指×2・デュアルホットスワップ3時間。CES 2026初公開・量産出荷中（4〜6週間納期）。',
+   specs:{身長:'165cm',体重:'71kg',自由度:'55 DOF',稼働時間:'約3時間（デュアルHS）',可搬重量:'3 kg/手（持続）',LLM:'ハイブリッド決定アーキテクチャ',触覚:'全身31分散型圧力センサー',外装:'ソフトポリマーシェル全身'},
+   useCase:['🏥 介護施設での見守り・同伴','💊 服薬サポート・健康モニタリング','🤝 コンパニオン・会話インタラクション','🦽 リハビリ支援','🏠 ホームケア・日常生活支援'],
+   tags:['ケアロボット','コンパニオン','LLM統合','全身触覚','ソフトシェル','55DOF','量産出荷中','CES2026'],
+   status:'量産出荷中（4〜6週間納期）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.fftai.com/products-gr3'},
+
+  {id:'fourierGR2',name:'Fourier Intelligence GR-2',brand:'Fourier Intelligence（傅利叶智能）',cat:'humanoid',emoji:'🔬',
+   img:'images/Fourier Intelligence GR-2.png',
+   detailPage:'Fourier Intelligence GR-2.html',
+   price:'約$125,000',rental:'要相談',
+   desc:'53 DoF・5指×2（各12 DoF）・6種アレイ型触覚センサー（力/形状/材料）で精密マニピュレーションに特化した研究・医療向けヒューマノイド。175cm / 63kg / FSA 2.0（380 N·m以上）/ VRテレオペ・模倣学習・Isaac Lab/MuJoCo対応。',
+   specs:{身長:'175cm',体重:'63kg',自由度:'53 DOF',最高速度:'5 km/h',稼働時間:'約2時間',可搬重量:'3 kg/アーム（持続）',アクチュエーター:'FSA 2.0（7種・380N·m以上）',触覚:'6種アレイ型'},
+   useCase:['🔬 精密マニピュレーション研究','🏥 医療・リハビリ研究','🤖 触覚センサー・把持研究','💻 模倣学習・sim-to-real研究','🎮 VRテレオペレーション実験'],
+   tags:['研究用','医療用','精密マニピュレーション','53DOF','触覚センサー','FSA2.0','VRテレオペ','IsaacLab'],
+   status:'パイロット供給中（量産2026年予定）',statusColor:'#f59e0b',contractStatus:'active',officialUrl:'https://www.fftai.com/products-gr2'},
+
+  {id:'teslaOptimus3',name:'Tesla Optimus Gen 3',brand:'Tesla, Inc.',cat:'humanoid',emoji:'⚡',
+   img:'images/Tesla Optimus Gen3.png',
+   detailPage:'Tesla Optimus Gen3.html',
+   price:'現在非売品（目標$20,000〜$30,000）',rental:'要相談',
+   desc:'Tesla AI5（H100推論相当）＋Grok LLM＋FSD-v13の三重AI統合。22 DoF/手×2・全指先触覚・Autopilot 8眼360°搭載。173cm / 57kg（Gen2比-22%）/ 可搬20kg。2026年夏Tesla工場向け量産開始。外部B2B: 2026年末〜・一般: 2027年末目標。',
+   specs:{身長:'173cm',体重:'57kg（Gen2比-22%）',自由度:'72+ DOF',稼働時間:'公称8〜10h（実証2h⚠️）',可搬重量:'20kg通常 / 68kgデッドリフト',AI:'Tesla AI5 + Grok + FSD-v13',ハンド:'22DoF/手・全指先触覚',販売状況:'非売品（2026年末〜B2B予定）'},
+   useCase:['🏭 Tesla工場自動化（現行）','🔩 自動車製造・部品組立','📦 部品搬送・物流（将来）','🏠 家庭用汎用ロボット（将来）','🔬 AI・ロボット研究（B2B向け）'],
+   tags:['非売品','TeslaAI5','Grok','FSD','22DoF','全指先触覚','2026年末B2B','2027年一般向け'],
+   status:'非売品（2026年末〜B2B予定）',statusColor:'#f59e0b',contractStatus:'active',officialUrl:'https://www.tesla.com/optimus'},
+
+  {id:'bostonAtlas',name:'Boston Dynamics Atlas',brand:'Boston Dynamics（Hyundai Motor Group）',cat:'humanoid',emoji:'🏆',
+   img:'images/Boston Dynamics Atlas.png',
+   detailPage:'Boston Dynamics Atlas.html',
+   price:'$150,000〜$500,000（業界推定）',rental:'要相談',
+   desc:'Google DeepMind Gemini Robotics統合・IP67・56 DOF 360°回転関節の産業用フルサイズヒューマノイド。190cm / 持続可搬30kg（瞬間50kg）/ リーチ2.3m / 自律バッテリー交換。2026年分はHyundai RMAC・Google DeepMind向け全量割当済。新規受付2027年以降。',
+   specs:{身長:'190cm',体重:'90kg',自由度:'56 DOF（360°回転）',IP等級:'IP67',可搬重量:'30kg持続 / 50kg瞬間',稼働時間:'4時間',AI:'Gemini Robotics（Google DeepMind）',リーチ:'2.3m'},
+   useCase:['🚗 自動車製造ライン（Hyundai RMAC）','🔬 AI研究・Embodied AI開発','🏗 重量部品搬送（持続30kg）','🌧 屋外・過酷環境作業（IP67）','🌙 24/7無人産業ライン稼働'],
+   tags:['産業用','IP67','GeminiRobotics','56DOF','自律バッテリー交換','HyundaiGroup','2027年受付開始'],
+   status:'2026年全量割当済・2027年以降受付',statusColor:'#f59e0b',contractStatus:'active',officialUrl:'https://bostondynamics.com/products/atlas/'},
+
+  {id:'engineAiT800',name:'EngineAI T800',brand:'Engine AI（深圳引智科技）',cat:'humanoid',emoji:'💪',
+   img:'images/EngineAI T800.png',
+   detailPage:'EngineAI T800.html',
+   price:'$25,000〜$50,000（4エディション）',rental:'要相談',
+   desc:'CES 2026発表・4エディション（Basic/Eco/Pro/Max）展開の産業向けフルサイズヒューマノイド。173cm/75kg/最高3m/s/ピークトルク450N·m/14,000W。Pro版Jetson Thor 2,000 TOPS搭載。固体電池ホットスワップ・全関節アクティブ冷却。2026年6月出荷予定。',
+   specs:{身長:'173cm',体重:'75kg',自由度:'43 DOF（Eco以上）',最高速度:'3 m/s（10.8 km/h）',稼働時間:'4〜5時間',可搬重量:'5 kg/手',演算:'Pro: Jetson Thor 2,000 TOPS',バッテリー:'固体電池ホットスワップ'},
+   useCase:['🏭 産業製造ライン（Pro/Max）','📦 物流・部品搬送（Basic〜）','🔬 AI・ロコモーション研究（Eco）','🌙 24/7夜間無人稼働（Max）','💻 強化学習・SDK開発（Eco）'],
+   tags:['産業用','研究用','4エディション','JetsonThor','2000TOPS','固体電池','ホットスワップ','CES2026'],
+   status:'予約受付中（2026年6月出荷予定）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://en.engineai.com.cn/'},
+
+  {id:'engineAiSE01',name:'EngineAI SE01',brand:'Engine AI（深圳引智科技）',cat:'humanoid',emoji:'🚶',
+   img:'images/EngineAI SE01.png',
+   detailPage:'EngineAI SE01.html',
+   price:'$54,000（⚠️乖離あり・要確認）',rental:'要相談',
+   desc:'E2Eニューラルネットで人間に近い自然歩容を実現した汎用ヒューマノイド。170cm / 32 DOF / 歩行7.2 km/h / Revo 2 Basic 5指 / 航空宇宙グレードアルミ（設計寿命10年）。Engine Sense（360° LiDAR+6眼HD）搭載。2024年12月グローバル販売開始。',
+   specs:{身長:'170cm',体重:'約55kg',自由度:'32 DOF',最高速度:'7.2 km/h（2 m/s）',稼働時間:'約2時間',可搬重量:'15 kg/アーム',演算:'NVIDIA+Intel デュアル',センサー:'360° LiDAR+6眼HD'},
+   useCase:['🚶 二足歩行・歩容研究','🔬 複雑環境歩行実証研究','🤖 E2E NN・強化学習研究','🏭 産業研究・物流ハンドリング','🎪 展示会・商業デモ'],
+   tags:['研究用','E2ENNウォーキング','7.2km/h','32DOF','5指','EngineSense','設計寿命10年'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://en.engineai.com.cn/'},
+
+  {id:'engineAiPM01',name:'EngineAI PM01',brand:'Engine AI（深圳引智科技）',cat:'humanoid',emoji:'🤸',
+   img:'images/EngineAI PM01.png',
+   detailPage:'EngineAI PM01.html',
+   price:'$12,000〜$25,500（要確認）',rental:'要相談',
+   desc:'$12,000〜・業界最安値クラスで世界初の前転・宙返りを実現した軽量二足歩行ヒューマノイド。40kg / 24 DOF / 2.0 m/s。Intel N97+Jetson Orinデュアルチップ・フルOSS（Isaac Sim/MuJoCo/ROS）。⚠️$12,000は2025年3月限定価格。',
+   specs:{身長:'138.8cm',体重:'40kg',自由度:'24 DOF',最高速度:'2.0 m/s',稼働時間:'約2時間',可搬重量:'15kg（デッドリフト）',演算:'Intel N97+Jetson Orin',特技:'前転・宙返り'},
+   useCase:['🤸 高動的二足歩行・アクロバット研究','🔬 AI・ロコモーション研究','🎓 大学・教育機関EDU用途','💻 ROS / Isaac Sim開発・検証','🎪 展示会・デモンストレーション'],
+   tags:['研究用','教育用','前転宙返り','業界最安値','オープンソース','ROS','IsaacSim'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://en.engineai.com.cn/'},
+
+  {id:'agibotX1',name:'AGIBOT X1',brand:'AGIBOT',cat:'humanoid',emoji:'🔬',
+   img:'images/Agibot X1.png',
+   detailPage:'Agibot X1.html',
+   price:'約$20,000',rental:'要相談',
+   desc:'約$20,000・フルスタックオープンソースの研究向けコンパクトヒューマノイド。CAD・ファームウェア・制御コードをすべて公開。AimRT + ROS2対応・34 DOF・PowerFlow準直接駆動サーボ搭載。31/41 DoFカスタマイズ可能。',
+   specs:{身長:'130cm',体重:'≤33kg',自由度:'34 DOF',最高速度:'≥1 m/s',稼働時間:'2〜4h（⚠️要確認）',可搬重量:'≥0.5 kg',AI:'外部PC/Jetson依存',通信:'Ethernet/FDCAN/USB-C'},
+   useCase:['🔬 二足歩行制御研究','🤖 強化学習・模倣学習の実機検証','🎓 大学院・高等教育ロボット工学','🌐 sim-to-real転移研究','🧠 身体化AI（Embodied AI）研究'],
+   tags:['研究用','教育用','フルスタックOSS','ROS2','AimRT','低価格','34DOF'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://jp.agibot.com/products/X1'},
+
+  {id:'agibotA2W',name:'AGIBOT A2-W',brand:'AGIBOT Innovation',cat:'humanoid',emoji:'🔄',
+   img:'images/Agibot A2-W.png',
+   detailPage:'Agibot A2-W.html',
+   price:'約$80,000〜（推定）',rental:'要相談',
+   desc:'四輪オムニ搭載の双腕産業用車輪付きヒューマノイド。2 kWh大容量バッテリー＋ホットスワップで24/7無停止稼働。275 TOPS・360° LiDAR・AIカメラ×4・6軸力覚センサー×2で精密産業組立を実現。中国電子機器・シートベルト工場での実導入実績あり。',
+   specs:{全高:'163cm',重量:'230kg',自由度:'22 DOF',稼働時間:'5h+ホットスワップ',可搬重量:'5 kg/アーム',演算:'275 TOPS',バッテリー:'2 kWh',通信:'5G/Wi-Fi（非公式情報）'},
+   useCase:['🔌 電子機器・端子挿入作業','🚗 シートベルト・車載部品組立','📦 部品供給・物流転送','🌙 24/7無停止夜間ライン稼働','🏭 柔軟製造セル自動化'],
+   tags:['産業用','車輪型','ホットスワップ','275TOPS','24/7稼働','AGIBOT'],
+   status:'取扱中（要確認）',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://jp.agibot.com/products/A2_W'},
+
+  {id:'bellabotA',name:'Pudu BellaBot',brand:'Pudu',cat:'service',emoji:'🍽',
+   price:'¥250〜300万',rental:'¥10〜20万/月',
+   specs:{身長:'120cm',積載:'10kg×4段',自律走行:'あり',対応環境:'室内',バッテリー:'約12時間',通信:'WiFi',地図作成:'自動'},
+   tags:['飲食店','ホテル','配膳','中長期'],
+   desc:'飲食店・ホテル向け配膳ロボット。4段トレイで最大40kgの料理を同時運搬。自律走行で障害物を回避。24時間稼働可能。',
+   useCase:['🍜 飲食店','🏨 ホテル','🏥 病院・施設','🎪 イベント'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.pudurobotics.com/robot/bellabot'},
+
+  {id:'cc1',name:'Pudu CC1',brand:'Pudu',cat:'service',emoji:'🧹',
+   price:'¥400〜500万',rental:'¥15〜30万/月',
+   specs:{身長:'110cm',清掃幅:'65cm',清掃方式:'吸引+モップ',自律走行:'あり',バッテリー:'約8時間',対応面積:'2,000㎡/日'},
+   tags:['商業施設','清掃','中長期'],
+   desc:'商業施設・オフィスビル向け自律清掃ロボット。吸引とモップがけを同時実施。1日2,000㎡の清掃が可能。夜間無人稼働対応。',
+   useCase:['🏬 商業施設','🏢 オフィス','🏨 ホテル','🏥 医療施設'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.pudurobotics.com/robot/cc1'},
+
+  {id:'go2edu',name:'Unitree Go2 EDU',brand:'Unitree',cat:'quadruped',emoji:'🐕',
+   price:'¥100〜200万',rental:'¥10〜30万/日',
+   specs:{サイズ:'70×35cm',体重:'15kg',最高速度:'3.5 m/s',バッテリー:'約2時間',自由度:'12 DOF',センサー:'LiDAR/カメラ',通信:'WiFi/4G'},
+   tags:['PR','撮影','教育','研究','短期'],
+   desc:'コンパクトで高性能な四足歩行ロボット。イベントPR・撮影・研究に最適。短期レンタルで高い稼働率が見込める。現時点での最有力レンタル機。',
+   useCase:['🎪 イベント・PR','📸 撮影','🎓 教育・研究','🏪 店頭デモ','📺 メディア'],
+   status:'取扱中',statusColor:'var(--green)',contractStatus:'active',officialUrl:'https://www.unitree.com/go2/',highlight:true},
+
+  {id:'starpery',name:'Starpery Robot',brand:'Starpery',cat:'companion',emoji:'💝',
+   price:'応相談',rental:'応相談',
+   specs:{外見:'リアル人型',素材:'シリコン',対応:'会話・感情認識',更新:'定期'},
+   tags:['コンパニオン','富裕層','B2C'],
+   desc:'高品質シリコン素材のコンパニオンロボット。会話・感情認識機能を搭載。富裕層向けプレミアムB2C商品として検討中。',
+   useCase:['🏠 個人・富裕層','🏨 ホテル'],
+   status:'検討中',statusColor:'var(--muted)',contractStatus:'pending',officialUrl:'https://www.starpery.com/'},
+
+  {id:'agv',name:'MiR100（AGV）',brand:'MiR',cat:'industrial',emoji:'📦',
+   price:'¥500万〜',rental:'¥20〜40万/月',
+   specs:{積載:'100kg',速度:'1.5 m/s',自律走行:'あり',バッテリー:'約10時間',対応環境:'工場・倉庫'},
+   tags:['倉庫','物流','自動搬送'],
+   desc:'工場・倉庫向け自律搬送ロボット（AMR）。100kgの荷物を自律搬送。人との協調稼働が可能。製造業の省人化に。',
+   useCase:['🏭 工場','📦 倉庫','🚚 物流センター'],
+   status:'情報掲載のみ',statusColor:'var(--muted)',contractStatus:'pending',officialUrl:'https://www.mobile-industrial-robots.com/solutions/robots/mir100/'},
+
+  {id:'carebot',name:'介護支援ロボット（検討中）',brand:'各社',cat:'industrial',emoji:'👴',
+   price:'応相談',rental:'応相談',
+   specs:{機能:'移乗支援・見守り',センサー:'各種',認証:'医療機器申請中'},
+   tags:['介護','医療','見守り'],
+   desc:'介護施設向け移乗支援・見守りロボット。超高齢化社会に向けた次の主力カテゴリ。規制対応を確認しながら展開予定。',
+   useCase:['🏥 介護施設','🏠 在宅介護'],
+   status:'準備中',statusColor:'var(--muted)',contractStatus:'pending',officialUrl:''},
+];
+
+const news = [
+  {emoji:'✈️',tag:'実証実験',title:'JAL・GMO AIR、羽田空港でUnitreeヒューマノイドロボットの実証実験を開始',date:'2026年5月14日'},
+  {emoji:'🤖',tag:'新製品',title:'ドーナッツロボティクス、身長130cmの小型ヒューマノイド「cinnamon mini」を初公開',date:'2026年5月10日'},
+  {emoji:'🏃',tag:'イベント',title:'北京ヒューマノイドロボットハーフマラソン2026に300体以上が参加─ロボット競技が新たな段階へ',date:'2026年4月28日'},
+  {emoji:'🎪',tag:'展示会',title:'NexTech Week 2026春でヒューマノイドEXPOが初開催─国内外メーカーが集結',date:'2026年4月20日'},
+  {emoji:'📦',tag:'市場動向',title:'物流ロボット市場、2026年に約200億ドル規模へ到達─日本でも倉庫自動化が加速',date:'2026年4月10日'},
+  {emoji:'🇯🇵',tag:'政策',title:'経済産業省、中小企業向けロボット導入補助金を拡充─最大500万円の助成も',date:'2026年4月3日'},
+];
+
+const features = [
+  {icon:'🛒',badge:'基本機能',title:'購入・レンタル',desc:'カートに入れてそのまま購入、またはレンタル申し込みが完結。1日〜長期まで対応。'},
+  {icon:'⚖️',badge:'基本機能',title:'スペック比較ツール',desc:'複数ロボットを選んでスペックを横並び比較。導入判断が一目でわかる。'},
+  {icon:'💬',badge:'提案機能',title:'AI導入アドバイザー',desc:'課題・業種・予算を入力すると最適なロボットを自動提案。（近日公開）'},
+  {icon:'📦',badge:'提案機能',title:'レンタルBOX',desc:'まずは1台試してみたい方向けの短期レンタルセット。送料込みで手軽に体験。'},
+  {icon:'🎓',badge:'提案機能',title:'導入事例ライブラリ',desc:'業種・用途別の実際の導入事例を動画・写真付きで公開。ROIも掲載。'},
+  {icon:'📰',badge:'提案機能',title:'ニュース・トレンド',desc:'ロボット業界の最新情報をいち早くお届け。メルマガ登録で毎週配信。'},
+  {icon:'🔧',badge:'提案機能',title:'アフターサポート',desc:'導入後の操作サポート・定期メンテナンス・故障対応を日本語で提供。'},
+  {icon:'🌏',badge:'提案機能',title:'多言語対応',desc:'日本語・中国語・英語に対応。中国メーカーとの交渉窓口も担当。'},
+];
+
+// ─── STATE ─────────────────────────────────────────────
+let selectedForCompare = [];
+let currentFilter = 'all';
+
+// ─── INIT ───────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  renderRobots(robots);
+  renderNews();
+  renderFeatures();
+});
+
+// ─── RENDER ROBOTS ──────────────────────────────────────
+function renderRobots(list){
+  const grid = document.getElementById('robotGrid');
+  grid.innerHTML = list.length === 0
+    ? '<p style="text-align:center;color:var(--muted);padding:40px;grid-column:1/-1">該当するロボットが見つかりません</p>'
+    : list.map(r => robotCard(r)).join('');
+}
+
+function robotCard(r){
+  const sel = selectedForCompare.includes(r.id);
+  const isPending = r.contractStatus === 'pending';
+  const detailLink = r.detailPage ? `<a class="btn-sm btn-detail" href="${r.detailPage}">詳細ページ ↗</a>` : `<button class="btn-sm btn-detail" onclick="openModal('${r.id}')">詳細</button>`;
+  const cardBtns = isPending
+    ? `${detailLink}
+       <button class="btn-sm btn-consult" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">未来屋に相談</button>`
+    : `${detailLink}
+       <button class="btn-sm btn-buy" onclick="openModal('${r.id}')">問い合わせ</button>`;
+  return `<div class="robot-card${sel?' selected':''}" id="card-${r.id}">
+    <div class="card-img">
+      <span class="card-category">${catLabel(r.cat)}</span>
+      <div class="card-compare-cb" onclick="toggleCompare('${r.id}',event)">${sel?'✓':''}</div>
+      ${r.img ? `<img src="${r.img}" style="max-height:170px;max-width:90%;object-fit:contain;padding:8px;"/>` : `<div class="robot-emoji">${r.emoji}</div>`}
+      ${isPending ? '<span class="badge-pending">取扱準備中</span>' : ''}
+    </div>
+    <div class="card-body">
+      <div class="card-brand">${r.brand}</div>
+      <div class="card-name">${r.name}</div>
+      <div class="card-specs">${r.tags.map(t=>`<span class="spec-chip">${t}</span>`).join('')}</div>
+      <div class="card-desc">${r.desc}</div>
+      <div class="card-footer">
+        <div class="card-price">${r.price}<br><span>レンタル ${r.rental}</span></div>
+        <div class="card-btns">${cardBtns}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function catLabel(cat){
+  return {humanoid:'ヒューマノイド',service:'配膳・清掃',quadruped:'四足歩行',companion:'コンパニオン',industrial:'産業・物流'}[cat]||cat;
+}
+
+// ─── FILTER / SEARCH ────────────────────────────────────
+function filterRobots(cat, btn){
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+
+function searchRobots(){applyFilter();}
+
+function applyFilter(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let list = robots;
+  if(currentFilter !== 'all') list = list.filter(r=>r.cat===currentFilter);
+  if(q) list = list.filter(r=>r.name.toLowerCase().includes(q)||r.tags.some(t=>t.includes(q))||r.desc.includes(q));
+  renderRobots(list);
+}
+
+// ─── COMPARE ────────────────────────────────────────────
+function toggleCompare(id, e){
+  e.stopPropagation();
+  if(selectedForCompare.includes(id)){
+    selectedForCompare = selectedForCompare.filter(x=>x!==id);
+  } else {
+    if(selectedForCompare.length >= 4){showToast('比較は最大4台までです');return;}
+    selectedForCompare.push(id);
+  }
+  updateCompareBar();
+  applyFilter();
+}
+
+function updateCompareBar(){
+  const bar = document.getElementById('compareBar');
+  const chips = document.getElementById('compareBarRobots');
+  if(selectedForCompare.length === 0){bar.classList.remove('visible');return;}
+  bar.classList.add('visible');
+  chips.innerHTML = selectedForCompare.map(id=>{
+    const r = robots.find(x=>x.id===id);
+    return `<div class="compare-chip">${r.emoji} ${r.name}<button onclick="toggleCompare('${id}',event)">×</button></div>`;
+  }).join('');
+}
+
+function clearCompare(){
+  selectedForCompare=[];
+  updateCompareBar();
+  applyFilter();
+  document.getElementById('compare-view').innerHTML='';
+  document.getElementById('compare-view').style.display='none';
+  document.getElementById('compare-select-area').style.display='';
+}
+
+function showCompare(){
+  if(selectedForCompare.length < 2){showToast('2台以上選んでください');return;}
+  const list = selectedForCompare.map(id=>robots.find(r=>r.id===id));
+  const allKeys = [...new Set(list.flatMap(r=>Object.keys(r.specs)))];
+
+  let html = `<div class="compare-table-wrap"><table class="compare-table">
+    <thead><tr><th>項目</th>${list.map(r=>`<th class="robot-col-header"><span class="robot-emoji-sm">${r.emoji}</span>${r.name}<br><small style="font-weight:400;color:rgba(255,255,255,.7)">${r.brand}</small></th>`).join('')}</tr></thead>
+    <tbody>
+    <tr><td class="row-label">販売価格</td>${list.map(r=>`<td style="font-weight:700">${r.price}</td>`).join('')}</tr>
+    <tr><td class="row-label">レンタル</td>${list.map(r=>`<td>${r.rental}</td>`).join('')}</tr>
+    <tr><td class="row-label">カテゴリ</td>${list.map(r=>`<td>${catLabel(r.cat)}</td>`).join('')}</tr>
+    ${allKeys.map(k=>`<tr><td class="row-label">${k}</td>${list.map(r=>`<td>${r.specs[k]||'—'}</td>`).join('')}</tr>`).join('')}
+    <tr><td class="row-label">主な用途</td>${list.map(r=>`<td style="font-size:12px">${r.useCase.join('<br>')}</td>`).join('')}</tr>
+    <tr><td class="row-label">ステータス</td>${list.map(r=>`<td style="font-weight:700;color:${r.statusColor}">${r.status}</td>`).join('')}</tr>
+    </tbody></table></div>
+  <div style="text-align:center;margin-top:24px">
+    <button class="btn btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">📩 この機種について相談する</button>
+  </div>`;
+
+  document.getElementById('compare-view').innerHTML = html;
+  document.getElementById('compare-view').style.display='block';
+  document.getElementById('compare-select-area').style.display='none';
+  document.getElementById('compare-section').scrollIntoView({behavior:'smooth'});
+}
+
+// ─── MODAL ──────────────────────────────────────────────
+function openModal(id){
+  const r = robots.find(x=>x.id===id);
+  const modal = document.getElementById('modalContent');
+  modal.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-robot-img">${r.emoji}</div>
+      <div class="modal-header-info">
+        <h2>${r.name}</h2>
+        <p>${r.brand} ／ ${catLabel(r.cat)} ／ <span style="color:#f9a87a;font-weight:700">${r.status}</span></p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <div class="modal-tab active" onclick="switchTab(this,'tab-spec')">📋 スペック</div>
+        <div class="modal-tab" onclick="switchTab(this,'tab-use')">🎯 用途・活用例</div>
+        <div class="modal-tab" onclick="switchTab(this,'tab-price')">💰 価格・レンタル</div>
+      </div>
+      <div id="tab-spec" class="modal-tab-content active">
+        <p style="color:var(--muted);font-size:14px;margin-bottom:16px;line-height:1.7">${r.desc}</p>
+        <div class="spec-grid">
+          ${Object.entries(r.specs).map(([k,v])=>`<div class="spec-item"><div class="spec-key">${k}</div><div class="spec-val">${v}</div></div>`).join('')}
+        </div>
+      </div>
+      <div id="tab-use" class="modal-tab-content">
+        <div class="use-cases">${r.useCase.map(u=>`<div class="use-case-item">${u}</div>`).join('')}</div>
+        <div class="spec-grid" style="margin-top:16px">
+          ${r.tags.map(t=>`<div class="spec-item"><div class="spec-val">${t}</div></div>`).join('')}
+        </div>
+      </div>
+      <div id="tab-price" class="modal-tab-content">
+        <div class="spec-grid">
+          <div class="spec-item"><div class="spec-key">販売価格（目安）</div><div class="spec-val" style="color:var(--accent)">${r.price}</div></div>
+          <div class="spec-item"><div class="spec-key">レンタル単価（目安）</div><div class="spec-val" style="color:var(--navy)">${r.rental}</div></div>
+      
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeModal();document.getElementById('contact').scrollIntoView({behavior:'smooth'})">📩 この機種について相談</button>
+        <button class="btn btn-outline" style="color:var(--navy);border-color:var(--border)" onclick="toggleCompare('${r.id}',{stopPropagation:()=>{}});closeModal()">
+          ${selectedForCompare.includes(r.id)?'✓ 比較から外す':'⚖️ 比較ツールに追加'}
+        </button>
+      </div>
+    </div>`;
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('detailModal').classList.remove('open');}
+document.getElementById('detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')closeModal();});
+
+function switchTab(el, tabId){
+  document.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.modal-tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// ─── NEWS ───────────────────────────────────────────────
+function renderNews(){
+  document.getElementById('newsGrid').innerHTML = news.map(n=>`
+    <div class="news-card">
+      <div class="news-img">${n.emoji}</div>
+      <div class="news-body">
+        <div class="news-tag">${n.tag}</div>
+        <div class="news-title">${n.title}</div>
+        <div class="news-date">📅 ${n.date}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── FEATURES ───────────────────────────────────────────
+function renderFeatures(){
+  document.getElementById('featuresGrid').innerHTML = features.map(f=>`
+    <div class="feature-card">
+      <div class="feature-badge">${f.badge}</div>
+      <div class="feature-icon">${f.icon}</div>
+      <h4>${f.title}</h4>
+      <p>${f.desc}</p>
+    </div>`).join('');
+}
+
+// ─── FORM ───────────────────────────────────────────────
+function submitForm(e){
+  e.preventDefault();
+  document.getElementById('successMsg').style.display='block';
+  e.target.querySelectorAll('input,select,textarea').forEach(el=>el.disabled=true);
+  document.querySelector('.form-submit').disabled=true;
+}
+
+// ─── UTILS ──────────────────────────────────────────────
+function toggleNav(){document.getElementById('navLinks').classList.toggle('open');}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── SLIDESHOW ──────────────────────────────────────────
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const dotsWrap = document.getElementById('slideDots');
+  if(!dotsWrap) return;
+  let cur = 0, timer;
+
+  slides.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.onclick = ()=>goTo(i);
+    dotsWrap.appendChild(d);
+  });
+
+  function goTo(n){
+    slides[cur].classList.remove('active');
+    dotsWrap.children[cur].classList.remove('active');
+    cur = (n + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    dotsWrap.children[cur].classList.add('active');
+    reset();
+  }
+
+  function reset(){ clearInterval(timer); timer = setInterval(()=>goTo(cur+1), 4500); }
+
+  window.moveSlide = (dir)=>goTo(cur+dir);
+  reset();
+})();
+</script>
+</body>
+</html>
